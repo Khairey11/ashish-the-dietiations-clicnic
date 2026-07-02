@@ -63,7 +63,7 @@ export function About() {
             <span className="gradient-text">for humans</span>
           </h2>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
-            Nutria+ was born in 2018 from a simple frustration: brilliant dietitians
+            The Dietitian's Clinic was born in 2018 from a simple frustration: brilliant dietitians
             were stuck with paper plans and WhatsApp check-ins, while clients
             struggled to stay accountable between visits. We knew there was a
             better way.

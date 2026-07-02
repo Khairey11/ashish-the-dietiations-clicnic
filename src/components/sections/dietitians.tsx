@@ -20,7 +20,7 @@ export function Dietitians() {
             <span className="gradient-text">actually care</span>
           </>
         }
-        description="Every Nutria+ dietitian is RDN-credentialed, regularly peer-reviewed, and trained in motivational interviewing. You're not just getting a meal plan — you're getting a partner."
+        description="Every The Dietitian's Clinic dietitian is RDN-credentialed, regularly peer-reviewed, and trained in motivational interviewing. You're not just getting a meal plan — you're getting a partner."
       />
 
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

@@ -3,7 +3,6 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import {
-  Leaf,
   Mail,
   Phone,
   MapPin,
@@ -88,7 +87,7 @@ export function Footer() {
     e.preventDefault();
     if (!email) return;
     toast.success("Subscribed!", {
-      description: "Welcome to the Nutria+ weekly newsletter.",
+      description: "Welcome to the The Dietitian's Clinic weekly newsletter.",
     });
     setEmail("");
   };
@@ -151,15 +150,17 @@ export function Footer() {
           {/* Brand + newsletter */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-white" />
-              </div>
+              <img
+                src="/icon.svg"
+                alt="The Dietitian's Clinic logo"
+                className="w-9 h-9 rounded-xl"
+              />
               <div className="flex flex-col leading-none">
-                <span className="text-lg font-bold tracking-tight">
-                  Nutria<span className="text-primary">+</span>
+                <span className="text-base font-bold tracking-tight">
+                  The Dietitian&apos;s Clinic
                 </span>
                 <span className="text-[10px] text-background/60 font-medium tracking-wide">
-                  PREMIUM NUTRITION
+                  PREMIUM NUTRITION CONSULTANCY
                 </span>
               </div>
             </div>
@@ -194,9 +195,9 @@ export function Footer() {
                 <Phone className="w-3.5 h-3.5" />
                 +977-1-4445566
               </a>
-              <a href="mailto:care@nutriaplus.health" className="flex items-center gap-2 hover:text-background transition-colors">
+              <a href="mailto:care@thedietitiansclinic.health" className="flex items-center gap-2 hover:text-background transition-colors">
                 <Mail className="w-3.5 h-3.5" />
-                care@nutriaplus.health
+                care@thedietitiansclinic.health
               </a>
               <p className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
@@ -229,7 +230,7 @@ export function Footer() {
         <div className="mt-12 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <p className="text-xs text-background/60">
-              © 2026 Nutria+ Health Pvt. Ltd. All rights reserved.
+              © 2026 The Dietitian&apos;s Clinic Pvt. Ltd. All rights reserved.
             </p>
             <div className="flex items-center gap-2 px-2 py-1 rounded-md bg-background/10">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />

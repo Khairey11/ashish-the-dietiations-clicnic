@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Leaf, ChevronDown, Command, Moon, Sun } from "lucide-react";
+import { Menu, X, ChevronDown, Command, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
@@ -74,20 +74,22 @@ export function Navigation() {
             <button
               onClick={() => scrollTo("#top")}
               className="flex items-center gap-2.5 group"
-              aria-label="Nutria+ home"
+              aria-label="The Dietitian's Clinic home"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-glow">
-                  <Leaf className="w-5 h-5 text-white" />
-                </div>
+                <img
+                  src="/icon.svg"
+                  alt=""
+                  className="relative w-9 h-9 rounded-xl shadow-glow"
+                />
               </div>
               <div className="flex flex-col leading-none">
-                <span className="text-lg font-bold tracking-tight">
-                  Nutria<span className="text-primary">+</span>
+                <span className="text-base font-bold tracking-tight">
+                  The Dietitian&apos;s Clinic
                 </span>
                 <span className="text-[10px] text-muted-foreground font-medium tracking-wide">
-                  PREMIUM NUTRITION
+                  PREMIUM NUTRITION CONSULTANCY
                 </span>
               </div>
             </button>

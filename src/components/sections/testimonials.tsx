@@ -36,7 +36,7 @@ export function Testimonials() {
             <span className="gradient-text">speak for themselves</span>
           </>
         }
-        description="12,400+ clients have transformed their health with Nutria+. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
+        description="12,400+ clients have transformed their health with The Dietitian's Clinic. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
       />
 
       {/* Filters */}
