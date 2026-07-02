@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { subscribeNewsletter } from "@/lib/actions/contact";
 
 const footerNav = [
   {
@@ -79,13 +80,26 @@ const socials = [
 export function Footer() {
   const [email, setEmail] = React.useState("");
 
-  const subscribe = (e: React.FormEvent) => {
+  const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    toast.success("Subscribed!", {
-      description: "Welcome to the The Dietitian's Clinic weekly newsletter.",
-    });
-    setEmail("");
+    try {
+      const result = await subscribeNewsletter({ email });
+      if (result.success) {
+        toast.success("Subscribed!", {
+          description: result.message,
+        });
+        setEmail("");
+      } else {
+        toast.error("Subscription failed", {
+          description: result.error || "Please try again.",
+        });
+      }
+    } catch {
+      toast.error("Subscription failed", {
+        description: "An unexpected error occurred. Please try again.",
+      });
+    }
   };
 
   return (

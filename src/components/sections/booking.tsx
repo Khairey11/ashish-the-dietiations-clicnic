@@ -26,6 +26,7 @@ import { SectionHeader, SectionWrapper } from "./section-utils";
 import { services, dietitians, programs } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { createBooking } from "@/lib/actions/contact";
 
 const steps = [
   { id: 0, label: "Service", icon: FileText },
@@ -83,11 +84,29 @@ export function Booking() {
   };
   const prev = () => step > 0 && setStep(step - 1);
 
-  const finalize = () => {
-    setStep(5);
-    toast.success("Booking confirmed!", {
-      description: "A confirmation email is on its way to " + data.email,
-    });
+  const [submitting, setSubmitting] = React.useState(false);
+
+  const finalize = async () => {
+    setSubmitting(true);
+    try {
+      const result = await createBooking(data);
+      if (result.success) {
+        setStep(5);
+        toast.success("Booking confirmed!", {
+          description: `A confirmation email is on its way to ${data.email}.`,
+        });
+      } else {
+        toast.error("Booking failed", {
+          description: result.error || "Please try again.",
+        });
+      }
+    } catch (e) {
+      toast.error("Booking failed", {
+        description: "An unexpected error occurred. Please try again.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const selectedService = services.find((s) => s.slug === data.service);
@@ -491,11 +510,20 @@ export function Booking() {
                     </Button>
                     <Button
                       onClick={step === 4 ? finalize : next}
-                      disabled={!canNext()}
+                      disabled={!canNext() || submitting}
                       className="bg-gradient-to-r from-primary to-secondary"
                     >
-                      {step === 4 ? "Confirm booking" : "Continue"}
-                      <ChevronRight className="w-4 h-4 ml-1" />
+                      {submitting && step === 4 ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Confirming...
+                        </>
+                      ) : (
+                        <>
+                          {step === 4 ? "Confirm booking" : "Continue"}
+                          <ChevronRight className="w-4 h-4 ml-1" />
+                        </>
+                      )}
                     </Button>
                   </div>
                 )}

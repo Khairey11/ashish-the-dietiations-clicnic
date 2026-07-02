@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { toast } from "sonner";
+import { submitContactForm } from "@/lib/actions/contact";
 
 const hours = [
   { day: "Sunday – Friday", time: "7:00 AM – 8:00 PM" },
@@ -61,16 +62,28 @@ export function Contact() {
   });
   const [submitting, setSubmitting] = React.useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      toast.success("Message sent!", {
-        description: "We'll be in touch within 1 hour.",
+    try {
+      const result = await submitContactForm(form);
+      if (result.success) {
+        toast.success("Message sent!", {
+          description: result.message || "We'll be in touch within 1 hour.",
+        });
+        setForm({ name: "", email: "", phone: "", message: "" });
+      } else {
+        toast.error("Submission failed", {
+          description: result.error || "Please try again.",
+        });
+      }
+    } catch (e) {
+      toast.error("Submission failed", {
+        description: "An unexpected error occurred. Please try again.",
       });
-      setForm({ name: "", email: "", phone: "", message: "" });
-    }, 1200);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
