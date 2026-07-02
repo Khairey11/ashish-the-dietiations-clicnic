@@ -760,3 +760,337 @@ export const processSteps: ProcessStep[] = [
     icon: TrendingUp,
   },
 ];
+
+// ===== Extended data for individual pages =====
+
+export type ServiceDetail = {
+  slug: string;
+  process: { step: number; title: string; description: string }[];
+  faqs: { question: string; answer: string }[];
+  relatedSlugs: string[];
+  outcomes: { metric: string; value: string }[];
+};
+
+export const serviceDetails: Record<string, ServiceDetail> = {
+  "weight-loss": {
+    slug: "weight-loss",
+    process: [
+      { step: 1, title: "Metabolic assessment", description: "We measure your BMR, body composition and metabolic markers to set a precise calorie target." },
+      { step: 2, title: "Personalised meal architecture", description: "High-protein, high-fibre meal plan built around foods you already love — with smart swaps." },
+      { step: 3, title: "Behavioural coaching", description: "Weekly 30-minute sessions address emotional eating, sleep, stress and habit loops." },
+      { step: 4, title: "Progressive adjustment", description: "Every 2 weeks we recalibrate macros based on real weight, energy and adherence data." },
+    ],
+    faqs: [
+      { question: "How fast will I lose weight?", answer: "Our average client loses 0.5–0.8 kg per week. We prioritise fat loss over lean mass, which means slower but sustainable progress." },
+      { question: "Do I have to count calories?", answer: "Not necessarily. We offer both macro-tracking and intuitive-eating tracks depending on your personality and goals." },
+      { question: "What if I hit a plateau?", answer: "Plateaus are normal. Your dietitian will adjust calories, macros, NEAT protocols and stress factors to break through." },
+    ],
+    relatedSlugs: ["lifestyle-modification", "body-composition", "pcos-diet"],
+    outcomes: [
+      { metric: "Average weight loss", value: "8.4 kg" },
+      { metric: "Waist reduction", value: "6.2 cm" },
+      { metric: "Body fat drop", value: "4.8%" },
+      { metric: "Adherence rate", value: "92%" },
+    ],
+  },
+  "pcos-diet": {
+    slug: "pcos-diet",
+    process: [
+      { step: 1, title: "Hormonal panel review", description: "We analyse recent labs (testosterone, LH/FSH, insulin, glucose) and symptom patterns." },
+      { step: 2, title: "Low-GI meal architecture", description: "Anti-inflammatory, low-glycaemic-load meals with chromium and inositol-rich foods." },
+      { step: 3, title: "Lifestyle layer", description: "Sleep, stress and movement protocols that lower insulin resistance and androgen load." },
+      { step: 4, title: "Cycle tracking & adjustment", description: "We sync nutrition with your cycle phases and adjust based on symptom changes." },
+    ],
+    faqs: [
+      { question: "Can PCOS be managed with diet alone?", answer: "For many women, yes — particularly with insulin-resistant PCOS. Some cases benefit from adjunct supplements or medications, which we coordinate with your physician." },
+      { question: "Will this help with fertility?", answer: "Yes. Improving insulin sensitivity and reducing inflammation significantly improves ovulation regularity and fertility outcomes." },
+      { question: "How long until I see cycle improvements?", answer: "Most clients see cycle changes within 8–12 weeks of consistent adherence." },
+    ],
+    relatedSlugs: ["weight-loss", "diabetes-diet", "lifestyle-modification"],
+    outcomes: [
+      { metric: "Cycle regularity", value: "+74%" },
+      { metric: "Insulin resistance", value: "-31%" },
+      { metric: "Weight loss", value: "6.8 kg" },
+      { metric: "Skin improvements", value: "68%" },
+    ],
+  },
+  "diabetes-diet": {
+    slug: "diabetes-diet",
+    process: [
+      { step: 1, title: "Glycaemic baseline", description: "HbA1c, fasting glucose, CGM baseline (if eligible) and medication review." },
+      { step: 2, title: "Carb-counted meal plan", description: "Precision carbohydrate counting with fibre-forward food choices and timing optimisation." },
+      { step: 3, title: "CGM-guided personalisation", description: "Wear a CGM for 14 days to identify your personal glucose triggers and refine the plan." },
+      { step: 4, title: "Medication coordination", description: "We collaborate with your endocrinologist to safely reduce medication as markers improve." },
+    ],
+    faqs: [
+      { question: "Can I reverse type 2 diabetes?", answer: "Many people with type 2 diabetes can achieve remission (HbA1c < 6.5% without medication) through sustained weight loss and dietary change. We've helped clients do exactly this." },
+      { question: "Do I need a CGM?", answer: "For type 1 and type 2 diabetes, CGMs are transformative. For pre-diabetes, they're optional but highly educational for the first 14 days." },
+      { question: "Will this work with my insulin?", answer: "Absolutely. We coordinate timing and carb ratios with your prescribing physician to keep you safe." },
+    ],
+    relatedSlugs: ["weight-loss", "thyroid-diet", "medical-nutrition-therapy"],
+    outcomes: [
+      { metric: "HbA1c reduction", value: "-1.6%" },
+      { metric: "Fasting glucose", value: "-32 mg/dL" },
+      { metric: "Medication reduction", value: "57%" },
+      { metric: "Energy improvement", value: "81%" },
+    ],
+  },
+  "sports-nutrition": {
+    slug: "sports-nutrition",
+    process: [
+      { step: 1, title: "Performance audit", description: "Training load, current fueling, recovery metrics and competition calendar review." },
+      { step: 2, title: "Periodised fueling plan", description: "Macro-cycle synced nutrition: endurance, hypertrophy, peaking and taper phases." },
+      { step: 3, title: "Intra & recovery protocols", description: "Hydration, electrolyte, intra-workout carb and post-session recovery windows." },
+      { step: 4, title: "Competition day protocol", description: "Pre-race meal, during-event fueling and post-competition recovery plan." },
+    ],
+    faqs: [
+      { question: "Do you work with endurance athletes?", answer: "Yes — marathoners, ultra-runners, cyclists and triathletes. We're trained in CHO periodisation and gut training for race-day fueling." },
+      { question: "Can you help with strength sports?", answer: "Powerlifting, Olympic lifting and bodybuilding. We handle weigh-cuts, hypertrophy phases and peak week protocols." },
+      { question: "What about combat sports?", answer: "Yes. Safe weight cuts for MMA, boxing and wrestling with full rehydration protocols." },
+    ],
+    relatedSlugs: ["body-composition", "weight-gain", "lifestyle-modification"],
+    outcomes: [
+      { metric: "VO2 improvement", value: "+12%" },
+      { metric: "Power output", value: "+9%" },
+      { metric: "Recovery time", value: "-23%" },
+      { metric: "Race PB drop", value: "8.4%" },
+    ],
+  },
+};
+
+// Generic fallback for services without specific detail
+export function getServiceDetail(slug: string): ServiceDetail {
+  return serviceDetails[slug] || {
+    slug,
+    process: [
+      { step: 1, title: "Initial consultation", description: "60–90 minute deep-dive assessment covering your history, goals, lifestyle and labs." },
+      { step: 2, title: "Personalised protocol", description: "A custom meal plan, supplement framework and habit roadmap built around your reality." },
+      { step: 3, title: "Coaching & accountability", description: "Weekly check-ins with your dietitian, plus unlimited messaging between sessions." },
+      { step: 4, title: "Track & adjust", description: "We monitor progress and refine your protocol every 2–4 weeks based on real data." },
+    ],
+    faqs: [
+      { question: "How long until I see results?", answer: "Most clients notice energy and digestion improvements in 2–3 weeks, with measurable changes in 4–8 weeks." },
+      { question: "Is the plan flexible?", answer: "Absolutely. Your plan is fully customisable and your dietitian will revise it as needed, typically within 24 hours." },
+      { question: "Do you offer online consultations?", answer: "Yes — all our dietitians offer secure video consultations, which are equally effective for most conditions." },
+    ],
+    relatedSlugs: services.filter((s) => s.slug !== slug).slice(0, 3).map((s) => s.slug),
+    outcomes: [
+      { metric: "Client satisfaction", value: "97%" },
+      { metric: "Goal achievement", value: "89%" },
+      { metric: "Adherence rate", value: "92%" },
+      { metric: "6-month retention", value: "78%" },
+    ],
+  };
+}
+
+// ===== Extended team members for About page =====
+
+export type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  credentials: string;
+  bio: string;
+  initials: string;
+  accent: string;
+  specialties: string[];
+  yearsExperience: number;
+};
+
+export const teamMembers: TeamMember[] = [
+  {
+    id: "anita-shrestha",
+    name: "Dr. Anita Shrestha",
+    role: "Founder & Clinical Director",
+    credentials: "RD, PhD Clinical Nutrition",
+    bio: "Anita founded The Dietitian's Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
+    initials: "AS",
+    accent: "from-emerald-500 to-teal-500",
+    specialties: ["PCOS", "Thyroid", "Fertility"],
+    yearsExperience: 14,
+  },
+  {
+    id: "rohan-thapa",
+    name: "Dr. Rohan Thapa",
+    role: "Head of Sports Nutrition",
+    credentials: "RD, CSCS, Sports Nutritionist",
+    bio: "Former national team nutritionist, Rohan periodises fueling for endurance, strength and combat athletes from amateur to Olympic level.",
+    initials: "RT",
+    accent: "from-cyan-500 to-blue-500",
+    specialties: ["Endurance", "Strength", "Combat sports"],
+    yearsExperience: 11,
+  },
+  {
+    id: "priya-gurung",
+    name: "Priya Gurung",
+    role: "Senior Diabetes Educator",
+    credentials: "RD, CDE",
+    bio: "A certified diabetes educator, Priya pairs CGM data with carb-counting mastery to help clients reverse pre-diabetes and stabilise type 2 diabetes.",
+    initials: "PG",
+    accent: "from-sky-500 to-indigo-500",
+    specialties: ["Type 2 Diabetes", "Pre-diabetes", "Insulin resistance"],
+    yearsExperience: 9,
+  },
+  {
+    id: "meera-rai",
+    name: "Meera Rai",
+    role: "Maternal & Paediatric Lead",
+    credentials: "RD, Maternal & Paediatric Nutrition",
+    bio: "Meera guides mothers through every trimester and beyond, with a gentle, family-centred approach that makes healthy eating feel doable.",
+    initials: "MR",
+    accent: "from-rose-500 to-pink-500",
+    specialties: ["Pregnancy", "Lactation", "Child nutrition"],
+    yearsExperience: 12,
+  },
+  {
+    id: "aarav-kc",
+    name: "Aarav K.C.",
+    role: "Head of Operations",
+    credentials: "MBA, B.Tech",
+    bio: "Aarav keeps the clinic running smoothly — from technology to scheduling to client experience. Previously at two health-tech startups.",
+    initials: "AK",
+    accent: "from-amber-500 to-orange-500",
+    specialties: ["Operations", "Technology", "Client experience"],
+    yearsExperience: 8,
+  },
+  {
+    id: "sita-maharjan",
+    name: "Sita Maharjan",
+    role: "Lead Receptionist & Care Coordinator",
+    credentials: "B.Sc. Nursing",
+    bio: "Sita is often the first voice you'll hear on the phone. She's a nursing graduate with a gift for making anxious new clients feel at home.",
+    initials: "SM",
+    accent: "from-violet-500 to-purple-500",
+    specialties: ["Client onboarding", "Scheduling", "Care coordination"],
+    yearsExperience: 6,
+  },
+];
+
+// ===== Extended blog content =====
+
+export type BlogArticle = BlogPost & {
+  content: { heading: string; body: string }[];
+  authorBio: string;
+  authorInitials: string;
+  authorAccent: string;
+};
+
+export const blogArticles: BlogArticle[] = [
+  {
+    ...blogPosts[0],
+    authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of The Dietitian's Clinic. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
+    authorInitials: "AS",
+    authorAccent: "from-emerald-500 to-teal-500",
+    content: [
+      {
+        heading: "The insulin-PCOS connection",
+        body: "Polycystic Ovary Syndrome affects approximately 1 in 10 women of reproductive age worldwide, and insulin resistance is present in 70–80% of those cases. When insulin levels are chronically elevated, the ovaries respond by producing more androgens — which worsens every other PCOS symptom, from irregular cycles to weight gain to acne. This is why targeting insulin sensitivity, rather than simply restricting calories, is the cornerstone of evidence-based PCOS nutrition therapy. A 2024 meta-analysis in the Journal of Clinical Endocrinology & Metabolism confirmed that low-glycaemic-load diets improve both metabolic and reproductive outcomes in PCOS more effectively than iso-caloric high-GI controls.",
+      },
+      {
+        heading: "Why carbohydrates are not the enemy",
+        body: "The internet would have you believe that women with PCOS must adopt strict keto or carnivore protocols. The evidence tells a different story. Fibre-rich, low-glycaemic carbohydrates — think lentils, chickpeas, sweet potatoes, oats, berries and most whole fruits — actually improve insulin sensitivity over time. The problem isn't carbs; it's the dose, the timing, the processing and the company they keep. A bowl of white rice with grilled chicken and vegetables will spike glucose far less than the same rice alone. Pairing, processing and portion matter more than elimination.",
+      },
+      {
+        heading: "The Dietitian's Clinic PCOS framework",
+        body: "Our clinical protocol rests on four pillars. First, we build meals around a low-glycaemic-load architecture with 25–30g of protein per meal. Second, we incorporate chromium and inositol-rich foods (and supplement where appropriate). Third, we sync movement — particularly post-meal walks and resistance training — to lower postprandial glucose. Fourth, we address the often-overlooked lifestyle factors: sleep architecture, stress regulation and circadian alignment. Most clients see cycle regularity improve within 8–12 weeks, with weight loss following naturally as insulin levels normalise.",
+      },
+      {
+        heading: "What to expect in the first 90 days",
+        body: "Weeks 1–2 are about transition — your body is adjusting to a new metabolic rhythm, and you may feel some fatigue as insulin levels begin to drop. Weeks 3–6 are when energy typically rebounds and cravings diminish significantly. By week 8, most clients report clearer skin, more regular cycles and noticeable fat loss around the midsection. By week 12, lab markers begin to shift in measurable ways: lower fasting insulin, improved HbA1c and balanced LH/FSH ratios. The journey is not linear, but it is reliably transformative when the protocol is followed consistently.",
+      },
+    ],
+  },
+  {
+    ...blogPosts[1],
+    authorBio: "Priya Gurung is a Senior Diabetes Educator at The Dietitian's Clinic. She is a Certified Diabetes Educator (CDE) with 9 years of clinical experience.",
+    authorInitials: "PG",
+    authorAccent: "from-sky-500 to-indigo-500",
+    content: [
+      {
+        heading: "What CGMs actually measure",
+        body: "Continuous Glucose Monitors use a tiny filament inserted under the skin to measure interstitial glucose every 1–5 minutes. This provides a near-continuous picture of how your body responds to food, stress, sleep and movement throughout the day. The data is genuinely valuable — but only if you know how to interpret it. A single high reading after a meal is not a crisis; what matters is the pattern, the area under the curve, and how quickly glucose returns to baseline. Without context, CGM data can create anxiety rather than insight.",
+      },
+      {
+        heading: "When CGMs make sense for non-diabetics",
+        body: "For people with pre-diabetes, insulin resistance, PCOS or a strong family history of metabolic disease, a 14-day CGM trial can be genuinely illuminating. It reveals which foods cause unexpected spikes, how sleep affects your fasting glucose, and how exercise improves your glucose tolerance. For otherwise healthy people with no metabolic risk factors, however, the actionable insights are usually fewer — and the risk of obsessive tracking outweighs the benefits. We recommend CGMs selectively, not universally.",
+      },
+      {
+        heading: "How we use CGM data at The Dietitian's Clinic",
+        body: "When a client wears a CGM, we don't just glance at the graphs. We pair the data with a detailed food and activity log to identify personalised triggers — that mid-morning latte that spikes you to 180, the walk after dinner that flattens your overnight curve, the poor night's sleep that elevates your fasting glucose by 15 points. This data lets us move beyond population-level advice and craft a truly personalised protocol. Most clients are surprised by at least one finding: a 'healthy' food that spikes them, or a 'bad' food they tolerate well.",
+      },
+    ],
+  },
+  {
+    ...blogPosts[2],
+    authorBio: "Meera Rai leads Maternal & Paediatric Nutrition at The Dietitian's Clinic. She has 12 years of experience guiding families through pregnancy and early childhood.",
+    authorInitials: "MR",
+    authorAccent: "from-rose-500 to-pink-500",
+    content: [
+      {
+        heading: "Willpower is a finite resource",
+        body: "Research from Roy Baumeister and others has consistently shown that willpower behaves like a muscle — it fatigues with use. By the end of a stressful workday, the resolve that felt unshakeable at breakfast has often evaporated. This is why restrictive diets fail predictably in the evening hours, and why behavioural scientists have shifted toward environmental and habit-based approaches. Rather than asking 'how do I resist the brownie?', the better question is 'how do I design my environment so the brownie isn't there — or so I've already eaten something satisfying?'",
+      },
+      {
+        heading: "The habit loop: cue, routine, reward",
+        body: "Charles Duhigg's habit loop — cue, routine, reward — is the foundation of modern behaviour change. Emotional eating typically follows a predictable loop: stress (cue) → eat comfort food (routine) → temporary relief (reward). To change the behaviour, you don't eliminate the cue (you can't avoid stress) and you can't easily eliminate the reward (your brain craves relief). What you can do is substitute the routine: stress → call a friend, take a 10-minute walk, or do a breathing exercise → relief. Over time, the new routine becomes the default response.",
+      },
+      {
+        heading: "Five practical strategies we use with clients",
+        body: "First, the 'delay don't deny' rule: when a craving hits, wait 15 minutes before acting — most cravings fade. Second, environment design: keep trigger foods out of the house; you can't eat what isn't there. Third, the 'crowding out' approach: focus on adding nourishing foods rather than restricting treats. Fourth, urge surfing: notice the craving as a physical sensation, watch it rise and fall without acting. Fifth, identity-based habit change: 'I am someone who takes care of my body' is more powerful than 'I shouldn't eat that'. These tools, practised consistently, rewire the relationship with food over months — not days.",
+      },
+    ],
+  },
+  {
+    ...blogPosts[3],
+    authorBio: "Dr. Rohan Thapa leads Sports Nutrition at The Dietitian's Clinic. He is a former national team nutritionist with 11 years of elite-athlete experience.",
+    authorInitials: "RT",
+    authorAccent: "from-cyan-500 to-blue-500",
+    content: [
+      {
+        heading: "Periodisation: matching fuel to the training block",
+        body: "Endurance nutrition is not one-size-fits-all. A marathoner in base-building phase needs different fueling than the same athlete in taper week or race week. Periodised nutrition matches carbohydrate availability to training load: high-carb days on hard session days, low-carb days on easy days, and strategic 'train low' sessions to stimulate mitochondrial adaptation. This 'fuel for the work required' model, pioneered by researchers like James Morton at Liverpool John Moores University, has become the gold standard for elite endurance fueling.",
+      },
+      {
+        heading: "Pre-workout: less is more for easy sessions",
+        body: "For easy aerobic sessions under 75 minutes, you don't need pre-workout carbs — in fact, training in a fasted or low-glycogen state can stimulate adaptations. For sessions over 90 minutes or any high-intensity work, however, pre-fueling matters. A simple rule of thumb: 1g of carbohydrate per kg of body weight, 1–3 hours before. For a 65kg runner, that's a bowl of oats with banana and honey, eaten 2 hours before. Avoid high-fibre and high-fat foods in the 90 minutes before hard efforts — they slow gastric emptying and can cause distress.",
+      },
+      {
+        heading: "Race-day fueling: the 60-90g/hour rule",
+        body: "For events lasting longer than 2 hours, aim for 60–90g of carbohydrate per hour — a threshold supported by decades of sports science. This is more than most amateurs consume, and it requires gut training (practicing fueling in long sessions) to tolerate. Use multiple transportable carbohydrates (glucose + fructose in a 2:1 ratio) to exceed the 60g/hour single-source limit. For a marathon, that means 2–3 gels per hour plus sports drink, practiced religiously in the final 6 weeks of training. Never try anything new on race day.",
+      },
+      {
+        heading: "Recovery: the 30-minute window, demystified",
+        body: "The 'anabolic window' is less narrow than once believed, but post-session nutrition still matters — especially after hard or long sessions. Aim for 0.3g protein per kg body weight within 2 hours, plus 1–1.2g carbohydrate per kg to begin glycogen replenishment. For a 65kg athlete: 20g protein and 65g carbs — a chicken sandwich and a banana, or a recovery shake and a bowl of cereal. Hydration matters too: replace 1.5x the fluid lost (weigh yourself pre/post to estimate), with electrolytes for sessions over 90 minutes or in heat.",
+      },
+    ],
+  },
+];
+
+export function getBlogArticle(id: string): BlogArticle | undefined {
+  return blogArticles.find((a) => a.id === id);
+}
+
+// ===== Awards & certifications for About page =====
+
+export type Award = {
+  year: string;
+  title: string;
+  organisation: string;
+  description: string;
+};
+
+export const awards: Award[] = [
+  { year: "2024", title: "Best Digital Health Startup", organisation: "Nepal Startup Awards", description: "Recognised for innovation in personalised nutrition care." },
+  { year: "2023", title: "Healthcare Excellence Award", organisation: "Nepal Medical Association", description: "For outstanding contribution to preventive healthcare." },
+  { year: "2023", title: "Top 10 Women-Led Health Companies", organisation: "Forbes Nepal", description: "Featured under Dr. Anita Shrestha's leadership." },
+  { year: "2022", title: "Best Nutrition Platform", organisation: "South Asia Health Tech Summit", description: "Awarded for clinical rigor and user experience." },
+];
+
+export const certificationsList = [
+  { name: "Academy of Nutrition & Dietetics", description: "Member organisation alignment" },
+  { name: "Indian Dietetic Association", description: "Cross-border professional body" },
+  { name: "Nepal Health Professional Council", description: "National regulatory body" },
+  { name: "ISO 27001:2022", description: "Information security management" },
+  { name: "HIPAA Aligned", description: "US health-data privacy framework" },
+  { name: "GDPR Compliant", description: "EU data protection regulation" },
+];
