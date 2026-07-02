@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -24,50 +25,45 @@ const footerNav = [
   {
     title: "Services",
     links: [
-      "Weight Loss",
-      "Weight Gain",
-      "PCOS Diet",
-      "Diabetes Diet",
-      "Thyroid Diet",
-      "Pregnancy Nutrition",
-      "Sports Nutrition",
-      "Corporate Wellness",
+      { label: "Weight Loss", href: "/services/weight-loss" },
+      { label: "Weight Gain", href: "/services/weight-gain" },
+      { label: "PCOS Diet", href: "/services/pcos-diet" },
+      { label: "Diabetes Diet", href: "/services/diabetes-diet" },
+      { label: "Thyroid Diet", href: "/services/thyroid-diet" },
+      { label: "Pregnancy Nutrition", href: "/services/pregnancy-nutrition" },
+      { label: "Sports Nutrition", href: "/services/sports-nutrition" },
+      { label: "Corporate Wellness", href: "/services/corporate-wellness" },
     ],
   },
   {
     title: "Programs",
     links: [
-      "30-Day Starter",
-      "60-Day Transform",
-      "90-Day Lifestyle",
-      "180-Day Deep",
-      "365-Day Annual",
-      "Body Composition Analysis",
-      "Compare Programs",
+      { label: "All Programs", href: "/programs" },
+      { label: "Compare Programs", href: "/programs" },
+      { label: "Body Composition Analysis", href: "/services/body-composition" },
+      { label: "Book Consultation", href: "/booking" },
+      { label: "BMI Calculator", href: "/#bmi-calculator" },
     ],
   },
   {
     title: "Company",
     links: [
-      "About Us",
-      "Meet the Team",
-      "Our Process",
-      "Blog",
-      "Careers",
-      "Press",
-      "Contact",
+      { label: "About Us", href: "/about" },
+      { label: "Meet the Team", href: "/dietitians" },
+      { label: "Blog", href: "/blog" },
+      { label: "Testimonials", href: "/testimonials" },
+      { label: "Contact", href: "/contact" },
+      { label: "FAQs", href: "/faq" },
     ],
   },
   {
     title: "Resources",
     links: [
-      "BMI Calculator",
-      "Recipe Library",
-      "FAQs",
-      "Client Dashboard",
-      "Admin Portal",
-      "Privacy Policy",
-      "Terms of Service",
+      { label: "Client Login", href: "/login" },
+      { label: "Client Dashboard", href: "/dashboard" },
+      { label: "Admin Portal", href: "/admin" },
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Service", href: "#" },
     ],
   },
 ];
@@ -212,13 +208,13 @@ export function Footer() {
               <h3 className="text-sm font-semibold mb-4">{col.title}</h3>
               <ul className="space-y-2.5">
                 {col.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
                       className="text-xs text-background/70 hover:text-background transition-colors"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

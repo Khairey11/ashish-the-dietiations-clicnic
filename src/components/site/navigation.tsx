@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Command, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,12 +10,12 @@ import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Programs", href: "#programs" },
-  { label: "Dietitians", href: "#dietitians" },
-  { label: "Results", href: "#testimonials" },
-  { label: "Blog", href: "#blog" },
-  { label: "About", href: "#about" },
+  { label: "Services", href: "/services" },
+  { label: "Programs", href: "/programs" },
+  { label: "Dietitians", href: "/dietitians" },
+  { label: "Results", href: "/testimonials" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
 ];
 
 export function Navigation() {
@@ -53,6 +55,11 @@ export function Navigation() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const go = (href: string) => {
+    setMobileOpen(false);
+    setCmdOpen(false);
+  };
+
   return (
     <>
       <motion.header
@@ -71,8 +78,9 @@ export function Navigation() {
               scrolled ? "glass shadow-premium h-14" : "h-16 bg-transparent"
             )}
           >
-            <button
-              onClick={() => scrollTo("#top")}
+            <Link
+              href="/"
+              onClick={() => go("/")}
               className="flex items-center gap-2.5 group"
               aria-label="The Dietitian's Clinic home"
             >
@@ -92,17 +100,18 @@ export function Navigation() {
                   PREMIUM NUTRITION CONSULTANCY
                 </span>
               </div>
-            </button>
+            </Link>
 
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
-                <button
+                <Link
                   key={link.href}
-                  onClick={() => scrollTo(link.href)}
+                  href={link.href}
+                  onClick={() => go(link.href)}
                   className="px-3.5 py-2 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg transition-all"
                 >
                   {link.label}
-                </button>
+                </Link>
               ))}
             </nav>
 
@@ -133,13 +142,14 @@ export function Navigation() {
                 </button>
               )}
 
-              <Button
-                size="sm"
-                onClick={() => scrollTo("#booking")}
-                className="hidden sm:inline-flex shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow"
-              >
-                Book Consultation
-              </Button>
+              <Link href="/booking">
+                <Button
+                  size="sm"
+                  className="hidden sm:inline-flex shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow"
+                >
+                  Book Consultation
+                </Button>
+              </Link>
 
               <button
                 onClick={() => setMobileOpen((v) => !v)}
@@ -173,21 +183,23 @@ export function Navigation() {
               className="absolute right-0 top-0 bottom-0 w-[280px] glass border-l border-border/40 p-6 pt-24 flex flex-col gap-2"
             >
               {navLinks.map((link) => (
-                <button
+                <Link
                   key={link.href}
-                  onClick={() => scrollTo(link.href)}
+                  href={link.href}
+                  onClick={() => go(link.href)}
                   className="flex items-center justify-between px-4 py-3 text-base font-medium rounded-xl hover:bg-muted/80 transition-colors text-left"
                 >
                   {link.label}
                   <ChevronDown className="w-4 h-4 -rotate-90 text-muted-foreground" />
-                </button>
+                </Link>
               ))}
-              <Button
-                onClick={() => scrollTo("#booking")}
-                className="mt-4 bg-gradient-to-r from-primary to-secondary"
-              >
-                Book Consultation
-              </Button>
+              <Link href="/booking">
+                <Button
+                  className="mt-4 bg-gradient-to-r from-primary to-secondary w-full"
+                >
+                  Book Consultation
+                </Button>
+              </Link>
             </motion.nav>
           </motion.div>
         )}
@@ -229,18 +241,21 @@ export function Navigation() {
                 </p>
                 {[
                   ...navLinks,
-                  { label: "Book Consultation", href: "#booking" },
-                  { label: "Contact", href: "#contact" },
-                  { label: "FAQ", href: "#faq" },
+                  { label: "Book Consultation", href: "/booking" },
+                  { label: "Contact", href: "/contact" },
+                  { label: "FAQ", href: "/faq" },
+                  { label: "Client Login", href: "/login" },
+                  { label: "Admin Portal", href: "/admin" },
                 ].map((item) => (
-                  <button
+                  <Link
                     key={item.href}
-                    onClick={() => scrollTo(item.href)}
+                    href={item.href}
+                    onClick={() => go(item.href)}
                     className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-muted/80 transition-colors text-sm text-left"
                   >
                     <span>{item.label}</span>
                     <ChevronDown className="w-4 h-4 -rotate-90 text-muted-foreground" />
-                  </button>
+                  </Link>
                 ))}
               </div>
             </motion.div>
