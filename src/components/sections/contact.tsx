@@ -147,7 +147,7 @@ export function Contact() {
                 <div className="flex items-start gap-2">
                   <Navigation className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-semibold">Nutria+ Health Clinic</p>
+                    <p className="text-sm font-semibold">The Dietitian's Clinic Health Clinic</p>
                     <p className="text-xs text-muted-foreground">Banasthali, Baluwatar-4, Kathmandu 44600, Nepal</p>
                   </div>
                 </div>

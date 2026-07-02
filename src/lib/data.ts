@@ -697,7 +697,7 @@ export const stats: Stat[] = [
   {
     label: "Lives transformed",
     value: "12,400",
-    description: "Clients who completed a Nutria+ program",
+    description: "Clients who completed a The Dietitian's Clinic program",
   },
   {
     label: "Avg. weight lost",
@@ -709,7 +709,7 @@ export const stats: Stat[] = [
     label: "Client satisfaction",
     value: "97",
     suffix: "%",
-    description: "Would recommend Nutria+ to a friend",
+    description: "Would recommend The Dietitian's Clinic to a friend",
   },
   {
     label: "Certified dietitians",

@@ -18,13 +18,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nutriaplus.health"),
+  metadataBase: new URL("https://thedietitiansclinic.health"),
   title: {
-    default: "Nutria+ | Premium Dietitian & Nutrition Consultancy",
-    template: "%s | Nutria+",
+    default: "The Dietitian's Clinic | Premium Nutrition Consultancy",
+    template: "%s | The Dietitian's Clinic",
   },
   description:
-    "Nutria+ is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PCOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
+    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PCOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
   keywords: [
     "dietitian",
     "nutritionist",
@@ -38,26 +38,27 @@ export const metadata: Metadata = {
     "online nutrition consultation",
     "meal plan",
     "body composition analysis",
+    "The Dietitian's Clinic",
   ],
-  authors: [{ name: "Nutria+ Health" }],
-  creator: "Nutria+ Health",
-  publisher: "Nutria+ Health",
-  applicationName: "Nutria+",
+  authors: [{ name: "The Dietitian's Clinic" }],
+  creator: "The Dietitian's Clinic",
+  publisher: "The Dietitian's Clinic",
+  applicationName: "The Dietitian's Clinic",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Nutria+ | Premium Dietitian & Nutrition Consultancy",
+    title: "The Dietitian's Clinic | Premium Nutrition Consultancy",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans. Book your consultation today.",
-    url: "https://nutriaplus.health",
-    siteName: "Nutria+",
+    url: "https://thedietitiansclinic.health",
+    siteName: "The Dietitian's Clinic",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nutria+ | Premium Dietitian & Nutrition Consultancy",
+    title: "The Dietitian's Clinic | Premium Nutrition Consultancy",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans.",
   },
@@ -73,9 +74,9 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/logo.svg",
-    shortcut: "/logo.svg",
-    apple: "/logo.svg",
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
   },
   category: "health",
 };
@@ -94,12 +95,12 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "MedicalOrganization",
-              name: "Nutria+ Health",
+              name: "The Dietitian's Clinic",
               description:
                 "Premium dietitian & nutrition consultancy offering personalized diet programs, online consultations, and continuous progress tracking.",
-              url: "https://nutriaplus.health",
-              logo: "https://nutriaplus.health/logo.svg",
-              email: "care@nutriaplus.health",
+              url: "https://thedietitiansclinic.health",
+              logo: "https://thedietitiansclinic.health/logo.svg",
+              email: "care@thedietitiansclinic.health",
               telephone: "+977-1-4445566",
               address: {
                 "@type": "PostalAddress",
