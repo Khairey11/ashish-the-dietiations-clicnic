@@ -166,7 +166,7 @@ export default function AdminSettingsPage() {
                   name="Khalti"
                   color="bg-purple-500"
                   icon={Smartphone}
-                  live={config?.khalti.apiKeyConfigured}
+                  live={!!config?.khalti.apiKeyConfigured}
                 >
                   <Field label="Merchant mobile" value={form.khaltiMerchantMobile}
                     onChange={(v) => setForm((f: any) => ({ ...f, khaltiMerchantMobile: v }))}
@@ -189,7 +189,7 @@ export default function AdminSettingsPage() {
                   name="eSewa"
                   color="bg-green-500"
                   icon={Smartphone}
-                  live={config?.esewa.merchantCodeConfigured}
+                  live={!!config?.esewa.merchantCodeConfigured}
                 >
                   <Field label="eSewa ID" value={form.esewaId}
                     onChange={(v) => setForm((f: any) => ({ ...f, esewaId: v }))}

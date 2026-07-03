@@ -57,7 +57,21 @@ export function Booking() {
     []
   );
   const [step, setStep] = React.useState(0);
-  const [data, setData] = React.useState({
+  const [data, setData] = React.useState<{
+    service: string;
+    dietitian: string;
+    date: string;
+    time: string;
+    name: string;
+    email: string;
+    phone: string;
+    age: string;
+    goal: string;
+    medical: string;
+    reports: string[];
+    program: string;
+    paymentMethod: "khalti" | "esewa" | "bank";
+  }>({
     service: "",
     dietitian: "",
     date: "",
@@ -68,7 +82,7 @@ export function Booking() {
     age: "",
     goal: "",
     medical: "",
-    reports: [] as string[],
+    reports: [],
     program: "",
     paymentMethod: "khalti",
   });
