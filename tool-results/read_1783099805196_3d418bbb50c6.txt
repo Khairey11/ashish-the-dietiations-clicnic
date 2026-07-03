@@ -1,0 +1,1097 @@
+     1→import {
+     2→  Activity,
+     3→  Apple,
+     4→  Baby,
+     5→  Dumbbell,
+     6→  HeartPulse,
+     7→  Heart,
+     8→  Leaf,
+     9→  TrendingDown,
+    10→  TrendingUp,
+    11→  Users,
+    12→  Zap,
+    13→  type LucideIcon,
+    14→} from "lucide-react";
+    15→
+    16→export type Service = {
+    17→  slug: string;
+    18→  title: string;
+    19→  icon: LucideIcon;
+    20→  tagline: string;
+    21→  problem: string;
+    22→  solution: string;
+    23→  benefits: string[];
+    24→  duration: string;
+    25→  accent: string;
+    26→  category: "weight" | "medical" | "life-stage" | "performance" | "corporate";
+    27→};
+    28→
+    29→export const services: Service[] = [
+    30→  {
+    31→    slug: "weight-loss",
+    32→    title: "Weight Loss Program",
+    33→    icon: TrendingDown,
+    34→    tagline: "Sustainable fat loss without crash diets",
+    35→    problem:
+    36→      "Fad diets, slow metabolism, emotional eating and yo-yo weight cycling make lasting fat loss feel impossible.",
+    37→    solution:
+    38→      "A science-backed calorie framework paired with high-protein meals, behavioural coaching and weekly accountability check-ins.",
+    39→    benefits: [
+    40→      "Lose 4–8 kg in 12 weeks (clinically supervised)",
+    41→      "Preserve lean muscle & metabolic rate",
+    42→      "Personalised macros and food swaps",
+    43→      "Habit-based behavioural coaching",
+    44→    ],
+    45→    duration: "12–24 weeks",
+    46→    accent: "from-emerald-500/20 to-emerald-500/5",
+    47→    category: "weight",
+    48→  },
+    49→  {
+    50→    slug: "weight-gain",
+    51→    title: "Healthy Weight Gain",
+    52→    icon: TrendingUp,
+    53→    tagline: "Build mass the clean, sustainable way",
+    54→    problem:
+    55→      "Hard gainers struggle to consume enough calories from nutrient-dense sources, often resorting to junk food.",
+    56→    solution:
+    57→      "Calorie-dense whole-food meal plans with progressive overload training support and digestive optimisation.",
+    58→    benefits: [
+    59→      "Gain 2–4 kg lean mass in 8 weeks",
+    60→      "Calorie-dense, low-satiety meals",
+    61→      "Gut-friendly digestion protocols",
+    62→      "Strength training sync",
+    63→    ],
+    64→    duration: "8–16 weeks",
+    65→    accent: "from-amber-500/20 to-amber-500/5",
+    66→    category: "weight",
+    67→  },
+    68→  {
+    69→    slug: "pcos-diet",
+    70→    title: "PCOS Nutrition",
+    71→    icon: Heart,
+    72→    tagline: "Balance hormones with food",
+    73→    problem:
+    74→      "Insulin resistance, irregular cycles and weight gain from PCOS disrupt daily life and long-term health.",
+    75→    solution:
+    76→      "Low-glycaemic, anti-inflammatory meal architecture combined with chromium & inositol-rich food protocols.",
+    77→    benefits: [
+    78→      "Improve cycle regularity",
+    79→      "Reduce insulin resistance markers",
+    80→      "Anti-inflammatory food framework",
+    81→      "Skin & hair co-benefits",
+    82→    ],
+    83→    duration: "12 weeks",
+    84→    accent: "from-pink-500/20 to-pink-500/5",
+    85→    category: "medical",
+    86→  },
+    87→  {
+    88→    slug: "diabetes-diet",
+    89→    title: "Diabetes Management",
+    90→    icon: Activity,
+    91→    tagline: "Stabilise blood sugar, reclaim energy",
+    92→    problem:
+    93→      "Erratic glucose levels, medication dependence and fear of complications dominate life with diabetes.",
+    94→    solution:
+    95→      "Carbohydrate-counted, fibre-forward meal plans with continuous glucose monitoring integration.",
+    96→    benefits: [
+    97→      "Lower HbA1c by 1–2% in 12 weeks",
+    98→      "Reduce medication dependence",
+    99→      "CGM-guided personalisation",
+   100→      "Prevent long-term complications",
+   101→    ],
+   102→    duration: "Ongoing",
+   103→    accent: "from-sky-500/20 to-sky-500/5",
+   104→    category: "medical",
+   105→  },
+   106→  {
+   107→    slug: "thyroid-diet",
+   108→    title: "Thyroid Nutrition",
+   109→    icon: HeartPulse,
+   110→    tagline: "Support your thyroid with the right fuel",
+   111→    problem:
+   112→      "Fatigue, weight fluctuation and brain fog from hypo/hyperthyroidism are worsened by nutrient gaps.",
+   113→    solution:
+   114→      "Selenium, iodine and zinc-optimised meals with goitrogen-aware preparation techniques.",
+   115→    benefits: [
+   116→      "Support thyroid hormone synthesis",
+   117→      "Energy & metabolism recovery",
+   118→      "Goitrogen-safe cooking methods",
+   119→      "Medication timing guidance",
+   120→    ],
+   121→    duration: "12 weeks",
+   122→    accent: "from-violet-500/20 to-violet-500/5",
+   123→    category: "medical",
+   124→  },
+   125→  {
+   126→    slug: "pregnancy-nutrition",
+   127→    title: "Pregnancy Nutrition",
+   128→    icon: Baby,
+   129→    tagline: "Nourish two lives, trimester by trimester",
+   130→    problem:
+   131→      "Morning sickness, gestational diabetes risk and confusion about what is safe create anxiety during pregnancy.",
+   132→    solution:
+   133→      "Trimester-wise meal architecture with folate, iron, DHA and calcium optimisation.",
+   134→    benefits: [
+   135→      "Trimester-specific meal plans",
+   136→      "Reduce gestational diabetes risk",
+   137→      "Optimise foetal development",
+   138→      "Postpartum recovery roadmap",
+   139→    ],
+   140→    duration: "40 weeks + postpartum",
+   141→    accent: "from-rose-500/20 to-rose-500/5",
+   142→    category: "life-stage",
+   143→  },
+   144→  {
+   145→    slug: "child-nutrition",
+   146→    title: "Child Nutrition",
+   147→    icon: Apple,
+   148→    tagline: "Healthy habits from the first bite",
+   149→    problem:
+   150→      "Picky eating, hidden sugar and growth concerns leave parents unsure if their child is meeting milestones.",
+   151→    solution:
+   152→      "Age-banded meal plans with hidden-vegetable recipes, growth tracking and family-friendly cooking guides.",
+   153→    benefits: [
+   154→      "Age-appropriate growth tracking",
+   155→      "Picky-eater reversal strategies",
+   156→      "Hidden-veg recipe library",
+   157→      "Family meal frameworks",
+   158→    ],
+   159→    duration: "Ongoing",
+   160→    accent: "from-orange-500/20 to-orange-500/5",
+   161→    category: "life-stage",
+   162→  },
+   163→  {
+   164→    slug: "sports-nutrition",
+   165→    title: "Sports Nutrition",
+   166→    icon: Dumbbell,
+   167→    tagline: "Fuel performance, accelerate recovery",
+   168→    problem:
+   169→      "Generic advice fails athletes who need precision around training cycles, recovery and competition day.",
+   170→    solution:
+   171→      "Periodised nutrition synced with macro-cycles, intra-workout fuel and competition-day protocols.",
+   172→    benefits: [
+   173→      "Periodised fueling strategy",
+   174→      "Improve VO2 & power output",
+   175→      "Faster recovery between sessions",
+   176→      "Competition-day protocols",
+   177→    ],
+   178→    duration: "Season-long",
+   179→    accent: "from-cyan-500/20 to-cyan-500/5",
+   180→    category: "performance",
+   181→  },
+   182→  {
+   183→    slug: "corporate-wellness",
+   184→    title: "Corporate Wellness",
+   185→    icon: Users,
+   186→    tagline: "Healthier teams, sharper business",
+   187→    problem:
+   188→      "Sedentary work, stress eating and burnout erode productivity and inflate healthcare costs.",
+   189→    solution:
+   190→      "On-site & virtual wellness programmes with biometric screenings, workshops and 1:1 coaching.",
+   191→    benefits: [
+   192→      "Reduce absenteeism 22%",
+   193→      "Quarterly biometric screenings",
+   194→      "On-site & virtual workshops",
+   195→      "ROI reporting dashboard",
+   196→    ],
+   197→    duration: "Quarterly / annual",
+   198→    accent: "from-indigo-500/20 to-indigo-500/5",
+   199→    category: "corporate",
+   200→  },
+   201→  {
+   202→    slug: "body-composition",
+   203→    title: "Body Composition Analysis",
+   204→    icon: Zap,
+   205→    tagline: "Measure what actually matters",
+   206→    problem:
+   207→      "The scale hides the truth — muscle gain, fat loss and hydration shifts are invisible without proper analysis.",
+   208→    solution:
+   209→      "InBody 770 analysis with visceral fat, segmental lean mass and BMR insights, interpreted by a clinical dietitian.",
+   210→    benefits: [
+   211→      "Visceral fat measurement",
+   212→      "Segmental muscle analysis",
+   213→      "Resting metabolic rate",
+   214→      "60-minute clinical review",
+   215→    ],
+   216→    duration: "Single session",
+   217→    accent: "from-teal-500/20 to-teal-500/5",
+   218→    category: "performance",
+   219→  },
+   220→  {
+   221→    slug: "medical-nutrition-therapy",
+   222→    title: "Medical Nutrition Therapy",
+   223→    icon: Leaf,
+   224→    tagline: "Evidence-based nutrition for clinical conditions",
+   225→    problem:
+   226→      "Chronic conditions like hypertension, IBS, fatty liver and renal issues require precise dietary intervention.",
+   227→    solution:
+   228→      "Academy-funded MNT protocols delivered by RDN-credentialed clinicians with lab-synced adjustments.",
+   229→    benefits: [
+   230→      "Lab-synced protocol adjustments",
+   231→      "RDN-credentialed clinicians",
+   232→      "Condition-specific frameworks",
+   233→      "Physician collaboration",
+   234→    ],
+   235→    duration: "Ongoing",
+   236→    accent: "from-green-500/20 to-green-500/5",
+   237→    category: "medical",
+   238→  },
+   239→  {
+   240→    slug: "lifestyle-modification",
+   241→    title: "Lifestyle Modification",
+   242→    icon: HeartPulse,
+   243→    tagline: "Sleep, stress, movement — the missing 80%",
+   244→    problem:
+   245→      "Diet alone cannot outwork poor sleep, chronic stress or sedentary patterns — yet most plans ignore them.",
+   246→    solution:
+   247→      "Holistic coaching covering sleep architecture, stress regulation and movement integration alongside nutrition.",
+   248→    benefits: [
+   249→      "Sleep architecture optimisation",
+   250→      "Stress regulation protocols",
+   251→      "Movement integration coaching",
+   252→      "Habit-stacking framework",
+   253→    ],
+   254→    duration: "12 weeks",
+   255→    accent: "from-lime-500/20 to-lime-500/5",
+   256→    category: "weight",
+   257→  },
+   258→];
+   259→
+   260→export type Program = {
+   261→  id: string;
+   262→  duration: string;
+   263→  days: number;
+   264→  price: number;
+   265→  originalPrice: number;
+   266→  tagline: string;
+   267→  popular?: boolean;
+   268→  features: string[];
+   269→  support: string[];
+   270→  accent: string;
+   271→};
+   272→
+   273→export const programs: Program[] = [
+   274→  {
+   275→    id: "starter-30",
+   276→    duration: "30 Days",
+   277→    days: 30,
+   278→    price: 2999,
+   279→    originalPrice: 3999,
+   280→    tagline: "Kickstart your journey",
+   281→    features: [
+   282→      "1:1 consultation with RDN",
+   283→      "Personalised meal plan",
+   284→      "WhatsApp support (Mon–Fri)",
+   285→      "Body composition analysis",
+   286→      "Recipe library access",
+   287→    ],
+   288→    support: ["5 days/week chat", "1 follow-up session", "Email support"],
+   289→    accent: "from-emerald-500 to-emerald-600",
+   290→  },
+   291→  {
+   292→    id: "transform-60",
+   293→    duration: "60 Days",
+   294→    days: 60,
+   295→    price: 5499,
+   296→    originalPrice: 7499,
+   297→    tagline: "Build momentum & habits",
+   298→    popular: true,
+   299→    features: [
+   300→      "Everything in Starter",
+   301→      "Bi-weekly 1:1 consultations",
+   302→      "Custom macro adjustments",
+   303→      "Progress photo tracking",
+   304→      "Habit coaching sessions",
+   305→      "Grocery list generator",
+   306→    ],
+   307→    support: ["6 days/week chat", "3 follow-up sessions", "Priority response"],
+   308→    accent: "from-emerald-600 to-teal-600",
+   309→  },
+   310→  {
+   311→    id: "lifestyle-90",
+   312→    duration: "90 Days",
+   313→    days: 90,
+   314→    price: 7999,
+   315→    originalPrice: 10999,
+   316→    tagline: "Lasting lifestyle transformation",
+   317→    features: [
+   318→      "Everything in Transform",
+   319→      "Weekly consultations",
+   320→      "CGM integration (if eligible)",
+   321→      "Lab review & adjustments",
+   322→      "Sleep & stress coaching",
+   323→      "Family meal planning",
+   324→    ],
+   325→    support: ["7 days/week chat", "6 follow-up sessions", "24h response"],
+   326→    accent: "from-teal-600 to-cyan-600",
+   327→  },
+   328→  {
+   329→    id: "deep-180",
+   330→    duration: "180 Days",
+   331→    days: 180,
+   332→    price: 13999,
+   333→    originalPrice: 19999,
+   334→    tagline: "Deep transformation & maintenance",
+   335→    features: [
+   336→      "Everything in Lifestyle",
+   337→      "Bi-weekly lab reviews",
+   338→      "Quarterly body composition",
+   339→      "Maintenance phase planning",
+   340→      "Mindful eating workshop",
+   341→      "Recipe customisation",
+   342→    ],
+   343→    support: ["7 days/week chat", "Unlimited messages", "Same-day response"],
+   344→    accent: "from-cyan-600 to-sky-600",
+   345→  },
+   346→  {
+   347→    id: "annual-365",
+   348→    duration: "365 Days",
+   349→    days: 365,
+   350→    price: 24999,
+   351→    originalPrice: 39999,
+   352→    tagline: "A full year of guided wellness",
+   353→    features: [
+   354→      "Everything in Deep Transformation",
+   355→      "Unlimited consultations",
+   356→      "Priority scheduling",
+   357→      "Annual health panel review",
+   358→      "Family access (up to 3)",
+   359→      "Concierge support",
+   360→    ],
+   361→    support: ["24/7 concierge", "Unlimited sessions", "Instant response"],
+   362→    accent: "from-sky-600 to-indigo-600",
+   363→  },
+   364→];
+   365→
+   366→export type Dietitian = {
+   367→  id: string;
+   368→  name: string;
+   369→  credentials: string;
+   370→  specialty: string;
+   371→  experience: number;
+   372→  languages: string[];
+   373→  rating: number;
+   374→  reviews: number;
+   375→  bio: string;
+   376→  initials: string;
+   377→  accent: string;
+   378→  availability: string;
+   379→  focus: string[];
+   380→};
+   381→
+   382→export const dietitians: Dietitian[] = [
+   383→  {
+   384→    id: "anita-shrestha",
+   385→    name: "Dr. Anita Shrestha",
+   386→    credentials: "RD, PhD Clinical Nutrition",
+   387→    specialty: "PCOS & Hormonal Health",
+   388→    experience: 14,
+   389→    languages: ["English", "Nepali", "Hindi"],
+   390→    rating: 4.97,
+   391→    reviews: 482,
+   392→    bio: "Dr. Shrestha leads our hormonal health practice, combining evidence-based medical nutrition therapy with a deeply empathetic coaching style.",
+   393→    initials: "AS",
+   394→    accent: "from-emerald-500 to-teal-500",
+   395→    availability: "Next available: Tomorrow, 10:00 AM",
+   396→    focus: ["PCOS", "Thyroid", "Fertility"],
+   397→  },
+   398→  {
+   399→    id: "rohan-thapa",
+   400→    name: "Dr. Rohan Thapa",
+   401→    credentials: "RD, CSCS, Sports Nutritionist",
+   402→    specialty: "Sports & Performance",
+   403→    experience: 11,
+   404→    languages: ["English", "Nepali"],
+   405→    rating: 4.95,
+   406→    reviews: 367,
+   407→    bio: "Former national team nutritionist, Dr. Thapa periodises fueling for endurance, strength and combat athletes — from amateur to Olympic-level.",
+   408→    initials: "RT",
+   409→    accent: "from-cyan-500 to-blue-500",
+   410→    availability: "Next available: Today, 4:30 PM",
+   411→    focus: ["Endurance", "Strength", "Combat sports"],
+   412→  },
+   413→  {
+   414→    id: "priya-gurung",
+   415→    name: "Priya Gurung",
+   416→    credentials: "RD, CDE (Diabetes Educator)",
+   417→    specialty: "Diabetes & Metabolic Health",
+   418→    experience: 9,
+   419→    languages: ["English", "Nepali", "Newari"],
+   420→    rating: 4.93,
+   421→    reviews: 298,
+   422→    bio: "A certified diabetes educator, Priya pairs CGM data with carb-counting mastery to help clients reverse pre-diabetes and stabilise type 2.",
+   423→    initials: "PG",
+   424→    accent: "from-sky-500 to-indigo-500",
+   425→    availability: "Next available: Tomorrow, 2:00 PM",
+   426→    focus: ["Type 2 Diabetes", "Pre-diabetes", "Insulin resistance"],
+   427→  },
+   428→  {
+   429→    id: "meera-rai",
+   430→    name: "Meera Rai",
+   431→    credentials: "RD, Maternal & Paediatric Nutrition",
+   432→    specialty: "Pregnancy & Child Nutrition",
+   433→    experience: 12,
+   434→    languages: ["English", "Nepali", "Maithili"],
+   435→    rating: 4.98,
+   436→    reviews: 421,
+   437→    bio: "Meera guides mothers through every trimester and beyond, with a gentle, family-centred approach that makes healthy eating feel doable.",
+   438→    initials: "MR",
+   439→    accent: "from-rose-500 to-pink-500",
+   440→    availability: "Next available: Today, 11:00 AM",
+   441→    focus: ["Pregnancy", "Lactation", "Child nutrition"],
+   442→  },
+   443→];
+   444→
+   445→export type Testimonial = {
+   446→  id: string;
+   447→  name: string;
+   448→  age: number;
+   449→  city: string;
+   450→  condition: string;
+   451→  rating: number;
+   452→  beforeWeight: number;
+   453→  afterWeight: number;
+   454→  duration: string;
+   455→  quote: string;
+   456→  highlight: string;
+   457→  initials: string;
+   458→  accent: string;
+   459→  tag: "weight-loss" | "pcos" | "diabetes" | "sports" | "pregnancy" | "thyroid";
+   460→};
+   461→
+   462→export const testimonials: Testimonial[] = [
+   463→  {
+   464→    id: "t1",
+   465→    name: "Sneha K.",
+   466→    age: 29,
+   467→    city: "Kathmandu",
+   468→    condition: "PCOS",
+   469→    rating: 5,
+   470→    beforeWeight: 78,
+   471→    afterWeight: 67,
+   472→    duration: "16 weeks",
+   473→    quote:
+   474→      "After years of irregular cycles and weight that wouldn't budge, Dr. Shrestha's protocol gave me my life back. My cycles are regular, my skin cleared up, and I lost 11 kg without feeling deprived.",
+   475→    highlight: "-11 kg in 16 weeks",
+   476→    initials: "SK",
+   477→    accent: "from-pink-500 to-rose-500",
+   478→    tag: "pcos",
+   479→  },
+   480→  {
+   481→    id: "t2",
+   482→    name: "Bishal T.",
+   483→    age: 42,
+   484→    city: "Lalitpur",
+   485→    condition: "Type 2 Diabetes",
+   486→    rating: 5,
+   487→    beforeWeight: 92,
+   488→    afterWeight: 81,
+   489→    duration: "24 weeks",
+   490→    quote:
+   491→      "My HbA1c dropped from 8.4 to 6.1 and my doctor took me off metformin. The CGM integration was a game changer — I finally understood how my body responds to food.",
+   492→    highlight: "HbA1c 8.4 → 6.1",
+   493→    initials: "BT",
+   494→    accent: "from-sky-500 to-blue-500",
+   495→    tag: "diabetes",
+   496→  },
+   497→  {
+   498→    id: "t3",
+   499→    name: "Anjali M.",
+   500→    age: 34,
+   501→    city: "Bhaktapur",
+   502→    condition: "Postpartum Weight",
+   503→    rating: 5,
+   504→    beforeWeight: 72,
+   505→    afterWeight: 60,
+   506→    duration: "20 weeks",
+   507→    quote:
+   508→      "Meera supported me through my second pregnancy and postpartum recovery. I'm now lighter than my pre-pregnancy weight and have more energy than I did in my twenties.",
+   509→    highlight: "-12 kg postpartum",
+   510→    initials: "AM",
+   511→    accent: "from-rose-500 to-pink-500",
+   512→    tag: "pregnancy",
+   513→  },
+   514→  {
+   515→    id: "t4",
+   516→    name: "Prakash R.",
+   517→    age: 27,
+   518→    city: "Pokhara",
+   519→    condition: "Athlete Recomp",
+   520→    rating: 5,
+   521→    beforeWeight: 68,
+   522→    afterWeight: 72,
+   523→    duration: "12 weeks",
+   524→    quote:
+   525→      "Dr. Thapa dialled in my race-day fueling and I dropped my marathon PB by 14 minutes. The 4 kg I gained is all lean mass. I've never felt this strong.",
+   526→    highlight: "+4 kg lean mass",
+   527→    initials: "PR",
+   528→    accent: "from-cyan-500 to-blue-500",
+   529→    tag: "sports",
+   530→  },
+   531→  {
+   532→    id: "t5",
+   533→    name: "Rekha S.",
+   534→    age: 38,
+   535→    city: "Kathmandu",
+   536→    condition: "Hypothyroidism",
+   537→    rating: 5,
+   538→    beforeWeight: 85,
+   539→    afterWeight: 75,
+   540→    duration: "18 weeks",
+   541→    quote:
+   542→      "My energy is back, my brain fog has lifted, and I've lost 10 kg. The thyroid-specific meal timing made a huge difference — I wish I'd found this years ago.",
+   543→    highlight: "-10 kg + energy restored",
+   544→    initials: "RS",
+   545→    accent: "from-violet-500 to-purple-500",
+   546→    tag: "thyroid",
+   547→  },
+   548→  {
+   549→    id: "t6",
+   550→    name: "Suman B.",
+   551→    age: 31,
+   552→    city: "Chitwan",
+   553→    condition: "Weight Loss",
+   554→    rating: 5,
+   555→    beforeWeight: 96,
+   556→    afterWeight: 78,
+   557→    duration: "32 weeks",
+   558→    quote:
+   559→      "I'd tried every diet under the sun. This was the first time I lost weight without gaining it back. The behavioural coaching rewired my relationship with food.",
+   560→    highlight: "-18 kg kept off",
+   561→    initials: "SB",
+   562→    accent: "from-emerald-500 to-teal-500",
+   563→    tag: "weight-loss",
+   564→  },
+   565→];
+   566→
+   567→export type BlogPost = {
+   568→  id: string;
+   569→  title: string;
+   570→  excerpt: string;
+   571→  category: string;
+   572→  author: string;
+   573→  date: string;
+   574→  readingTime: number;
+   575→  tags: string[];
+   576→  accent: string;
+   577→  featured?: boolean;
+   578→};
+   579→
+   580→export const blogPosts: BlogPost[] = [
+   581→  {
+   582→    id: "b1",
+   583→    title: "The Truth About PCOS and Carbohydrates: What 2025 Research Tells Us",
+   584→    excerpt:
+   585→      "PCOS isn't a carbs problem — it's an insulin problem. Here's how to build a low-glycaemic plate that actually works for hormonal balance, with evidence from 12 recent RCTs.",
+   586→    category: "Hormonal Health",
+   587→    author: "Dr. Anita Shrestha",
+   588→    date: "2025-06-18",
+   589→    readingTime: 8,
+   590→    tags: ["PCOS", "Insulin", "Carbohydrates"],
+   591→    accent: "from-pink-500 to-rose-500",
+   592→    featured: true,
+   593→  },
+   594→  {
+   595→    id: "b2",
+   596→    title: "Continuous Glucose Monitoring for Non-Diabetics: Hype or Helpful?",
+   597→    excerpt:
+   598→      "CGMs are everywhere — but is the data actually actionable for someone without diabetes? We break down what's useful, what's noise, and who should consider wearing one.",
+   599→    category: "Metabolic Health",
+   600→    author: "Priya Gurung",
+   601→    date: "2025-06-12",
+   602→    readingTime: 6,
+   603→    tags: ["CGM", "Glucose", "Metabolism"],
+   604→    accent: "from-sky-500 to-blue-500",
+   605→  },
+   606→  {
+   607→    id: "b3",
+   608→    title: "5 Evidence-Based Strategies to Fix Emotional Eating",
+   609→    excerpt:
+   610→      "Willpower is not a strategy. Drawing on CBT and habit science, here are five practical tools our dietitians use with clients to break the binge-restrict cycle for good.",
+   611→    category: "Behavioural Nutrition",
+   612→    author: "Meera Rai",
+   613→    date: "2025-06-05",
+   614→    readingTime: 7,
+   615→    tags: ["Mindful eating", "CBT", "Habits"],
+   616→    accent: "from-emerald-500 to-teal-500",
+   617→  },
+   618→  {
+   619→    id: "b4",
+   620→    title: "Pre-Workout Nutrition for Endurance Athletes: A Periodised Approach",
+   621→    excerpt:
+   622→      "From fasted easy sessions to race-day carb loading, learn how to fuel each training block for maximum adaptation and minimum gastrointestinal distress.",
+   623→    category: "Sports Nutrition",
+   624→    author: "Dr. Rohan Thapa",
+   625→    date: "2025-05-28",
+   626→    readingTime: 9,
+   627→    tags: ["Endurance", "Performance", "Carb loading"],
+   628→    accent: "from-cyan-500 to-blue-500",
+   629→  },
+   630→];
+   631→
+   632→export type FAQ = {
+   633→  question: string;
+   634→  answer: string;
+   635→  category: string;
+   636→};
+   637→
+   638→export const faqs: FAQ[] = [
+   639→  {
+   640→    question: "Do I need a referral from my doctor to book a consultation?",
+   641→    answer:
+   642→      "No referral is required for most services. However, if you are booking for Medical Nutrition Therapy (diabetes, thyroid, hypertension, etc.), we may request recent lab reports to design the most effective protocol. Our intake form will guide you through what to bring.",
+   643→    category: "Booking",
+   644→  },
+   645→  {
+   646→    question: "Are consultations available online or only in-clinic?",
+   647→    answer:
+   648→      "Both. All our dietitians offer secure video consultations via the platform, and in-clinic appointments are available at our Kathmandu location for body composition analysis and hands-on assessments. Video consultations are equally effective for most conditions.",
+   649→    category: "Booking",
+   650→  },
+   651→  {
+   652→    question: "How quickly will I see results?",
+   653→    answer:
+   654→      "Most clients notice energy and digestion improvements within 2–3 weeks. Measurable changes in weight, body composition and lab markers typically appear between weeks 4–8, with the most significant transformations happening between weeks 12–24. Sustainable progress beats rapid loss every time.",
+   655→    category: "Results",
+   656→  },
+   657→  {
+   658→    question: "What if I don't like the meal plan?",
+   659→    answer:
+   660→      "Your meal plan is fully customisable. We build around foods you already enjoy, with smart swaps to improve nutrition. If something isn't working, your dietitian will revise it — typically within 24 hours. The platform also includes 200+ recipes you can swap in.",
+   661→    category: "Programs",
+   662→  },
+   663→  {
+   664→    question: "Do you accept insurance?",
+   665→    answer:
+   666→      "We currently partner with several major insurers for Medical Nutrition Therapy sessions. Coverage varies by provider and plan. Our team will verify your benefits before your first appointment and provide an itemised receipt you can submit for reimbursement.",
+   667→    category: "Payments",
+   668→  },
+   669→  {
+   670→    question: "Can I cancel or pause my program?",
+   671→    answer:
+   672→      "Yes. Programs can be paused for up to 60 days for travel, illness or personal reasons — just notify your dietitian. Cancellations within the first 14 days are fully refundable minus the consultation fee. After 14 days, unused sessions remain valid for 12 months.",
+   673→    category: "Programs",
+   674→  },
+   675→  {
+   676→    question: "Is my health data secure and private?",
+   677→    answer:
+   678→      "Absolutely. We are HIPAA-aligned and GDPR-compliant. All health data is encrypted at rest and in transit, stored on ISO 27001-certified infrastructure, and never shared with third parties without your explicit consent. You can export or delete your data at any time.",
+   679→    category: "Privacy",
+   680→  },
+   681→  {
+   682→    question: "Do you offer family or corporate plans?",
+   683→    answer:
+   684→      "Yes. Our 365-day program includes access for up to 3 family members. For corporate wellness, we offer quarterly and annual contracts with biometric screenings, workshops and 1:1 coaching — please contact our team for a custom proposal and ROI model.",
+   685→    category: "Programs",
+   686→  },
+   687→];
+   688→
+   689→export type Stat = {
+   690→  label: string;
+   691→  value: string;
+   692→  suffix?: string;
+   693→  description: string;
+   694→};
+   695→
+   696→export const stats: Stat[] = [
+   697→  {
+   698→    label: "Lives transformed",
+   699→    value: "12,400",
+   700→    description: "Clients who completed a The Dietitian's Clinic program",
+   701→  },
+   702→  {
+   703→    label: "Avg. weight lost",
+   704→    value: "8.4",
+   705→    suffix: "kg",
+   706→    description: "Across all 90-day completers in 2024",
+   707→  },
+   708→  {
+   709→    label: "Client satisfaction",
+   710→    value: "97",
+   711→    suffix: "%",
+   712→    description: "Would recommend The Dietitian's Clinic to a friend",
+   713→  },
+   714→  {
+   715→    label: "Certified dietitians",
+   716→    value: "28",
+   717→    description: "RDN-credentialed clinicians on staff",
+   718→  },
+   719→];
+   720→
+   721→export type ProcessStep = {
+   722→  step: number;
+   723→  title: string;
+   724→  description: string;
+   725→  duration: string;
+   726→  icon: LucideIcon;
+   727→};
+   728→
+   729→export const processSteps: ProcessStep[] = [
+   730→  {
+   731→    step: 1,
+   732→    title: "Discovery Call",
+   733→    description:
+   734→      "A free 15-minute call to understand your goals, history and timeline. We match you with the right dietitian and program.",
+   735→    duration: "15 min · Free",
+   736→    icon: Users,
+   737→  },
+   738→  {
+   739→    step: 2,
+   740→    title: "Comprehensive Assessment",
+   741→    description:
+   742→      "60–90 minute deep-dive covering labs, body composition, lifestyle, food preferences and behavioural patterns.",
+   743→    duration: "90 min · In-clinic or video",
+   744→    icon: Activity,
+   745→  },
+   746→  {
+   747→    step: 3,
+   748→    title: "Personalised Plan & Coaching",
+   749→    description:
+   750→      "Receive a custom meal plan, supplement protocol and habit roadmap. Weekly check-ins keep you accountable.",
+   751→    duration: "Ongoing · Daily support",
+   752→    icon: HeartPulse,
+   753→  },
+   754→  {
+   755→    step: 4,
+   756→    title: "Track, Adjust, Transform",
+   757→    description:
+   758→      "Monitor progress with our dashboard. Your dietitian adjusts protocols based on real data — not guesswork.",
+   759→    duration: "12+ weeks",
+   760→    icon: TrendingUp,
+   761→  },
+   762→];
+   763→
+   764→// ===== Extended data for individual pages =====
+   765→
+   766→export type ServiceDetail = {
+   767→  slug: string;
+   768→  process: { step: number; title: string; description: string }[];
+   769→  faqs: { question: string; answer: string }[];
+   770→  relatedSlugs: string[];
+   771→  outcomes: { metric: string; value: string }[];
+   772→};
+   773→
+   774→export const serviceDetails: Record<string, ServiceDetail> = {
+   775→  "weight-loss": {
+   776→    slug: "weight-loss",
+   777→    process: [
+   778→      { step: 1, title: "Metabolic assessment", description: "We measure your BMR, body composition and metabolic markers to set a precise calorie target." },
+   779→      { step: 2, title: "Personalised meal architecture", description: "High-protein, high-fibre meal plan built around foods you already love — with smart swaps." },
+   780→      { step: 3, title: "Behavioural coaching", description: "Weekly 30-minute sessions address emotional eating, sleep, stress and habit loops." },
+   781→      { step: 4, title: "Progressive adjustment", description: "Every 2 weeks we recalibrate macros based on real weight, energy and adherence data." },
+   782→    ],
+   783→    faqs: [
+   784→      { question: "How fast will I lose weight?", answer: "Our average client loses 0.5–0.8 kg per week. We prioritise fat loss over lean mass, which means slower but sustainable progress." },
+   785→      { question: "Do I have to count calories?", answer: "Not necessarily. We offer both macro-tracking and intuitive-eating tracks depending on your personality and goals." },
+   786→      { question: "What if I hit a plateau?", answer: "Plateaus are normal. Your dietitian will adjust calories, macros, NEAT protocols and stress factors to break through." },
+   787→    ],
+   788→    relatedSlugs: ["lifestyle-modification", "body-composition", "pcos-diet"],
+   789→    outcomes: [
+   790→      { metric: "Average weight loss", value: "8.4 kg" },
+   791→      { metric: "Waist reduction", value: "6.2 cm" },
+   792→      { metric: "Body fat drop", value: "4.8%" },
+   793→      { metric: "Adherence rate", value: "92%" },
+   794→    ],
+   795→  },
+   796→  "pcos-diet": {
+   797→    slug: "pcos-diet",
+   798→    process: [
+   799→      { step: 1, title: "Hormonal panel review", description: "We analyse recent labs (testosterone, LH/FSH, insulin, glucose) and symptom patterns." },
+   800→      { step: 2, title: "Low-GI meal architecture", description: "Anti-inflammatory, low-glycaemic-load meals with chromium and inositol-rich foods." },
+   801→      { step: 3, title: "Lifestyle layer", description: "Sleep, stress and movement protocols that lower insulin resistance and androgen load." },
+   802→      { step: 4, title: "Cycle tracking & adjustment", description: "We sync nutrition with your cycle phases and adjust based on symptom changes." },
+   803→    ],
+   804→    faqs: [
+   805→      { question: "Can PCOS be managed with diet alone?", answer: "For many women, yes — particularly with insulin-resistant PCOS. Some cases benefit from adjunct supplements or medications, which we coordinate with your physician." },
+   806→      { question: "Will this help with fertility?", answer: "Yes. Improving insulin sensitivity and reducing inflammation significantly improves ovulation regularity and fertility outcomes." },
+   807→      { question: "How long until I see cycle improvements?", answer: "Most clients see cycle changes within 8–12 weeks of consistent adherence." },
+   808→    ],
+   809→    relatedSlugs: ["weight-loss", "diabetes-diet", "lifestyle-modification"],
+   810→    outcomes: [
+   811→      { metric: "Cycle regularity", value: "+74%" },
+   812→      { metric: "Insulin resistance", value: "-31%" },
+   813→      { metric: "Weight loss", value: "6.8 kg" },
+   814→      { metric: "Skin improvements", value: "68%" },
+   815→    ],
+   816→  },
+   817→  "diabetes-diet": {
+   818→    slug: "diabetes-diet",
+   819→    process: [
+   820→      { step: 1, title: "Glycaemic baseline", description: "HbA1c, fasting glucose, CGM baseline (if eligible) and medication review." },
+   821→      { step: 2, title: "Carb-counted meal plan", description: "Precision carbohydrate counting with fibre-forward food choices and timing optimisation." },
+   822→      { step: 3, title: "CGM-guided personalisation", description: "Wear a CGM for 14 days to identify your personal glucose triggers and refine the plan." },
+   823→      { step: 4, title: "Medication coordination", description: "We collaborate with your endocrinologist to safely reduce medication as markers improve." },
+   824→    ],
+   825→    faqs: [
+   826→      { question: "Can I reverse type 2 diabetes?", answer: "Many people with type 2 diabetes can achieve remission (HbA1c < 6.5% without medication) through sustained weight loss and dietary change. We've helped clients do exactly this." },
+   827→      { question: "Do I need a CGM?", answer: "For type 1 and type 2 diabetes, CGMs are transformative. For pre-diabetes, they're optional but highly educational for the first 14 days." },
+   828→      { question: "Will this work with my insulin?", answer: "Absolutely. We coordinate timing and carb ratios with your prescribing physician to keep you safe." },
+   829→    ],
+   830→    relatedSlugs: ["weight-loss", "thyroid-diet", "medical-nutrition-therapy"],
+   831→    outcomes: [
+   832→      { metric: "HbA1c reduction", value: "-1.6%" },
+   833→      { metric: "Fasting glucose", value: "-32 mg/dL" },
+   834→      { metric: "Medication reduction", value: "57%" },
+   835→      { metric: "Energy improvement", value: "81%" },
+   836→    ],
+   837→  },
+   838→  "sports-nutrition": {
+   839→    slug: "sports-nutrition",
+   840→    process: [
+   841→      { step: 1, title: "Performance audit", description: "Training load, current fueling, recovery metrics and competition calendar review." },
+   842→      { step: 2, title: "Periodised fueling plan", description: "Macro-cycle synced nutrition: endurance, hypertrophy, peaking and taper phases." },
+   843→      { step: 3, title: "Intra & recovery protocols", description: "Hydration, electrolyte, intra-workout carb and post-session recovery windows." },
+   844→      { step: 4, title: "Competition day protocol", description: "Pre-race meal, during-event fueling and post-competition recovery plan." },
+   845→    ],
+   846→    faqs: [
+   847→      { question: "Do you work with endurance athletes?", answer: "Yes — marathoners, ultra-runners, cyclists and triathletes. We're trained in CHO periodisation and gut training for race-day fueling." },
+   848→      { question: "Can you help with strength sports?", answer: "Powerlifting, Olympic lifting and bodybuilding. We handle weigh-cuts, hypertrophy phases and peak week protocols." },
+   849→      { question: "What about combat sports?", answer: "Yes. Safe weight cuts for MMA, boxing and wrestling with full rehydration protocols." },
+   850→    ],
+   851→    relatedSlugs: ["body-composition", "weight-gain", "lifestyle-modification"],
+   852→    outcomes: [
+   853→      { metric: "VO2 improvement", value: "+12%" },
+   854→      { metric: "Power output", value: "+9%" },
+   855→      { metric: "Recovery time", value: "-23%" },
+   856→      { metric: "Race PB drop", value: "8.4%" },
+   857→    ],
+   858→  },
+   859→};
+   860→
+   861→// Generic fallback for services without specific detail
+   862→export function getServiceDetail(slug: string): ServiceDetail {
+   863→  return serviceDetails[slug] || {
+   864→    slug,
+   865→    process: [
+   866→      { step: 1, title: "Initial consultation", description: "60–90 minute deep-dive assessment covering your history, goals, lifestyle and labs." },
+   867→      { step: 2, title: "Personalised protocol", description: "A custom meal plan, supplement framework and habit roadmap built around your reality." },
+   868→      { step: 3, title: "Coaching & accountability", description: "Weekly check-ins with your dietitian, plus unlimited messaging between sessions." },
+   869→      { step: 4, title: "Track & adjust", description: "We monitor progress and refine your protocol every 2–4 weeks based on real data." },
+   870→    ],
+   871→    faqs: [
+   872→      { question: "How long until I see results?", answer: "Most clients notice energy and digestion improvements in 2–3 weeks, with measurable changes in 4–8 weeks." },
+   873→      { question: "Is the plan flexible?", answer: "Absolutely. Your plan is fully customisable and your dietitian will revise it as needed, typically within 24 hours." },
+   874→      { question: "Do you offer online consultations?", answer: "Yes — all our dietitians offer secure video consultations, which are equally effective for most conditions." },
+   875→    ],
+   876→    relatedSlugs: services.filter((s) => s.slug !== slug).slice(0, 3).map((s) => s.slug),
+   877→    outcomes: [
+   878→      { metric: "Client satisfaction", value: "97%" },
+   879→      { metric: "Goal achievement", value: "89%" },
+   880→      { metric: "Adherence rate", value: "92%" },
+   881→      { metric: "6-month retention", value: "78%" },
+   882→    ],
+   883→  };
+   884→}
+   885→
+   886→// ===== Extended team members for About page =====
+   887→
+   888→export type TeamMember = {
+   889→  id: string;
+   890→  name: string;
+   891→  role: string;
+   892→  credentials: string;
+   893→  bio: string;
+   894→  initials: string;
+   895→  accent: string;
+   896→  specialties: string[];
+   897→  yearsExperience: number;
+   898→};
+   899→
+   900→export const teamMembers: TeamMember[] = [
+   901→  {
+   902→    id: "anita-shrestha",
+   903→    name: "Dr. Anita Shrestha",
+   904→    role: "Founder & Clinical Director",
+   905→    credentials: "RD, PhD Clinical Nutrition",
+   906→    bio: "Anita founded The Dietitian's Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
+   907→    initials: "AS",
+   908→    accent: "from-emerald-500 to-teal-500",
+   909→    specialties: ["PCOS", "Thyroid", "Fertility"],
+   910→    yearsExperience: 14,
+   911→  },
+   912→  {
+   913→    id: "rohan-thapa",
+   914→    name: "Dr. Rohan Thapa",
+   915→    role: "Head of Sports Nutrition",
+   916→    credentials: "RD, CSCS, Sports Nutritionist",
+   917→    bio: "Former national team nutritionist, Rohan periodises fueling for endurance, strength and combat athletes from amateur to Olympic level.",
+   918→    initials: "RT",
+   919→    accent: "from-cyan-500 to-blue-500",
+   920→    specialties: ["Endurance", "Strength", "Combat sports"],
+   921→    yearsExperience: 11,
+   922→  },
+   923→  {
+   924→    id: "priya-gurung",
+   925→    name: "Priya Gurung",
+   926→    role: "Senior Diabetes Educator",
+   927→    credentials: "RD, CDE",
+   928→    bio: "A certified diabetes educator, Priya pairs CGM data with carb-counting mastery to help clients reverse pre-diabetes and stabilise type 2 diabetes.",
+   929→    initials: "PG",
+   930→    accent: "from-sky-500 to-indigo-500",
+   931→    specialties: ["Type 2 Diabetes", "Pre-diabetes", "Insulin resistance"],
+   932→    yearsExperience: 9,
+   933→  },
+   934→  {
+   935→    id: "meera-rai",
+   936→    name: "Meera Rai",
+   937→    role: "Maternal & Paediatric Lead",
+   938→    credentials: "RD, Maternal & Paediatric Nutrition",
+   939→    bio: "Meera guides mothers through every trimester and beyond, with a gentle, family-centred approach that makes healthy eating feel doable.",
+   940→    initials: "MR",
+   941→    accent: "from-rose-500 to-pink-500",
+   942→    specialties: ["Pregnancy", "Lactation", "Child nutrition"],
+   943→    yearsExperience: 12,
+   944→  },
+   945→  {
+   946→    id: "aarav-kc",
+   947→    name: "Aarav K.C.",
+   948→    role: "Head of Operations",
+   949→    credentials: "MBA, B.Tech",
+   950→    bio: "Aarav keeps the clinic running smoothly — from technology to scheduling to client experience. Previously at two health-tech startups.",
+   951→    initials: "AK",
+   952→    accent: "from-amber-500 to-orange-500",
+   953→    specialties: ["Operations", "Technology", "Client experience"],
+   954→    yearsExperience: 8,
+   955→  },
+   956→  {
+   957→    id: "sita-maharjan",
+   958→    name: "Sita Maharjan",
+   959→    role: "Lead Receptionist & Care Coordinator",
+   960→    credentials: "B.Sc. Nursing",
+   961→    bio: "Sita is often the first voice you'll hear on the phone. She's a nursing graduate with a gift for making anxious new clients feel at home.",
+   962→    initials: "SM",
+   963→    accent: "from-violet-500 to-purple-500",
+   964→    specialties: ["Client onboarding", "Scheduling", "Care coordination"],
+   965→    yearsExperience: 6,
+   966→  },
+   967→];
+   968→
+   969→// ===== Extended blog content =====
+   970→
+   971→export type BlogArticle = BlogPost & {
+   972→  content: { heading: string; body: string }[];
+   973→  authorBio: string;
+   974→  authorInitials: string;
+   975→  authorAccent: string;
+   976→};
+   977→
+   978→export const blogArticles: BlogArticle[] = [
+   979→  {
+   980→    ...blogPosts[0],
+   981→    authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of The Dietitian's Clinic. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
+   982→    authorInitials: "AS",
+   983→    authorAccent: "from-emerald-500 to-teal-500",
+   984→    content: [
+   985→      {
+   986→        heading: "The insulin-PCOS connection",
+   987→        body: "Polycystic Ovary Syndrome affects approximately 1 in 10 women of reproductive age worldwide, and insulin resistance is present in 70–80% of those cases. When insulin levels are chronically elevated, the ovaries respond by producing more androgens — which worsens every other PCOS symptom, from irregular cycles to weight gain to acne. This is why targeting insulin sensitivity, rather than simply restricting calories, is the cornerstone of evidence-based PCOS nutrition therapy. A 2024 meta-analysis in the Journal of Clinical Endocrinology & Metabolism confirmed that low-glycaemic-load diets improve both metabolic and reproductive outcomes in PCOS more effectively than iso-caloric high-GI controls.",
+   988→      },
+   989→      {
+   990→        heading: "Why carbohydrates are not the enemy",
+   991→        body: "The internet would have you believe that women with PCOS must adopt strict keto or carnivore protocols. The evidence tells a different story. Fibre-rich, low-glycaemic carbohydrates — think lentils, chickpeas, sweet potatoes, oats, berries and most whole fruits — actually improve insulin sensitivity over time. The problem isn't carbs; it's the dose, the timing, the processing and the company they keep. A bowl of white rice with grilled chicken and vegetables will spike glucose far less than the same rice alone. Pairing, processing and portion matter more than elimination.",
+   992→      },
+   993→      {
+   994→        heading: "The Dietitian's Clinic PCOS framework",
+   995→        body: "Our clinical protocol rests on four pillars. First, we build meals around a low-glycaemic-load architecture with 25–30g of protein per meal. Second, we incorporate chromium and inositol-rich foods (and supplement where appropriate). Third, we sync movement — particularly post-meal walks and resistance training — to lower postprandial glucose. Fourth, we address the often-overlooked lifestyle factors: sleep architecture, stress regulation and circadian alignment. Most clients see cycle regularity improve within 8–12 weeks, with weight loss following naturally as insulin levels normalise.",
+   996→      },
+   997→      {
+   998→        heading: "What to expect in the first 90 days",
+   999→        body: "Weeks 1–2 are about transition — your body is adjusting to a new metabolic rhythm, and you may feel some fatigue as insulin levels begin to drop. Weeks 3–6 are when energy typically rebounds and cravings diminish significantly. By week 8, most clients report clearer skin, more regular cycles and noticeable fat loss around the midsection. By week 12, lab markers begin to shift in measurable ways: lower fasting insulin, improved HbA1c and balanced LH/FSH ratios. The journey is not linear, but it is reliably transformative when the protocol is followed consistently.",
+  1000→      },
+  1001→    ],
+  1002→  },
+  1003→  {
+  1004→    ...blogPosts[1],
+  1005→    authorBio: "Priya Gurung is a Senior Diabetes Educator at The Dietitian's Clinic. She is a Certified Diabetes Educator (CDE) with 9 years of clinical experience.",
+  1006→    authorInitials: "PG",
+  1007→    authorAccent: "from-sky-500 to-indigo-500",
+  1008→    content: [
+  1009→      {
+  1010→        heading: "What CGMs actually measure",
+  1011→        body: "Continuous Glucose Monitors use a tiny filament inserted under the skin to measure interstitial glucose every 1–5 minutes. This provides a near-continuous picture of how your body responds to food, stress, sleep and movement throughout the day. The data is genuinely valuable — but only if you know how to interpret it. A single high reading after a meal is not a crisis; what matters is the pattern, the area under the curve, and how quickly glucose returns to baseline. Without context, CGM data can create anxiety rather than insight.",
+  1012→      },
+  1013→      {
+  1014→        heading: "When CGMs make sense for non-diabetics",
+  1015→        body: "For people with pre-diabetes, insulin resistance, PCOS or a strong family history of metabolic disease, a 14-day CGM trial can be genuinely illuminating. It reveals which foods cause unexpected spikes, how sleep affects your fasting glucose, and how exercise improves your glucose tolerance. For otherwise healthy people with no metabolic risk factors, however, the actionable insights are usually fewer — and the risk of obsessive tracking outweighs the benefits. We recommend CGMs selectively, not universally.",
+  1016→      },
+  1017→      {
+  1018→        heading: "How we use CGM data at The Dietitian's Clinic",
+  1019→        body: "When a client wears a CGM, we don't just glance at the graphs. We pair the data with a detailed food and activity log to identify personalised triggers — that mid-morning latte that spikes you to 180, the walk after dinner that flattens your overnight curve, the poor night's sleep that elevates your fasting glucose by 15 points. This data lets us move beyond population-level advice and craft a truly personalised protocol. Most clients are surprised by at least one finding: a 'healthy' food that spikes them, or a 'bad' food they tolerate well.",
+  1020→      },
+  1021→    ],
+  1022→  },
+  1023→  {
+  1024→    ...blogPosts[2],
+  1025→    authorBio: "Meera Rai leads Maternal & Paediatric Nutrition at The Dietitian's Clinic. She has 12 years of experience guiding families through pregnancy and early childhood.",
+  1026→    authorInitials: "MR",
+  1027→    authorAccent: "from-rose-500 to-pink-500",
+  1028→    content: [
+  1029→      {
+  1030→        heading: "Willpower is a finite resource",
+  1031→        body: "Research from Roy Baumeister and others has consistently shown that willpower behaves like a muscle — it fatigues with use. By the end of a stressful workday, the resolve that felt unshakeable at breakfast has often evaporated. This is why restrictive diets fail predictably in the evening hours, and why behavioural scientists have shifted toward environmental and habit-based approaches. Rather than asking 'how do I resist the brownie?', the better question is 'how do I design my environment so the brownie isn't there — or so I've already eaten something satisfying?'",
+  1032→      },
+  1033→      {
+  1034→        heading: "The habit loop: cue, routine, reward",
+  1035→        body: "Charles Duhigg's habit loop — cue, routine, reward — is the foundation of modern behaviour change. Emotional eating typically follows a predictable loop: stress (cue) → eat comfort food (routine) → temporary relief (reward). To change the behaviour, you don't eliminate the cue (you can't avoid stress) and you can't easily eliminate the reward (your brain craves relief). What you can do is substitute the routine: stress → call a friend, take a 10-minute walk, or do a breathing exercise → relief. Over time, the new routine becomes the default response.",
+  1036→      },
+  1037→      {
+  1038→        heading: "Five practical strategies we use with clients",
+  1039→        body: "First, the 'delay don't deny' rule: when a craving hits, wait 15 minutes before acting — most cravings fade. Second, environment design: keep trigger foods out of the house; you can't eat what isn't there. Third, the 'crowding out' approach: focus on adding nourishing foods rather than restricting treats. Fourth, urge surfing: notice the craving as a physical sensation, watch it rise and fall without acting. Fifth, identity-based habit change: 'I am someone who takes care of my body' is more powerful than 'I shouldn't eat that'. These tools, practised consistently, rewire the relationship with food over months — not days.",
+  1040→      },
+  1041→    ],
+  1042→  },
+  1043→  {
+  1044→    ...blogPosts[3],
+  1045→    authorBio: "Dr. Rohan Thapa leads Sports Nutrition at The Dietitian's Clinic. He is a former national team nutritionist with 11 years of elite-athlete experience.",
+  1046→    authorInitials: "RT",
+  1047→    authorAccent: "from-cyan-500 to-blue-500",
+  1048→    content: [
+  1049→      {
+  1050→        heading: "Periodisation: matching fuel to the training block",
+  1051→        body: "Endurance nutrition is not one-size-fits-all. A marathoner in base-building phase needs different fueling than the same athlete in taper week or race week. Periodised nutrition matches carbohydrate availability to training load: high-carb days on hard session days, low-carb days on easy days, and strategic 'train low' sessions to stimulate mitochondrial adaptation. This 'fuel for the work required' model, pioneered by researchers like James Morton at Liverpool John Moores University, has become the gold standard for elite endurance fueling.",
+  1052→      },
+  1053→      {
+  1054→        heading: "Pre-workout: less is more for easy sessions",
+  1055→        body: "For easy aerobic sessions under 75 minutes, you don't need pre-workout carbs — in fact, training in a fasted or low-glycogen state can stimulate adaptations. For sessions over 90 minutes or any high-intensity work, however, pre-fueling matters. A simple rule of thumb: 1g of carbohydrate per kg of body weight, 1–3 hours before. For a 65kg runner, that's a bowl of oats with banana and honey, eaten 2 hours before. Avoid high-fibre and high-fat foods in the 90 minutes before hard efforts — they slow gastric emptying and can cause distress.",
+  1056→      },
+  1057→      {
+  1058→        heading: "Race-day fueling: the 60-90g/hour rule",
+  1059→        body: "For events lasting longer than 2 hours, aim for 60–90g of carbohydrate per hour — a threshold supported by decades of sports science. This is more than most amateurs consume, and it requires gut training (practicing fueling in long sessions) to tolerate. Use multiple transportable carbohydrates (glucose + fructose in a 2:1 ratio) to exceed the 60g/hour single-source limit. For a marathon, that means 2–3 gels per hour plus sports drink, practiced religiously in the final 6 weeks of training. Never try anything new on race day.",
+  1060→      },
+  1061→      {
+  1062→        heading: "Recovery: the 30-minute window, demystified",
+  1063→        body: "The 'anabolic window' is less narrow than once believed, but post-session nutrition still matters — especially after hard or long sessions. Aim for 0.3g protein per kg body weight within 2 hours, plus 1–1.2g carbohydrate per kg to begin glycogen replenishment. For a 65kg athlete: 20g protein and 65g carbs — a chicken sandwich and a banana, or a recovery shake and a bowl of cereal. Hydration matters too: replace 1.5x the fluid lost (weigh yourself pre/post to estimate), with electrolytes for sessions over 90 minutes or in heat.",
+  1064→      },
+  1065→    ],
+  1066→  },
+  1067→];
+  1068→
+  1069→export function getBlogArticle(id: string): BlogArticle | undefined {
+  1070→  return blogArticles.find((a) => a.id === id);
+  1071→}
+  1072→
+  1073→// ===== Awards & certifications for About page =====
+  1074→
+  1075→export type Award = {
+  1076→  year: string;
+  1077→  title: string;
+  1078→  organisation: string;
+  1079→  description: string;
+  1080→};
+  1081→
+  1082→export const awards: Award[] = [
+  1083→  { year: "2024", title: "Best Digital Health Startup", organisation: "Nepal Startup Awards", description: "Recognised for innovation in personalised nutrition care." },
+  1084→  { year: "2023", title: "Healthcare Excellence Award", organisation: "Nepal Medical Association", description: "For outstanding contribution to preventive healthcare." },
+  1085→  { year: "2023", title: "Top 10 Women-Led Health Companies", organisation: "Forbes Nepal", description: "Featured under Dr. Anita Shrestha's leadership." },
+  1086→  { year: "2022", title: "Best Nutrition Platform", organisation: "South Asia Health Tech Summit", description: "Awarded for clinical rigor and user experience." },
+  1087→];
+  1088→
+  1089→export const certificationsList = [
+  1090→  { name: "Academy of Nutrition & Dietetics", description: "Member organisation alignment" },
+  1091→  { name: "Indian Dietetic Association", description: "Cross-border professional body" },
+  1092→  { name: "Nepal Health Professional Council", description: "National regulatory body" },
+  1093→  { name: "ISO 27001:2022", description: "Information security management" },
+  1094→  { name: "HIPAA Aligned", description: "US health-data privacy framework" },
+  1095→  { name: "GDPR Compliant", description: "EU data protection regulation" },
+  1096→];
+  1097→
