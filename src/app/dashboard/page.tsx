@@ -4,39 +4,83 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Home, Calendar, Apple, Activity, Camera, FileText, MessageCircle,
-  CreditCard, Bell, Settings, LogOut, TrendingDown, Flame, Droplets,
-  Moon, Footprints, CheckCircle2, ChevronRight, Star, Plus, Send,
+  Home, Calendar, FileText, MessageCircle, Bell, Settings, LogOut,
+  CheckCircle2, ChevronRight, Clock, Video, MapPin, Loader2, User,
+  Target, Wallet,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+type Appointment = {
+  id: string;
+  scheduledAt: string;
+  status: string;
+  mode: string;
+  meetingLink: string | null;
+  dietitian: { name: string } | null;
+  service: { title: string } | null;
+  program: { duration: string; tagline: string } | null;
+};
+
+type Notification = {
+  id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  createdAt: string;
+  isRead: boolean;
+};
+
+type DashboardData = {
+  user: { id: string; name: string | null; email: string; phone: string | null; createdAt: Date } | null;
+  patient: {
+    id: string;
+    primaryGoal: string | null;
+    condition: string | null;
+    startDate: Date | null;
+    targetWeight: number | null;
+    currentWeight: number | null;
+  } | null;
+  upcomingAppointments: Appointment[];
+  recentNotifications: Notification[];
+  activePayment: { id: string; amount: number; method: string; updatedAt: Date } | null;
+};
 
 const sidebarItems = [
   { icon: Home, label: "Dashboard", active: true },
   { icon: Calendar, label: "Appointments" },
-  { icon: Apple, label: "Meal Plans" },
-  { icon: Activity, label: "Progress" },
-  { icon: Camera, label: "Photos" },
   { icon: FileText, label: "Reports" },
-  { icon: MessageCircle, label: "Messages", badge: 2 },
-  { icon: CreditCard, label: "Payments" },
+  { icon: MessageCircle, label: "Messages" },
   { icon: Bell, label: "Notifications" },
   { icon: Settings, label: "Settings" },
 ];
 
-const messages = [
-  { from: "Dr. Anita Shrestha", initials: "AS", accent: "from-pink-500 to-rose-500", text: "Great progress this week, Sneha! Your fasting glucose is down 8 points. Keep up the morning walks.", time: "2h ago", unread: true },
-  { from: "Care Team", initials: "CT", accent: "from-emerald-500 to-teal-500", text: "Your next appointment is confirmed for Thursday at 10:00 AM. Video link will be sent 15 minutes before.", time: "1d ago" },
-];
-
 export default function DashboardPage() {
   const router = useRouter();
-  const [activeNav, setActiveNav] = React.useState("Dashboard");
-  const [messageText, setMessageText] = React.useState("");
+  const [data, setData] = React.useState<DashboardData | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    fetch("/api/client/dashboard")
+      .then(async (r) => {
+        if (r.status === 401) {
+          router.push("/login?next=/dashboard");
+          return null;
+        }
+        return r.json();
+      })
+      .then((d) => {
+        if (d?.success) setData(d.data);
+        else if (d) setError(d.error || "Failed to load");
+      })
+      .catch(() => setError("Network error"))
+      .finally(() => setLoading(false));
+  }, [router]);
 
   const signOut = async () => {
     try {
@@ -49,246 +93,277 @@ export default function DashboardPage() {
     router.refresh();
   };
 
+  const fmtDate = (s: string | Date) =>
+    new Date(s).toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    });
+  const fmtTime = (s: string | Date) =>
+    new Date(s).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  const fmtRelative = (s: string | Date) => {
+    const diff = Date.now() - new Date(s).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  };
+
+  const userName = data?.user?.name || "there";
+  const initials = (userName || "?")
+    .split(" ")
+    .map((s) => s[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navigation />
-      <main className="flex-1 pt-20">
+      <main id="main" className="flex-1 pt-20">
         <div className="container mx-auto px-4 sm:px-6 py-8">
           {/* Header */}
           <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
             <div>
               <p className="text-xs text-muted-foreground">Welcome back</p>
-              <h1 className="text-2xl sm:text-3xl font-bold">Sneha Karki 👋</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">
+                {loading ? <Skeleton className="h-8 w-48" /> : `${userName} 👋`}
+              </h1>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                On track · Day 47 of 90
-              </Badge>
-              <Button variant="outline" size="sm" onClick={signOut}>
-                <LogOut className="w-3.5 h-3.5 mr-1.5" />
-                Sign out
-              </Button>
-            </div>
+            {data && (
+              <div className="flex items-center gap-2">
+                {data.upcomingAppointments.length > 0 && (
+                  <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    {data.upcomingAppointments.length} upcoming
+                  </Badge>
+                )}
+                <Button variant="outline" size="sm" onClick={signOut}>
+                  <LogOut className="w-3.5 h-3.5 mr-1.5" />
+                  Sign out
+                </Button>
+              </div>
+            )}
           </div>
+
+          {error && (
+            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-sm text-rose-700 dark:text-rose-300">
+              {error}
+            </div>
+          )}
 
           <div className="grid lg:grid-cols-12 gap-6">
             {/* Sidebar */}
             <aside className="hidden lg:flex lg:col-span-2 flex-col gap-1 p-4 rounded-2xl border border-border/60 bg-card h-fit sticky top-24">
               <div className="flex items-center gap-2 px-2 py-3 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold">SK</div>
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold">
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : initials}
+                </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold truncate">Sneha K.</p>
-                  <p className="text-[10px] text-muted-foreground">Premium · 90-day</p>
+                  <p className="text-xs font-semibold truncate">{userName}</p>
+                  <p className="text-[10px] text-muted-foreground">Client</p>
                 </div>
               </div>
               {sidebarItems.map((item) => (
                 <button
                   key={item.label}
-                  onClick={() => setActiveNav(item.label)}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors",
-                    item.label === activeNav
+                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors text-left",
+                    item.active
                       ? "bg-primary text-primary-foreground shadow-glow"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                 >
                   <item.icon className="w-3.5 h-3.5" />
-                  {item.label}
-                  {item.badge && (
-                    <span className={cn(
-                      "ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold",
-                      item.label === activeNav ? "bg-white/20" : "bg-primary/15 text-primary"
-                    )}>
-                      {item.badge}
-                    </span>
-                  )}
+                  <span className="flex-1">{item.label}</span>
                 </button>
               ))}
               <div className="mt-2 pt-2 border-t border-border/40">
-                <Link href="/" className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                <button
+                  onClick={signOut}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                >
                   <LogOut className="w-3.5 h-3.5" />
-                  Back to site
-                </Link>
+                  Sign out
+                </button>
               </div>
             </aside>
 
             {/* Main content */}
             <div className="lg:col-span-10 space-y-6">
-              {/* Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                {[
-                  { icon: TrendingDown, label: "Weight lost", value: "10.8 kg", change: "-1.2 kg this week", color: "text-emerald-600 dark:text-emerald-400" },
-                  { icon: Flame, label: "Calories today", value: "1,000", change: "/ 1,700 kcal", color: "text-primary" },
-                  { icon: Footprints, label: "Steps", value: "8,420", change: "+12% vs avg", color: "text-sky-600 dark:text-sky-400" },
-                  { icon: Droplets, label: "Water", value: "1.8 L", change: "/ 2.5 L goal", color: "text-cyan-600 dark:text-cyan-400" },
-                ].map((s) => (
-                  <div key={s.label} className="p-4 rounded-2xl border border-border/40 bg-card">
-                    <div className="flex items-center justify-between mb-2">
-                      <s.icon className={cn("w-4 h-4", s.color)} />
-                      <span className="text-[10px] text-muted-foreground">{s.change}</span>
-                    </div>
-                    <p className="text-2xl font-bold">{s.value}</p>
-                    <p className="text-xs text-muted-foreground">{s.label}</p>
+              {/* Profile + goal cards */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="p-4 rounded-2xl border border-border/40 bg-card">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-primary" />
+                    <p className="text-xs text-muted-foreground">Profile</p>
                   </div>
-                ))}
-              </div>
-
-              {/* Weight chart + next appointment */}
-              <div className="grid lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-2 p-5 rounded-2xl border border-border/40 bg-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-sm font-semibold">Weight trend</h3>
-                      <p className="text-xs text-muted-foreground">Last 16 weeks</p>
-                    </div>
-                    <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0">-10.8 kg</Badge>
-                  </div>
-                  <svg viewBox="0 0 400 160" className="w-full h-40">
-                    <defs>
-                      <linearGradient id="dashLine" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="oklch(0.62 0.18 145)" />
-                        <stop offset="100%" stopColor="oklch(0.65 0.16 230)" />
-                      </linearGradient>
-                      <linearGradient id="dashFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="oklch(0.62 0.18 145 / 0.3)" />
-                        <stop offset="100%" stopColor="oklch(0.62 0.18 145 / 0)" />
-                      </linearGradient>
-                    </defs>
-                    {[0, 40, 80, 120, 160].map((y) => (
-                      <line key={y} x1="0" y1={y} x2="400" y2={y} stroke="oklch(0.92 0.01 150)" strokeWidth="1" />
-                    ))}
-                    <path d="M0,20 C50,30 80,40 120,55 C160,70 200,80 240,95 C280,110 320,120 400,130 L400,160 L0,160 Z" fill="url(#dashFill)" />
-                    <path d="M0,20 C50,30 80,40 120,55 C160,70 200,80 240,95 C280,110 320,120 400,130" stroke="url(#dashLine)" strokeWidth="3" fill="none" strokeLinecap="round" />
-                    <line x1="0" y1="140" x2="400" y2="140" stroke="oklch(0.65 0.16 230)" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
-                    <text x="380" y="135" textAnchor="end" fontSize="10" fill="oklch(0.45 0.03 150)">Goal 62kg</text>
-                    <circle cx="400" cy="130" r="5" fill="oklch(0.62 0.18 145)" />
-                    <circle cx="400" cy="130" r="10" fill="oklch(0.62 0.18 145 / 0.3)" />
-                  </svg>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30 text-xs">
-                    <span className="text-muted-foreground">Start: 78.0 kg</span>
-                    <span className="font-semibold text-emerald-600 dark:text-emerald-400">Current: 67.2 kg</span>
-                    <span className="text-muted-foreground">Goal: 62.0 kg</span>
-                  </div>
+                  {loading ? (
+                    <Skeleton className="h-5 w-32" />
+                  ) : (
+                    <>
+                      <p className="text-sm font-semibold">{data?.user?.email}</p>
+                      <p className="text-xs text-muted-foreground">{data?.user?.phone || "No phone"}</p>
+                    </>
+                  )}
                 </div>
-
-                <div className="p-5 rounded-2xl border border-border/40 bg-gradient-to-br from-primary/5 to-secondary/5">
-                  <h3 className="text-sm font-semibold mb-3">Next appointment</h3>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold">AS</div>
-                    <div>
-                      <p className="text-sm font-semibold">Dr. Anita Shrestha</p>
-                      <p className="text-xs text-muted-foreground">PCOS & Hormonal Health</p>
-                    </div>
+                <div className="p-4 rounded-2xl border border-border/40 bg-card">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="w-4 h-4 text-primary" />
+                    <p className="text-xs text-muted-foreground">Primary goal</p>
                   </div>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-background/60">
-                      <span className="text-muted-foreground">Date</span>
-                      <span className="font-semibold">Thu, Jul 2</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-background/60">
-                      <span className="text-muted-foreground">Time</span>
-                      <span className="font-semibold">10:00 AM</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-background/60">
-                      <span className="text-muted-foreground">Mode</span>
-                      <span className="font-semibold">Video call</span>
-                    </div>
+                  {loading ? (
+                    <Skeleton className="h-5 w-24" />
+                  ) : (
+                    <p className="text-sm font-semibold">
+                      {data?.patient?.primaryGoal || "Not set yet"}
+                    </p>
+                  )}
+                </div>
+                <div className="p-4 rounded-2xl border border-border/40 bg-card">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Wallet className="w-4 h-4 text-primary" />
+                    <p className="text-xs text-muted-foreground">Last payment</p>
                   </div>
-                  <Button className="mt-4 w-full bg-gradient-to-r from-primary to-secondary" size="sm">Join call</Button>
+                  {loading ? (
+                    <Skeleton className="h-5 w-20" />
+                  ) : data?.activePayment ? (
+                    <>
+                      <p className="text-sm font-semibold">
+                        Rs. {data.activePayment.amount.toLocaleString("en-IN")}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {data.activePayment.method} · {fmtDate(data.activePayment.updatedAt)}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No payments yet</p>
+                  )}
                 </div>
               </div>
 
-              {/* Meal plan + measurements */}
-              <div className="grid lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-2 p-5 rounded-2xl border border-border/40 bg-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-sm font-semibold">Today&apos;s meal plan</h3>
-                      <p className="text-xs text-muted-foreground">1,700 kcal · 145g protein</p>
-                    </div>
-                    <Button variant="ghost" size="sm" className="text-xs">Swap meal <ChevronRight className="w-3 h-3" /></Button>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {[
-                      { meal: "Breakfast", food: "Oats & berries", cal: 420, done: true },
-                      { meal: "Lunch", food: "Chicken bowl", cal: 580, done: true },
-                      { meal: "Snack", food: "Greek yogurt", cal: 180, done: false },
-                      { meal: "Dinner", food: "Salmon & quinoa", cal: 520, done: false },
-                    ].map((m) => (
-                      <div key={m.meal} className={cn("p-3 rounded-xl border", m.done ? "border-primary/30 bg-primary/5" : "border-border/40")}>
-                        <div className="flex items-center gap-1.5 mb-1">
-                          {m.done ? <CheckCircle2 className="w-3 h-3 text-primary" /> : <div className="w-3 h-3 rounded-full border-2 border-muted-foreground/30" />}
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{m.meal}</span>
-                        </div>
-                        <p className="text-xs font-semibold">{m.food}</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">{m.cal} kcal</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-5 rounded-2xl border border-border/40 bg-card">
-                  <h3 className="text-sm font-semibold mb-3">Measurements</h3>
-                  <div className="space-y-2.5">
-                    {[
-                      { label: "Waist", value: "78 cm", change: "-6 cm" },
-                      { label: "Hip", value: "96 cm", change: "-4 cm" },
-                      { label: "Chest", value: "92 cm", change: "-3 cm" },
-                      { label: "Body fat", value: "24%", change: "-5%" },
-                    ].map((m) => (
-                      <div key={m.label} className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">{m.label}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">{m.value}</span>
-                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">{m.change}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-border/30">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Moon className="w-3.5 h-3.5 text-primary" />
-                      <span>Sleep avg: <span className="font-semibold text-foreground">7h 12m</span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Messages */}
+              {/* Upcoming appointments */}
               <div className="p-5 rounded-2xl border border-border/40 bg-card">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold">Messages from your care team</h3>
-                  <Badge variant="outline" className="text-[10px]">2 new</Badge>
+                  <div>
+                    <h3 className="text-sm font-semibold">Upcoming appointments</h3>
+                    <p className="text-xs text-muted-foreground">Your next consultations</p>
+                  </div>
+                  <Link href="/booking">
+                    <Button variant="outline" size="sm" className="text-xs h-7">
+                      Book new
+                    </Button>
+                  </Link>
                 </div>
-                <div className="space-y-3 mb-4">
-                  {messages.map((m, i) => (
-                    <div key={i} className={cn("flex items-start gap-3 p-3 rounded-xl", m.unread ? "bg-primary/5" : "bg-muted/40")}>
-                      <div className={cn("w-9 h-9 rounded-lg bg-gradient-to-br flex items-center justify-center text-white text-xs font-bold flex-shrink-0", m.accent)}>
-                        {m.initials}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="text-sm font-semibold">{m.from}</p>
-                          <span className="text-[10px] text-muted-foreground">{m.time}</span>
+                {loading ? (
+                  <div className="space-y-2">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <Skeleton key={i} className="h-16 w-full" />
+                    ))}
+                  </div>
+                ) : data?.upcomingAppointments.length === 0 ? (
+                  <div className="text-center py-10">
+                    <Calendar className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
+                    <p className="text-sm font-semibold">No upcoming appointments</p>
+                    <p className="text-xs text-muted-foreground mt-1 mb-3">
+                      Book your first consultation to get started.
+                    </p>
+                    <Link href="/booking">
+                      <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">
+                        Book consultation
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {data?.upcomingAppointments.map((a) => (
+                      <div
+                        key={a.id}
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors"
+                      >
+                        <div className="text-xs font-mono font-semibold w-24 text-muted-foreground">
+                          <div>{fmtDate(a.scheduledAt)}</div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {fmtTime(a.scheduledAt)}
+                          </div>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{m.text}</p>
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                          {(a.dietitian?.name || "?").charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold">
+                            {a.service?.title || a.program?.duration || "Consultation"}
+                          </p>
+                          <p className="text-xs text-muted-foreground flex items-center gap-2">
+                            <span>{a.dietitian?.name || "—"}</span>
+                            <span className="inline-flex items-center gap-0.5">
+                              {a.mode === "VIDEO" ? (
+                                <>
+                                  <Video className="w-3 h-3" /> Video
+                                </>
+                              ) : (
+                                <>
+                                  <MapPin className="w-3 h-3" /> In-clinic
+                                </>
+                              )}
+                            </span>
+                          </p>
+                        </div>
+                        <span className="text-[10px] font-bold uppercase px-2 py-1 rounded-md bg-muted text-muted-foreground">
+                          {a.status}
+                        </span>
                       </div>
-                      {m.unread && <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2" />}
-                    </div>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <Input
-                    value={messageText}
-                    onChange={(e) => setMessageText(e.target.value)}
-                    placeholder="Reply to your dietitian..."
-                    className="h-10"
-                  />
-                  <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">
-                    <Send className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Notifications */}
+              <div className="p-5 rounded-2xl border border-border/40 bg-card">
+                <h3 className="text-sm font-semibold mb-4">Recent notifications</h3>
+                {loading ? (
+                  <div className="space-y-2">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <Skeleton key={i} className="h-12 w-full" />
+                    ))}
+                  </div>
+                ) : data?.recentNotifications.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-6">
+                    No notifications yet.
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {data?.recentNotifications.map((n) => (
+                      <div
+                        key={n.id}
+                        className={cn(
+                          "flex items-start gap-3 p-3 rounded-xl",
+                          !n.isRead && "bg-primary/5"
+                        )}
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Bell className="w-3.5 h-3.5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold">{n.title}</p>
+                          {n.body && (
+                            <p className="text-[11px] text-muted-foreground mt-0.5">{n.body}</p>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                          {fmtRelative(n.createdAt)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

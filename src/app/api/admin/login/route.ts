@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { signSession, ADMIN_COOKIE } from "@/lib/auth";
+import { rateLimit, getClientIp, rateLimitResponse } from "@/lib/ratelimit";
 
 /**
  * POST /api/admin/login
@@ -25,6 +26,19 @@ async function verifyPassword(plain: string, hash: string): Promise<boolean> {
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 10 attempts per 15 min per IP
+  const ip = getClientIp(req);
+  const rl = rateLimit({ key: `login:${ip}`, limit: 10, windowMs: 15 * 60 * 1000 });
+  if (!rl.ok) {
+    return new NextResponse(rateLimitResponse(rl.resetAt).body, {
+      status: 429,
+      headers: {
+        "Content-Type": "application/json",
+        "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)),
+      },
+    });
+  }
+
   try {
     const body = await req.json();
     const email = String(body.email || "").toLowerCase().trim();
@@ -49,9 +63,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (user.role !== "SUPER_ADMIN" && user.role !== "DIETITIAN") {
+    // Allow all real user roles. The role-based access control happens in
+    // requireAdmin / requireClient on each protected route.
+    const allowedRoles = ["SUPER_ADMIN", "DIETITIAN", "NUTRITIONIST", "RECEPTIONIST", "MANAGER", "CONTENT_MANAGER", "FINANCE", "CLIENT"];
+    if (!allowedRoles.includes(user.role)) {
       return NextResponse.json(
-        { success: false, error: "Account not authorized for admin access" },
+        { success: false, error: "Account not authorized" },
         { status: 403 }
       );
     }

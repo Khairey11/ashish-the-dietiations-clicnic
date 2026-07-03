@@ -1,8 +1,20 @@
 "use server";
 
 import * as React from "react";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { rateLimit } from "@/lib/ratelimit";
+
+/** Get client IP from server action context. */
+async function actionIp(): Promise<string> {
+  const h = await headers();
+  return (
+    h.get("x-forwarded-for")?.split(",")[0].trim() ||
+    h.get("x-real-ip")?.trim() ||
+    "unknown"
+  );
+}
 
 // ============================================================
 // BOOKING ACTION
@@ -27,6 +39,16 @@ export type BookingInput = z.infer<typeof bookingSchema>;
 
 export async function createBooking(input: BookingInput) {
   try {
+    // Rate limit: 5 bookings per hour per IP
+    const ip = await actionIp();
+    const rl = rateLimit({ key: `booking:${ip}`, limit: 5, windowMs: 60 * 60 * 1000 });
+    if (!rl.ok) {
+      return {
+        success: false,
+        error: "Too many booking attempts. Please try again later.",
+      };
+    }
+
     const parsed = bookingSchema.parse(input);
 
     // Find or create the client (User + Patient)
@@ -196,7 +218,7 @@ export async function createBooking(input: BookingInput) {
       success: true,
       appointmentId: appointment.id,
       paymentId,
-      message: "Booking confirmed. A confirmation email is on its way.",
+      message: "Booking confirmed. Our team will WhatsApp you to verify your payment and slot.",
     };
   } catch (error) {
     console.error("Booking creation failed:", error);
@@ -228,6 +250,16 @@ export type ContactInput = z.infer<typeof contactSchema>;
 
 export async function submitContactForm(input: ContactInput) {
   try {
+    // Rate limit: 5 contact submissions per hour per IP
+    const ip = await actionIp();
+    const rl = rateLimit({ key: `contact:${ip}`, limit: 5, windowMs: 60 * 60 * 1000 });
+    if (!rl.ok) {
+      return {
+        success: false,
+        error: "Too many messages. Please try again later.",
+      };
+    }
+
     const parsed = contactSchema.parse(input);
 
     // Persist as a Lead
@@ -279,6 +311,16 @@ const newsletterSchema = z.object({
 
 export async function subscribeNewsletter(input: { email: string }) {
   try {
+    // Rate limit: 10 subscriptions per hour per IP
+    const ip = await actionIp();
+    const rl = rateLimit({ key: `newsletter:${ip}`, limit: 10, windowMs: 60 * 60 * 1000 });
+    if (!rl.ok) {
+      return {
+        success: false,
+        error: "Too many attempts. Please try again later.",
+      };
+    }
+
     const parsed = newsletterSchema.parse(input);
 
     // Upsert (so unsubscribes can re-subscribe)

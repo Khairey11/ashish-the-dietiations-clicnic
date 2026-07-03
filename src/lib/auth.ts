@@ -55,8 +55,11 @@ export async function verifySession(token: string | undefined): Promise<string |
   return userId;
 }
 
-export async function requireAdmin(req: NextRequest): Promise<
-  { ok: true; userId: string } | { ok: false; response: NextResponse }
+export async function requireUser(
+  req: NextRequest,
+  allowedRoles?: Array<"SUPER_ADMIN" | "DIETITIAN" | "CLIENT" | "NUTRITIONIST" | "RECEPTIONIST" | "MANAGER" | "CONTENT_MANAGER" | "FINANCE">
+): Promise<
+  { ok: true; userId: string; role: string } | { ok: false; response: NextResponse }
 > {
   const token = req.cookies.get(COOKIE_NAME)?.value;
   const userId = await verifySession(token);
@@ -69,12 +72,11 @@ export async function requireAdmin(req: NextRequest): Promise<
       ),
     };
   }
-  // Confirm the user still exists and is an admin
   const user = await db.user.findUnique({
     where: { id: userId },
     select: { id: true, role: true },
   });
-  if (!user || (user.role !== "SUPER_ADMIN" && user.role !== "DIETITIAN")) {
+  if (!user) {
     return {
       ok: false,
       response: NextResponse.json(
@@ -83,7 +85,32 @@ export async function requireAdmin(req: NextRequest): Promise<
       ),
     };
   }
-  return { ok: true, userId };
+  if (allowedRoles && !allowedRoles.includes(user.role as any)) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { success: false, error: "Forbidden" },
+        { status: 403 }
+      ),
+    };
+  }
+  return { ok: true, userId: user.id, role: user.role };
+}
+
+export async function requireAdmin(req: NextRequest): Promise<
+  { ok: true; userId: string } | { ok: false; response: NextResponse }
+> {
+  const result = await requireUser(req, ["SUPER_ADMIN", "DIETITIAN"]);
+  if (!result.ok) return result;
+  return { ok: true, userId: result.userId };
+}
+
+export async function requireClient(req: NextRequest): Promise<
+  { ok: true; userId: string } | { ok: false; response: NextResponse }
+> {
+  const result = await requireUser(req, ["CLIENT", "SUPER_ADMIN", "DIETITIAN"]);
+  if (!result.ok) return result;
+  return { ok: true, userId: result.userId };
 }
 
 export const ADMIN_COOKIE = COOKIE_NAME;
