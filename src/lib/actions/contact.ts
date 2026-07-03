@@ -13,14 +13,14 @@ const bookingSchema = z.object({
   dietitian: z.string().min(1, "Dietitian is required"),
   date: z.string().min(1, "Date is required"),
   time: z.string().min(1, "Time is required"),
-  name: z.string().min(2, "Name is required"),
-  email: z.string().email("Valid email is required"),
-  phone: z.string().min(7, "Valid phone is required"),
-  age: z.string().optional(),
-  goal: z.string().optional(),
-  medical: z.string().optional(),
-  program: z.string().optional(),
-  paymentMethod: z.string().default("khalti"),
+  name: z.string().min(2, "Name is required").max(120),
+  email: z.string().email("Valid email is required").max(160),
+  phone: z.string().min(7, "Valid phone is required").max(32),
+  age: z.string().max(10).optional(),
+  goal: z.string().max(1000).optional(),
+  medical: z.string().max(2000).optional(),
+  program: z.string().max(80).optional(),
+  paymentMethod: z.enum(["khalti", "esewa", "bank"]).default("khalti"),
 });
 
 export type BookingInput = z.infer<typeof bookingSchema>;
@@ -73,16 +73,12 @@ export async function createBooking(input: BookingInput) {
       throw new Error("Failed to create patient profile");
     }
 
-    // Resolve dietitian by slug (matches seed: anita-shrestha → email)
-    // The parsed.dietitian is a slug like "anita-shrestha"
+    // Resolve dietitian by slug — the parsed.dietitian value is a slug
+    // like "anita-shrestha"; we derive the matching seeded email.
     const dietitianEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.health`;
     const dietitian = await db.dietitian.findFirst({
-      where: {
-        OR: [
-          { userId: parsed.dietitian },
-          { user: { email: dietitianEmail } },
-        ],
-      },
+      where: { user: { email: dietitianEmail } },
+      include: { user: true },
     });
 
     if (!dietitian) {
@@ -133,7 +129,7 @@ export async function createBooking(input: BookingInput) {
         scheduledAt,
         status: "CONFIRMED",
         mode: "VIDEO",
-        meetingLink: `https://meet.thedietitiansclinic.health/${Date.now().toString(36)}`,
+        meetingLink: `https://meet.google.com/${crypto.randomUUID().slice(0, 10)}`,
         notes: parsed.goal || parsed.medical || undefined,
       },
     });
@@ -143,10 +139,9 @@ export async function createBooking(input: BookingInput) {
     if (programId) {
       const program = await db.program.findUnique({ where: { id: programId } });
       if (program) {
-        const methodMap: Record<string, "KHALTI" | "ESEWA" | "STRIPE" | "BANK_TRANSFER"> = {
+        const methodMap: Record<string, "KHALTI" | "ESEWA" | "BANK_TRANSFER"> = {
           khalti: "KHALTI",
           esewa: "ESEWA",
-          stripe: "STRIPE",
           bank: "BANK_TRANSFER",
         };
         const payment = await db.payment.create({
@@ -223,10 +218,10 @@ export async function createBooking(input: BookingInput) {
 // ============================================================
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  email: z.string().email("Valid email is required"),
-  phone: z.string().min(7, "Valid phone is required"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: z.string().min(2, "Name is required").max(120),
+  email: z.string().email("Valid email is required").max(160),
+  phone: z.string().min(7, "Valid phone is required").max(32),
+  message: z.string().min(10, "Message must be at least 10 characters").max(2000),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
@@ -326,36 +321,4 @@ export async function subscribeNewsletter(input: { email: string }) {
   }
 }
 
-// ============================================================
-// LEAD CREATION (generic)
-// ============================================================
 
-export async function createLead(input: {
-  name: string;
-  email: string;
-  phone?: string;
-  message?: string;
-  service?: string;
-  source?: string;
-}) {
-  try {
-    const lead = await db.lead.create({
-      data: {
-        name: input.name,
-        email: input.email.toLowerCase(),
-        phone: input.phone,
-        message: input.message,
-        service: input.service,
-        source: (input.source as any) || "WEBSITE",
-        status: "NEW",
-      },
-    });
-    return { success: true, leadId: lead.id };
-  } catch (error) {
-    console.error("Lead creation failed:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Lead creation failed",
-    };
-  }
-}

@@ -171,8 +171,8 @@ export default function AdminSettingsPage() {
                   <Field label="Merchant mobile" value={form.khaltiMerchantMobile}
                     onChange={(v) => setForm((f: any) => ({ ...f, khaltiMerchantMobile: v }))}
                     placeholder="9800000000" />
-                  <EnvRow label="KHALTI_API_KEY" configured={!!process.env.KHALTI_API_KEY} />
-                  <EnvRow label="KHALTI_SECRET" configured={!!process.env.KHALTI_SECRET} />
+                  <EnvRow label="KHALTI_API_KEY" configured={!!config?.khalti.apiKeyConfigured} />
+                  <EnvRow label="KHALTI_SECRET" configured={!!config?.khalti.apiKeyConfigured} />
                   <QrUploader
                     label="Khalti QR code"
                     preview={qrPreviews.khalti}
@@ -194,8 +194,8 @@ export default function AdminSettingsPage() {
                   <Field label="eSewa ID" value={form.esewaId}
                     onChange={(v) => setForm((f: any) => ({ ...f, esewaId: v }))}
                     placeholder="thedietitiansclinic" />
-                  <EnvRow label="ESEWA_MERCHANT_CODE" configured={!!process.env.ESEWA_MERCHANT_CODE} />
-                  <EnvRow label="ESEWA_SECRET" configured={!!process.env.ESEWA_SECRET} />
+                  <EnvRow label="ESEWA_MERCHANT_CODE" configured={!!config?.esewa.merchantCodeConfigured} />
+                  <EnvRow label="ESEWA_SECRET" configured={!!config?.esewa.merchantCodeConfigured} />
                   <QrUploader
                     label="eSewa QR code"
                     preview={qrPreviews.esewa}

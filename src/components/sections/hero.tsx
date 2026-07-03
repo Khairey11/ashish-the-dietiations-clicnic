@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -43,6 +44,17 @@ const liveStats = [
 ];
 
 export function Hero() {
+  const [todayStr, setTodayStr] = React.useState("");
+  React.useEffect(() => {
+    setTodayStr(
+      new Date().toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      })
+    );
+  }, []);
+
   return (
     <section
       id="top"
@@ -73,7 +85,7 @@ export function Hero() {
                 className="mb-6 px-3 py-1.5 gap-1.5 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>2026 Healthcare SaaS · Now with CGM integration</span>
+                <span>Now offering Continuous Glucose Monitoring</span>
               </Badge>
             </motion.div>
 
@@ -102,23 +114,25 @@ export function Hero() {
               variants={item}
               className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-3"
             >
-              <Button
-                size="lg"
-                onClick={() => document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" })}
-                className="shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow text-base h-12 px-6"
-              >
-                Start your free consultation
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => document.querySelector("#programs")?.scrollIntoView({ behavior: "smooth" })}
-                className="text-base h-12 px-6 glass border-border/40"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Explore programs
-              </Button>
+              <Link href="/booking" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow text-base h-12 px-6 w-full sm:w-auto"
+                >
+                  Start your free consultation
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+              <Link href="/programs" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-base h-12 px-6 glass border-border/40 w-full sm:w-auto"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Explore programs
+                </Button>
+              </Link>
             </motion.div>
 
             <motion.div
@@ -150,7 +164,7 @@ export function Hero() {
                 <div className="flex items-center justify-between mb-5">
                   <div>
                     <p className="text-xs text-muted-foreground font-medium">
-                      Today · Tue, 29 Jun
+                      Today · {todayStr || "—"}
                     </p>
                     <h3 className="text-lg font-semibold">Your progress</h3>
                   </div>

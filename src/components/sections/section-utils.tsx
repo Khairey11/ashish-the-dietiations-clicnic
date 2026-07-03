@@ -37,13 +37,7 @@ export function SectionHeader({
         {title}
       </h2>
       {description && (
-        <p
-          className={
-            align === "center"
-              ? "mt-4 text-lg text-muted-foreground text-balance"
-              : "mt-4 text-lg text-muted-foreground text-balance"
-          }
-        >
+        <p className="mt-4 text-lg text-muted-foreground text-balance">
           {description}
         </p>
       )}
@@ -98,8 +92,6 @@ export function AnimatedNumber({
       setDisplay(
         num >= 100
           ? `${Math.round(current).toLocaleString()}`
-          : num >= 10
-          ? `${current.toFixed(1)}`
           : `${current.toFixed(1)}`
       );
       if (progress < 1) requestAnimationFrame(step);

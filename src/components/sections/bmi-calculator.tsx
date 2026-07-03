@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Calculator, Activity, HeartPulse, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -38,13 +39,13 @@ export function BMICalculator() {
       color = "text-sky-600 dark:text-sky-400";
       advice =
         "Your BMI suggests you may benefit from a healthy weight gain program focused on nutrient-dense foods and muscle building.";
-      recommendedProgram = "Healthy Weight Gain";
+      recommendedProgram = "Weight Gain Program (30 days)";
     } else if (bmi < 25) {
       category = "Normal";
       color = "text-emerald-600 dark:text-emerald-400";
       advice =
         "Great work! Your BMI is in the healthy range. A lifestyle maintenance program can help you optimise body composition and long-term health.";
-      recommendedProgram = "Lifestyle Modification";
+      recommendedProgram = "Lifestyle Modification Service";
     } else if (bmi < 30) {
       category = "Overweight";
       color = "text-amber-600 dark:text-amber-400";
@@ -216,15 +217,16 @@ export function BMICalculator() {
                       {result.recommendedProgram}
                     </p>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" })}
-                    className="text-primary hover:text-primary hover:bg-primary/10"
-                  >
-                    Explore
-                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </Button>
+                  <Link href="/booking">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-primary hover:text-primary hover:bg-primary/10"
+                    >
+                      Explore
+                      <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                    </Button>
+                  </Link>
                 </div>
               )}
             </motion.div>

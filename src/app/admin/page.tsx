@@ -10,12 +10,17 @@ import {
   LayoutDashboard, Users, CalendarDays, CreditCard, FileText,
   Megaphone, Star, Settings, Search, Bell, TrendingUp, DollarSign,
   UserPlus, Clock, ChevronRight, Activity, Wallet, ArrowUpRight,
-  ArrowDownRight, LogOut, Plus, Download,
+  ArrowDownRight, LogOut, Plus, Download, Loader2,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const revenueData = [
   { month: "Jan", revenue: 145000, target: 130000 },
@@ -70,6 +75,74 @@ const upcomingAppointments = [
 ];
 
 export default function AdminPage() {
+  const [stats, setStats] = React.useState<null | {
+    totalRevenue: number;
+    todayAppointments: number;
+    pendingLeads: number;
+    totalClients: number;
+    totalAppointments: number;
+    activeDietitians: number;
+    publishedBlogPosts: number;
+    approvedTestimonials: number;
+    activePrograms: number;
+    newClientsThisMonth: number;
+  }>(null);
+  const [leads, setLeads] = React.useState<Array<{
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    service: string | null;
+    status: string;
+    createdAt: string;
+  }>>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [todayStr, setTodayStr] = React.useState("");
+
+  React.useEffect(() => {
+    setTodayStr(
+      new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    );
+    Promise.all([
+      fetch("/api/admin/stats").then((r) => r.json()),
+      fetch("/api/admin/leads?limit=10").then((r) => r.json()),
+    ])
+      .then(([s, l]) => {
+        if (s.success) setStats(s.data);
+        if (l.success) setLeads(l.data);
+      })
+      .catch(() => {
+        // Silent fail — admin page still shows fallback mock charts
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const updateLeadStatus = async (id: string, status: string) => {
+    try {
+      const res = await fetch("/api/admin/leads", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)));
+        toast.success("Lead updated", { description: `Marked as ${status.toLowerCase()}` });
+      } else {
+        toast.error("Update failed", { description: data.error });
+      }
+    } catch {
+      toast.error("Update failed", { description: "Network error" });
+    }
+  };
+
+  const fmtNPR = (n: number) => `Rs. ${n.toLocaleString("en-IN")}`;
+
   return (
     <div className="min-h-screen flex flex-col bg-muted/30">
       <Navigation />
@@ -82,7 +155,7 @@ export default function AdminPage() {
                 <h1 className="text-2xl sm:text-3xl font-bold">Admin Portal</h1>
                 <Badge className="bg-primary/15 text-primary border-0">Super Admin</Badge>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Tuesday, June 29, 2026 · Welcome back, Aarav</p>
+              <p className="text-xs text-muted-foreground mt-1">{todayStr || ""} · Welcome back, Aarav</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/60 text-xs">
@@ -149,25 +222,31 @@ export default function AdminPage() {
               {/* KPI cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { icon: DollarSign, label: "Revenue (MTD)", value: "Rs. 2.48L", change: "+12.8%", trend: "up", accent: "from-emerald-500 to-teal-500" },
-                  { icon: CalendarDays, label: "Today's appts", value: "34", change: "+5 vs avg", trend: "up", accent: "from-sky-500 to-blue-500" },
-                  { icon: UserPlus, label: "Pending leads", value: "12", change: "-3 yesterday", trend: "down", accent: "from-amber-500 to-orange-500" },
-                  { icon: Users, label: "Active clients", value: "1,247", change: "+42 this month", trend: "up", accent: "from-violet-500 to-purple-500" },
+                  { icon: DollarSign, label: "Total Revenue", value: stats ? fmtNPR(stats.totalRevenue) : null, change: stats ? `${stats.activePrograms} active programs` : null, trend: "up", accent: "from-emerald-500 to-teal-500" },
+                  { icon: CalendarDays, label: "Today's appts", value: stats ? String(stats.todayAppointments) : null, change: stats ? `${stats.totalAppointments} total` : null, trend: "up", accent: "from-sky-500 to-blue-500" },
+                  { icon: UserPlus, label: "Pending leads", value: stats ? String(stats.pendingLeads) : null, change: "Action needed", trend: "down", accent: "from-amber-500 to-orange-500" },
+                  { icon: Users, label: "Active clients", value: stats ? stats.totalClients.toLocaleString() : null, change: stats ? `+${stats.newClientsThisMonth} this month` : null, trend: "up", accent: "from-violet-500 to-purple-500" },
                 ].map((k) => (
                   <div key={k.label} className="p-4 rounded-2xl border border-border/40 bg-card">
                     <div className="flex items-center justify-between mb-3">
                       <div className={cn("w-9 h-9 rounded-lg bg-gradient-to-br flex items-center justify-center", k.accent)}>
                         <k.icon className="w-4 h-4 text-white" />
                       </div>
-                      <div className={cn(
-                        "flex items-center gap-0.5 text-[10px] font-semibold",
-                        k.trend === "up" ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
-                      )}>
-                        {k.trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                        {k.change}
-                      </div>
+                      {k.change && (
+                        <div className={cn(
+                          "flex items-center gap-0.5 text-[10px] font-semibold",
+                          k.trend === "up" ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
+                        )}>
+                          {k.trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                          {k.change}
+                        </div>
+                      )}
                     </div>
-                    <p className="text-2xl font-bold tracking-tight">{k.value}</p>
+                    {loading ? (
+                      <Skeleton className="h-7 w-20 mb-1" />
+                    ) : (
+                      <p className="text-2xl font-bold tracking-tight">{k.value ?? "—"}</p>
+                    )}
                     <p className="text-xs text-muted-foreground">{k.label}</p>
                   </div>
                 ))}
@@ -291,38 +370,90 @@ export default function AdminPage() {
                 <div className="lg:col-span-2 p-5 rounded-2xl border border-border/40 bg-card">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-sm font-semibold">Lead sources</h3>
-                      <p className="text-xs text-muted-foreground">Last 30 days</p>
+                      <h3 className="text-sm font-semibold">Recent leads</h3>
+                      <p className="text-xs text-muted-foreground">Latest 10 inquiries from the contact form</p>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-xs">View report <ChevronRight className="w-3 h-3" /></Button>
                   </div>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <BarChart data={leadSourceData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.92 0.01 150)" vertical={false} />
-                      <XAxis dataKey="source" stroke="oklch(0.45 0.03 150)" fontSize={11} tickLine={false} axisLine={false} />
-                      <YAxis stroke="oklch(0.45 0.03 150)" fontSize={11} tickLine={false} axisLine={false} />
-                      <Tooltip
-                        cursor={{ fill: "oklch(0.97 0.01 150)" }}
-                        contentStyle={{ background: "oklch(1 0 0)", border: "1px solid oklch(0.92 0.01 150)", borderRadius: "0.75rem", fontSize: "0.75rem" }}
-                      />
-                      <Bar dataKey="count" fill="oklch(0.62 0.18 145)" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  {loading ? (
+                    <div className="space-y-2">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Skeleton key={i} className="h-10 w-full" />
+                      ))}
+                    </div>
+                  ) : leads.length === 0 ? (
+                    <div className="text-center py-12 text-sm text-muted-foreground">
+                      No leads yet. New inquiries from the contact form will appear here.
+                    </div>
+                  ) : (
+                    <div className="rounded-lg border border-border/40 overflow-hidden">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="text-xs">Name</TableHead>
+                            <TableHead className="text-xs hidden sm:table-cell">Service</TableHead>
+                            <TableHead className="text-xs hidden md:table-cell">Received</TableHead>
+                            <TableHead className="text-xs">Status</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {leads.map((lead) => (
+                            <TableRow key={lead.id}>
+                              <TableCell className="text-xs">
+                                <div className="font-semibold">{lead.name}</div>
+                                <div className="text-muted-foreground">{lead.email}</div>
+                              </TableCell>
+                              <TableCell className="text-xs hidden sm:table-cell">
+                                {lead.service || "—"}
+                              </TableCell>
+                              <TableCell className="text-xs hidden md:table-cell text-muted-foreground">
+                                {new Date(lead.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                              </TableCell>
+                              <TableCell>
+                                <select
+                                  value={lead.status}
+                                  onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
+                                  className={cn(
+                                    "text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-md border-0 cursor-pointer",
+                                    lead.status === "NEW" && "bg-amber-500/15 text-amber-600 dark:text-amber-400",
+                                    lead.status === "CONTACTED" && "bg-sky-500/15 text-sky-600 dark:text-sky-400",
+                                    lead.status === "QUALIFIED" && "bg-violet-500/15 text-violet-600 dark:text-violet-400",
+                                    lead.status === "BOOKED" && "bg-primary/15 text-primary",
+                                    lead.status === "CONVERTED" && "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
+                                    lead.status === "LOST" && "bg-rose-500/15 text-rose-600 dark:text-rose-400",
+                                    lead.status === "ARCHIVED" && "bg-muted text-muted-foreground"
+                                  )}
+                                >
+                                  <option value="NEW">New</option>
+                                  <option value="CONTACTED">Contacted</option>
+                                  <option value="QUALIFIED">Qualified</option>
+                                  <option value="BOOKED">Booked</option>
+                                  <option value="CONVERTED">Converted</option>
+                                  <option value="LOST">Lost</option>
+                                  <option value="ARCHIVED">Archived</option>
+                                </select>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-5 rounded-2xl border border-border/40 bg-card">
                   <h3 className="text-sm font-semibold mb-4">Quick actions</h3>
                   <div className="space-y-2">
                     {[
-                      { icon: CalendarDays, label: "New appointment" },
-                      { icon: FileText, label: "Create diet plan" },
-                      { icon: UserPlus, label: "Add lead" },
-                      { icon: CreditCard, label: "Send invoice" },
-                      { icon: Megaphone, label: "Publish blog" },
-                      { icon: Download, label: "Export CSV" },
+                      { icon: CalendarDays, label: "New appointment", href: "/booking" },
+                      { icon: FileText, label: "Create diet plan", href: "/admin" },
+                      { icon: UserPlus, label: "Add lead", href: "/admin" },
+                      { icon: CreditCard, label: "Payment settings", href: "/admin/settings" },
+                      { icon: Megaphone, label: "Publish blog", href: "/blog" },
+                      { icon: Settings, label: "Settings", href: "/admin/settings" },
                     ].map((a) => (
-                      <button
+                      <Link
                         key={a.label}
+                        href={a.href}
                         className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors text-left"
                       >
                         <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
@@ -330,7 +461,7 @@ export default function AdminPage() {
                         </div>
                         <span className="text-xs font-medium">{a.label}</span>
                         <ChevronRight className="w-3.5 h-3.5 ml-auto text-muted-foreground" />
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 </div>

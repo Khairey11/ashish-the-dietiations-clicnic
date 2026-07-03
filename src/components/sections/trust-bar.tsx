@@ -51,7 +51,7 @@ export function TrustBar() {
             Trusted & certified by
           </p>
           <div className="flex gap-12 animate-marquee whitespace-nowrap">
-            {[...certifications, ...certifications, ...certifications].map((cert, i) => (
+            {[...certifications, ...certifications].map((cert, i) => (
               <span
                 key={i}
                 className="text-sm font-semibold text-muted-foreground/80 tracking-wide"

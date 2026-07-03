@@ -1,11 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
+
+const LeadStatus = z.enum(["NEW", "CONTACTED", "QUALIFIED", "BOOKED", "CONVERTED", "LOST", "ARCHIVED"]);
+const LeadSource = z.enum(["WEBSITE", "WHATSAPP", "PHONE", "REFERRAL", "SOCIAL", "OTHER"]);
+
+const createSchema = z.object({
+  name: z.string().min(1).max(120),
+  email: z.string().email().max(160),
+  phone: z.string().min(4).max(32),
+  message: z.string().min(1).max(2000),
+  service: z.string().max(120).optional().nullable(),
+  source: LeadSource.default("WEBSITE"),
+});
+
+const updateSchema = z.object({
+  id: z.string().min(1).max(40),
+  status: LeadStatus.optional(),
+  assignedTo: z.string().max(40).nullable().optional(),
+  notes: z.string().max(4000).nullable().optional(),
+  followUpAt: z.string().datetime().nullable().optional(),
+});
 
 export async function GET(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
-    const limit = parseInt(searchParams.get("limit") || "50", 10);
+    const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 200);
 
     const where = status ? { status: status as any } : {};
     const leads = await db.lead.findMany({
@@ -13,7 +38,7 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
       take: limit,
       include: {
-        assignedUser: { select: { id: true, name: true, email: true } },
+        assignedUser: { select: { id: true, name: true } },
       },
     });
 
@@ -28,16 +53,26 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
+    const parsed = createSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Invalid input", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
     const lead = await db.lead.create({
       data: {
-        name: body.name,
-        email: body.email.toLowerCase(),
-        phone: body.phone,
-        message: body.message,
-        service: body.service,
-        source: body.source || "WEBSITE",
+        name: parsed.data.name,
+        email: parsed.data.email.toLowerCase(),
+        phone: parsed.data.phone,
+        message: parsed.data.message,
+        service: parsed.data.service ?? null,
+        source: parsed.data.source,
         status: "NEW",
       },
     });
@@ -52,9 +87,19 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
-    const { id, status, assignedTo, notes, followUpAt } = body;
+    const parsed = updateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Invalid input", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
+    const { id, status, assignedTo, notes, followUpAt } = parsed.data;
 
     const lead = await db.lead.update({
       where: { id },

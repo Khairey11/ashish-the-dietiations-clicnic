@@ -17,8 +17,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/login`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${baseUrl}/dashboard`, lastModified: now, changeFrequency: "weekly", priority: 0.3 },
-    { url: `${baseUrl}/admin`, lastModified: now, changeFrequency: "weekly", priority: 0.3 },
   ];
 
   // Service detail pages
