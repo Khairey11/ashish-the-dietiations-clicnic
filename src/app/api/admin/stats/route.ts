@@ -1,7 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const [
       totalClients,
@@ -23,26 +27,19 @@ export async function GET() {
       db.program.count({ where: { isActive: true } }),
     ]);
 
-    // Today's appointments
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
     const endOfToday = new Date();
     endOfToday.setHours(23, 59, 59, 999);
     const todayAppointments = await db.appointment.count({
-      where: {
-        scheduledAt: { gte: startOfToday, lte: endOfToday },
-      },
+      where: { scheduledAt: { gte: startOfToday, lte: endOfToday } },
     });
 
-    // New clients this month
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
     const newClientsThisMonth = await db.user.count({
-      where: {
-        role: "CLIENT",
-        createdAt: { gte: startOfMonth },
-      },
+      where: { role: "CLIENT", createdAt: { gte: startOfMonth } },
     });
 
     return NextResponse.json({

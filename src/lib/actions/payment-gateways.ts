@@ -15,32 +15,30 @@
  *   - ESEWA_MERCHANT_CODE   — eSewa merchant code
  *   - ESEWA_SECRET          — eSewa secret for signature verification (production)
  *   - APP_BASE_URL          — Public base URL of the deployment (for return URLs)
- *
- * Until credentials are configured, the QR + WhatsApp proof flow is the default.
- * See `payments.ts` for the QR config and `getPaymentConfig()` for the runtime check.
  */
 
-import * as React from "react";
 import { db } from "@/lib/db";
 import { siteConfig } from "@/lib/site-config";
 
 const APP_BASE_URL = process.env.APP_BASE_URL || siteConfig.domain;
 
+const KHALTI_BASE =
+  process.env.KHALTI_ENV === "live"
+    ? "https://api.khalti.com"
+    : "https://a.khalti.com.np";
+
+const ESEWA_BASE =
+  process.env.ESEWA_ENV === "live"
+    ? "https://esewa.com.np"
+    : "https://uat.esewa.com.np";
+
 // ============================================================
 // KHALTI
 // ============================================================
-// Khalti docs: https://docs.khalti.com/
-// Initiation endpoint: POST https://dev.khalti.com/api/v2/epayment/initiate/
-// Verification:        POST https://dev.khalti.com/api/v2/epayment/lookup/
-// Live base:           https://api.khalti.com
-
-const KHALTI_BASE = process.env.KHALTI_ENV === "live"
-  ? "https://api.khalti.com"
-  : "https://a.khalti.com.np"; // dev/test host
 
 export async function initiateKhaltiPayment(opts: {
-  paymentId: string;        // Our internal Payment.id
-  amount: number;           // In NPR (Khalti expects paise — multiply by 100)
+  paymentId: string;
+  amount: number;
   description: string;
   customerName: string;
   customerEmail: string;
@@ -51,20 +49,20 @@ export async function initiateKhaltiPayment(opts: {
     return {
       success: false,
       error: "Khalti is not configured. Set KHALTI_API_KEY in your environment.",
-      fallback: "qr_whatsapp",
+      fallback: "qr_whatsapp" as const,
     };
   }
 
   const payload = {
     return_url: `${APP_BASE_URL}/api/payments/khalti/return?paymentId=${opts.paymentId}`,
     website_url: APP_BASE_URL,
-    amount: Math.round(opts.amount * 100), // Khalti wants paisa
+    amount: Math.round(opts.amount * 100),
     purchase_order_id: opts.paymentId,
     purchase_order_name: opts.description.slice(0, 150),
     customer_info: {
-      name: opts.customerName,
-      email: opts.customerEmail,
-      phone: opts.customerPhone,
+      name: opts.customerName.slice(0, 100),
+      email: opts.customerEmail.slice(0, 100),
+      phone: opts.customerPhone.slice(0, 20),
     },
   };
 
@@ -72,7 +70,7 @@ export async function initiateKhaltiPayment(opts: {
     const res = await fetch(`${KHALTI_BASE}/api/v2/epayment/initiate/`, {
       method: "POST",
       headers: {
-        "Authorization": `Key ${process.env.KHALTI_SECRET || apiKey}`,
+        Authorization: `Key ${process.env.KHALTI_SECRET || apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
@@ -80,7 +78,7 @@ export async function initiateKhaltiPayment(opts: {
 
     if (!res.ok) {
       const text = await res.text();
-      return { success: false, error: `Khalti error: ${text}` };
+      return { success: false, error: `Khalti error: ${text.slice(0, 200)}` };
     }
 
     const data = await res.json();
@@ -103,11 +101,27 @@ export async function verifyKhaltiPayment(pidx: string, paymentId: string) {
     return { success: false, error: "KHALTI_SECRET not configured" };
   }
 
+  // Fetch the payment from the DB first — never trust URL params blindly.
+  const payment = await db.payment.findUnique({
+    where: { id: paymentId },
+    select: { id: true, amount: true, status: true, currency: true },
+  });
+  if (!payment) {
+    return { success: false, error: "Payment record not found" };
+  }
+  // Idempotency: already paid, no-op success.
+  if (payment.status === "PAID") {
+    return { success: true, status: "PAID", idempotent: true };
+  }
+  if (payment.status !== "PENDING") {
+    return { success: false, error: `Payment is ${payment.status}, cannot verify` };
+  }
+
   try {
     const res = await fetch(`${KHALTI_BASE}/api/v2/epayment/lookup/`, {
       method: "POST",
       headers: {
-        "Authorization": `Key ${secret}`,
+        Authorization: `Key ${secret}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ pidx }),
@@ -118,19 +132,30 @@ export async function verifyKhaltiPayment(pidx: string, paymentId: string) {
     }
 
     const data = await res.json();
-    if (data.status === "Completed") {
-      await db.payment.update({
-        where: { id: paymentId },
-        data: {
-          status: "PAID",
-          txnId: data.transaction_id,
-          txnRef: pidx,
-          metadata: JSON.stringify(data),
-        },
-      });
-      return { success: true, status: "PAID" };
+    if (data.status !== "Completed") {
+      return { success: false, status: data.status };
     }
-    return { success: false, status: data.status };
+
+    // CRITICAL: verify the gateway-returned amount matches our DB record (in paisa).
+    const expectedPaisa = Math.round(payment.amount * 100);
+    const returnedPaisa = Math.round(Number(data.total_amount || 0));
+    if (returnedPaisa !== expectedPaisa) {
+      console.error(
+        `Khalti amount mismatch for payment ${paymentId}: expected ${expectedPaisa}, got ${returnedPaisa}`
+      );
+      return { success: false, error: "Amount mismatch — payment rejected" };
+    }
+
+    await db.payment.update({
+      where: { id: paymentId },
+      data: {
+        status: "PAID",
+        txnId: data.transaction_id,
+        txnRef: pidx,
+        metadata: JSON.stringify(data),
+      },
+    });
+    return { success: true, status: "PAID" };
   } catch (e) {
     return {
       success: false,
@@ -142,14 +167,6 @@ export async function verifyKhaltiPayment(pidx: string, paymentId: string) {
 // ============================================================
 // eSewa
 // ============================================================
-// eSewa docs: https://developer.esewa.com.np/
-// Test endpoint: https://uat.esewa.com.np/epay/main
-// Live endpoint: https://esewa.com.np/epay/main
-// Verification:  https://uat.esewa.com.np/epay/transrec / https://esewa.com.np/epay/transrec
-
-const ESEWA_BASE = process.env.ESEWA_ENV === "live"
-  ? "https://esewa.com.np"
-  : "https://uat.esewa.com.np";
 
 export async function initiateEsewaPayment(opts: {
   paymentId: string;
@@ -164,18 +181,19 @@ export async function initiateEsewaPayment(opts: {
     return {
       success: false,
       error: "eSewa is not configured. Set ESEWA_MERCHANT_CODE in your environment.",
-      fallback: "qr_whatsapp",
+      fallback: "qr_whatsapp" as const,
     };
   }
 
-  // eSewa uses a form POST (not JSON). We return the URL + form fields for the
-  // client to submit via a hidden form.
+  const totalAmount =
+    opts.amount + (opts.taxAmount || 0) + (opts.serviceCharge || 0) + (opts.deliveryCharge || 0);
+
   const params = new URLSearchParams({
     amt: opts.amount.toString(),
     psc: (opts.serviceCharge || 0).toString(),
     pdc: (opts.deliveryCharge || 0).toString(),
     txAmt: (opts.taxAmount || 0).toString(),
-    tAmt: (opts.amount + (opts.taxAmount || 0) + (opts.serviceCharge || 0) + (opts.deliveryCharge || 0)).toString(),
+    tAmt: totalAmount.toString(),
     pid: opts.paymentId,
     scd: merchantCode,
     su: `${APP_BASE_URL}/api/payments/esewa/return?paymentId=${opts.paymentId}&status=success`,
@@ -198,8 +216,26 @@ export async function verifyEsewaPayment(opts: {
     return { success: false, error: "ESEWA_MERCHANT_CODE not configured" };
   }
 
+  // Fetch the payment from DB — never trust URL-supplied paymentId/amount alone.
+  const payment = await db.payment.findUnique({
+    where: { id: opts.paymentId },
+    select: { id: true, amount: true, status: true },
+  });
+  if (!payment) {
+    return { success: false, error: "Payment record not found" };
+  }
+  if (payment.status === "PAID") {
+    return { success: true, status: "PAID", idempotent: true };
+  }
+  if (payment.status !== "PENDING") {
+    return { success: false, error: `Payment is ${payment.status}, cannot verify` };
+  }
+
+  // CRITICAL: ignore the URL-supplied amount and use the DB amount for verification.
+  const expectedAmount = payment.amount;
+
   const params = new URLSearchParams({
-    amt: (opts.totalAmount).toString(),
+    amt: expectedAmount.toString(),
     rid: opts.transactionRef,
     pid: opts.paymentId,
     scd: merchantCode,
@@ -216,12 +252,12 @@ export async function verifyEsewaPayment(opts: {
         data: {
           status: "PAID",
           txnRef: opts.transactionRef,
-          metadata: JSON.stringify({ verified: true, raw: text }),
+          metadata: JSON.stringify({ verified: true, raw: text.slice(0, 500) }),
         },
       });
       return { success: true, status: "PAID" };
     }
-    return { success: false, status: text };
+    return { success: false, status: text.slice(0, 200) };
   } catch (e) {
     return {
       success: false,
@@ -233,39 +269,26 @@ export async function verifyEsewaPayment(opts: {
 // ============================================================
 // QR + WhatsApp proof (manual verification fallback)
 // ============================================================
-// This is the default flow when API credentials are not configured.
-// The booking UI shows the QR (uploaded by admin) + an "I've paid — send proof
-// on WhatsApp" button. The Payment row stays PENDING until admin verifies the
-// screenshot and marks it PAID via the admin portal.
-
-export async function createPendingQrPayment(opts: {
-  clientId: string;
-  programId?: string;
-  amount: number;
-  method: "KHALTI" | "ESEWA" | "BANK_TRANSFER";
-  bookingRef: string;
-}) {
-  const payment = await db.payment.create({
-    data: {
-      clientId: opts.clientId,
-      programId: opts.programId,
-      amount: opts.amount,
-      currency: "NPR",
-      method: opts.method,
-      status: "PENDING",
-      txnRef: `QR-${opts.bookingRef}`,
-      metadata: JSON.stringify({
-        mode: "qr_whatsapp",
-        bookingRef: opts.bookingRef,
-        createdAt: new Date().toISOString(),
-      }),
-    },
-  });
-  return { success: true, paymentId: payment.id };
-}
+// Used by createBooking in contact.ts (which creates the PENDING payment inline).
+// Admin marks PAID via the admin portal using markPaymentPaid below.
 
 export async function markPaymentPaid(paymentId: string, txnRef?: string) {
   try {
+    // Idempotent: only PENDING payments can be marked PAID.
+    const existing = await db.payment.findUnique({
+      where: { id: paymentId },
+      select: { status: true },
+    });
+    if (!existing) {
+      return { success: false, error: "Payment not found" };
+    }
+    if (existing.status === "PAID") {
+      return { success: true, idempotent: true };
+    }
+    if (existing.status !== "PENDING") {
+      return { success: false, error: `Payment is ${existing.status}` };
+    }
+
     const payment = await db.payment.update({
       where: { id: paymentId },
       data: {

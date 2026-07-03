@@ -1,18 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { updatePaymentConfig } from "@/lib/actions/payments";
+import { requireAdmin } from "@/lib/auth";
 
-/**
- * PUT /api/admin/payment-config
- * Updates payment configuration (QR URLs, merchant mobile, eSewa ID, bank details,
- * proof mode, instructions).
- *
- * NOTE: In production, this endpoint must be protected by an admin auth check.
- * For now, it's open to demonstrate the flow.
- */
+const updateSchema = z.object({
+  khaltiMerchantMobile: z.string().max(32).optional(),
+  khaltiQrUrl: z.string().url().max(2048).or(z.literal("")).optional(),
+  esewaId: z.string().max(64).optional(),
+  esewaQrUrl: z.string().url().max(2048).or(z.literal("")).optional(),
+  bankName: z.string().max(120).optional(),
+  bankAccountName: z.string().max(120).optional(),
+  bankAccountNumber: z.string().max(40).optional(),
+  bankBranch: z.string().max(120).optional(),
+  bankQrUrl: z.string().url().max(2048).or(z.literal("")).optional(),
+  proofMode: z.enum(["whatsapp", "upload"]).optional(),
+  instructions: z.string().max(2000).optional(),
+});
+
 export async function PUT(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
-    const result = await updatePaymentConfig(body);
+    const parsed = updateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Invalid input", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
+    const result = await updatePaymentConfig(parsed.data);
     return NextResponse.json(result);
   } catch (error) {
     console.error("Failed to update payment config:", error);
@@ -23,12 +41,10 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-/**
- * GET /api/admin/payment-config
- * Returns the full payment config (same as the public endpoint, kept here for
- * admin convenience).
- */
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { getPaymentConfig } = await import("@/lib/actions/payments");
     const config = await getPaymentConfig();

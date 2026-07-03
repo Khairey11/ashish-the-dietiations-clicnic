@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, User, ShieldCheck, Sparkles } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
@@ -12,27 +13,50 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") || "/dashboard";
+
   const [mode, setMode] = React.useState<"login" | "register">("login");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [name, setName] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success(mode === "login" ? "Welcome back!" : "Account created!", {
-        description: "Redirecting to your dashboard...",
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
-    }, 1200);
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Welcome back!", {
+          description: "Redirecting to your dashboard...",
+        });
+        router.push(next);
+        router.refresh();
+      } else {
+        toast.error("Sign-in failed", {
+          description: data.error || "Invalid credentials.",
+        });
+      }
+    } catch {
+      toast.error("Sign-in failed", {
+        description: "Network error. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navigation />
-      <main className="flex-1 pt-20 grid lg:grid-cols-2">
+      <main id="main" className="flex-1 pt-20 grid lg:grid-cols-2">
         {/* Left: form */}
         <div className="flex items-center justify-center p-6 sm:p-12">
           <motion.div
@@ -82,6 +106,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@email.com"
                     className="h-11 pl-9"
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -97,6 +122,8 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     className="h-11 pl-9"
+                    autoComplete="current-password"
+                    minLength={6}
                     required
                   />
                 </div>
@@ -108,7 +135,17 @@ export default function LoginPage() {
                     <input type="checkbox" className="rounded" />
                     <span className="text-muted-foreground">Remember me</span>
                   </label>
-                  <button type="button" className="text-primary font-medium hover:underline">Forgot password?</button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      toast.info("Password reset", {
+                        description: "Email care@thedietitiansclinic.health to reset your password.",
+                      })
+                    }
+                    className="text-primary font-medium hover:underline"
+                  >
+                    Forgot password?
+                  </button>
                 </div>
               )}
 
@@ -135,11 +172,21 @@ export default function LoginPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="h-11">
+              <Button
+                variant="outline"
+                className="h-11"
+                disabled
+                title="Coming soon"
+              >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/></svg>
                 Google
               </Button>
-              <Button variant="outline" className="h-11">
+              <Button
+                variant="outline"
+                className="h-11"
+                disabled
+                title="Coming soon"
+              >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
                 Apple
               </Button>

@@ -2,9 +2,20 @@
 // Run: bun run db:seed
 
 import { PrismaClient, UserRole, LeadStatus, LeadSource } from "@prisma/client";
+import { scryptSync, randomBytes } from "node:crypto";
 import { services, programs, dietitians, blogPosts, faqs, testimonials } from "../src/lib/data";
 
 const prisma = new PrismaClient();
+
+/**
+ * Hash a password using scrypt (Node built-in) — format: "<salt>:<derived>" (hex).
+ * Matches the verifyPassword implementation in src/app/api/admin/login/route.ts.
+ */
+function hashPassword(plain: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const derived = scryptSync(plain, salt, 64).toString("hex");
+  return `${salt}:${derived}`;
+}
 
 async function main() {
   console.log("🌱 Seeding database...");
@@ -23,6 +34,8 @@ async function main() {
       phone: "+977 9800000001",
       role: UserRole.SUPER_ADMIN,
       isActive: true,
+      // Default admin password — change immediately after first login.
+      passwordHash: hashPassword("admin123"),
     },
   });
 

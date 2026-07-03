@@ -11,7 +11,6 @@ import {
   FileText,
   CreditCard,
   CheckCircle2,
-  Upload,
   Mail,
   Phone,
   MapPin,
@@ -46,13 +45,17 @@ const timeSlots = [
   "05:00 PM", "06:00 PM",
 ];
 
-const nextDays = Array.from({ length: 14 }, (_, i) => {
-  const d = new Date();
-  d.setDate(d.getDate() + i + 1);
-  return d;
-});
-
 export function Booking() {
+  // Compute next 14 days inside the component to avoid SSR/CSR hydration mismatch.
+  const nextDays = React.useMemo(
+    () =>
+      Array.from({ length: 14 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i + 1);
+        return d;
+      }),
+    []
+  );
   const [step, setStep] = React.useState(0);
   const [data, setData] = React.useState({
     service: "",
@@ -278,7 +281,6 @@ export function Booking() {
                       <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
                         {nextDays.map((d) => {
                           const key = d.toISOString().split("T")[0];
-                          const isToday = d.toDateString() === new Date().toDateString();
                           return (
                             <button
                               key={key}
@@ -367,13 +369,11 @@ export function Booking() {
                       <Label htmlFor="medical" className="text-xs">Medical history (optional)</Label>
                       <Textarea id="medical" value={data.medical} onChange={(e) => update("medical", e.target.value)} placeholder="Any conditions, medications, allergies, previous surgeries..." className="resize-none" rows={3} />
                     </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs">Upload recent reports (optional)</Label>
-                      <div className="rounded-xl border-2 border-dashed border-border p-6 text-center hover:border-primary/40 hover:bg-muted/40 transition-colors cursor-pointer">
-                        <Upload className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                        <p className="text-sm font-medium">Drop files here or click to upload</p>
-                        <p className="text-xs text-muted-foreground mt-1">PDF, JPG, PNG · up to 10MB each</p>
-                      </div>
+                    <div className="rounded-xl border border-border/60 bg-muted/30 p-4 flex items-start gap-3">
+                      <Info className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        Bring any recent lab reports (thyroid panel, HbA1c, lipid profile, etc.) to your consultation, or email them to <a href={`mailto:${siteConfig.email}`} className="text-primary font-medium hover:underline">{siteConfig.email}</a> ahead of time.
+                      </p>
                     </div>
                   </div>
                 )}

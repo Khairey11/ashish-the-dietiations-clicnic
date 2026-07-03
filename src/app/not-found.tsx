@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Home, Search, ArrowLeft, Leaf, MessageCircle } from "lucide-react";
+import { Home, Search, Leaf, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/site/navigation";
 

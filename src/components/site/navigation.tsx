@@ -22,8 +22,10 @@ export function Navigation() {
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [cmdOpen, setCmdOpen] = React.useState(false);
+  const [cmdQuery, setCmdQuery] = React.useState("");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const pathname = usePathname();
 
   React.useEffect(() => setMounted(true), []);
 
@@ -48,17 +50,27 @@ export function Navigation() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const scrollTo = (href: string) => {
-    setMobileOpen(false);
-    setCmdOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   const go = (href: string) => {
     setMobileOpen(false);
     setCmdOpen(false);
+    setCmdQuery("");
+    void href;
   };
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(href + "/");
+
+  const cmdItems = [
+    ...navLinks,
+    { label: "Book Consultation", href: "/booking" },
+    { label: "Contact", href: "/contact" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Client Login", href: "/login" },
+    { label: "Admin Portal", href: "/admin" },
+  ];
+  const filteredCmdItems = cmdItems.filter((item) =>
+    item.label.toLowerCase().includes(cmdQuery.toLowerCase())
+  );
 
   return (
     <>
@@ -108,7 +120,13 @@ export function Navigation() {
                   key={link.href}
                   href={link.href}
                   onClick={() => go(link.href)}
-                  className="px-3.5 py-2 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg transition-all"
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={cn(
+                    "px-3.5 py-2 text-sm font-medium rounded-lg transition-all",
+                    isActive(link.href)
+                      ? "text-foreground bg-muted/80"
+                      : "text-foreground/80 hover:text-foreground hover:bg-muted/60"
+                  )}
                 >
                   {link.label}
                 </Link>
@@ -118,7 +136,7 @@ export function Navigation() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCmdOpen(true)}
-                className="hidden md:flex items-center gap-2 px-3 py-1.5 text-xs text-muted-foreground border border-border/60 rounded-lg hover:bg-muted/60 transition-colors"
+                className="hidden md:flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground border border-border/60 rounded-lg hover:bg-muted/60 transition-colors min-h-[40px]"
                 aria-label="Open command palette"
               >
                 <Command className="w-3 h-3" />
@@ -131,8 +149,9 @@ export function Navigation() {
               {mounted && (
                 <button
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-muted/60 transition-colors"
+                  className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-muted/60 transition-colors"
                   aria-label="Toggle theme"
+                  aria-pressed={theme === "dark"}
                 >
                   {theme === "dark" ? (
                     <Sun className="w-4 h-4" />
@@ -153,8 +172,10 @@ export function Navigation() {
 
               <button
                 onClick={() => setMobileOpen((v) => !v)}
-                className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-muted/60 transition-colors"
+                className="lg:hidden w-11 h-11 flex items-center justify-center rounded-lg hover:bg-muted/60 transition-colors"
                 aria-label="Toggle menu"
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-menu-panel"
               >
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -176,6 +197,7 @@ export function Navigation() {
               onClick={() => setMobileOpen(false)}
             />
             <motion.nav
+              id="mobile-menu-panel"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -228,7 +250,10 @@ export function Navigation() {
                 <Command className="w-4 h-4 text-muted-foreground" />
                 <input
                   autoFocus
+                  value={cmdQuery}
+                  onChange={(e) => setCmdQuery(e.target.value)}
                   placeholder="Search services, programs, dietitians, blogs..."
+                  aria-label="Search the site"
                   className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
                 />
                 <kbd className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-mono">
@@ -239,14 +264,12 @@ export function Navigation() {
                 <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Quick navigation
                 </p>
-                {[
-                  ...navLinks,
-                  { label: "Book Consultation", href: "/booking" },
-                  { label: "Contact", href: "/contact" },
-                  { label: "FAQ", href: "/faq" },
-                  { label: "Client Login", href: "/login" },
-                  { label: "Admin Portal", href: "/admin" },
-                ].map((item) => (
+                {filteredCmdItems.length === 0 && (
+                  <p className="px-3 py-4 text-sm text-muted-foreground text-center">
+                    No matches found.
+                  </p>
+                )}
+                {filteredCmdItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}

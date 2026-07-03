@@ -65,18 +65,16 @@ const footerNav = [
       { label: "Client Login", href: "/login" },
       { label: "Client Dashboard", href: "/dashboard" },
       { label: "Admin Portal", href: "/admin" },
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
     ],
   },
 ];
 
 const socials = [
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Youtube, href: "#", label: "YouTube" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Instagram, href: siteConfig.social.instagram, label: "Instagram" },
+  { icon: Facebook, href: siteConfig.social.facebook, label: "Facebook" },
+  { icon: Twitter, href: siteConfig.social.twitter, label: "Twitter" },
+  { icon: Youtube, href: siteConfig.social.youtube, label: "YouTube" },
+  { icon: Linkedin, href: siteConfig.social.linkedin, label: "LinkedIn" },
 ];
 
 export function Footer() {
@@ -135,22 +133,24 @@ export function Footer() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 lg:justify-end">
-              <Button
-                size="lg"
-                onClick={() => document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" })}
-                className="bg-white text-primary hover:bg-white/90 h-12 px-6 text-base"
-              >
-                Book free call
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => document.querySelector("#programs")?.scrollIntoView({ behavior: "smooth" })}
-                className="border-white/40 text-white hover:bg-white/10 hover:text-white h-12 px-6 text-base"
-              >
-                Explore programs
-              </Button>
+              <Link href="/booking" className="inline-block">
+                <Button
+                  size="lg"
+                  className="bg-white text-primary hover:bg-white/90 h-12 px-6 text-base w-full sm:w-auto"
+                >
+                  Book free call
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+              <Link href="/programs" className="inline-block">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white/40 text-white hover:bg-white/10 hover:text-white h-12 px-6 text-base w-full sm:w-auto"
+                >
+                  Explore programs
+                </Button>
+              </Link>
             </div>
           </div>
         </motion.div>

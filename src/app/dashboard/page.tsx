@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import {
   Home, Calendar, Apple, Activity, Camera, FileText, MessageCircle,
   CreditCard, Bell, Settings, LogOut, TrendingDown, Flame, Droplets,
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const sidebarItems = [
   { icon: Home, label: "Dashboard", active: true },
@@ -33,8 +34,20 @@ const messages = [
 ];
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [activeNav, setActiveNav] = React.useState("Dashboard");
   const [messageText, setMessageText] = React.useState("");
+
+  const signOut = async () => {
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch {
+      // ignore
+    }
+    toast.success("Signed out", { description: "You have been logged out." });
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -52,7 +65,7 @@ export default function DashboardPage() {
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 On track · Day 47 of 90
               </Badge>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={signOut}>
                 <LogOut className="w-3.5 h-3.5 mr-1.5" />
                 Sign out
               </Button>
