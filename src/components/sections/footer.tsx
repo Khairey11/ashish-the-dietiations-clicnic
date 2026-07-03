@@ -7,6 +7,7 @@ import {
   Mail,
   Phone,
   MapPin,
+  MessageCircle,
   Facebook,
   Instagram,
   Twitter,
@@ -21,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { subscribeNewsletter } from "@/lib/actions/contact";
+import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage } from "@/lib/site-config";
 
 const footerNav = [
   {
@@ -201,17 +203,26 @@ export function Footer() {
 
             {/* Contact */}
             <div className="space-y-1.5 text-xs text-background/70">
-              <a href="tel:+97714445566" className="flex items-center gap-2 hover:text-background transition-colors">
+              <a href={phoneLink()} className="flex items-center gap-2 hover:text-background transition-colors">
                 <Phone className="w-3.5 h-3.5" />
-                +977-1-4445566
+                {siteConfig.phoneDisplay}
               </a>
-              <a href="mailto:care@thedietitiansclinic.health" className="flex items-center gap-2 hover:text-background transition-colors">
+              <a
+                href={whatsappLink(defaultWhatsappMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-background transition-colors"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                WhatsApp: {siteConfig.whatsappDisplay}
+              </a>
+              <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-2 hover:text-background transition-colors">
                 <Mail className="w-3.5 h-3.5" />
-                care@thedietitiansclinic.health
+                {siteConfig.email}
               </a>
               <p className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
-                Banasthali, Baluwatar-4, Kathmandu 44600, Nepal
+                {siteConfig.address}
               </p>
             </div>
           </div>

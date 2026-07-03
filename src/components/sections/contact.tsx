@@ -19,10 +19,11 @@ import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { toast } from "sonner";
 import { submitContactForm } from "@/lib/actions/contact";
+import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage } from "@/lib/site-config";
 
 const hours = [
-  { day: "Sunday – Friday", time: "7:00 AM – 8:00 PM" },
-  { day: "Saturday", time: "8:00 AM – 6:00 PM" },
+  { day: "Sunday – Friday", time: siteConfig.weekdayHours },
+  { day: "Saturday", time: siteConfig.saturdayHours },
   { day: "Public Holidays", time: "By appointment" },
 ];
 
@@ -30,25 +31,28 @@ const contactMethods = [
   {
     icon: Phone,
     label: "Call us",
-    value: "+977-1-4445566",
+    value: siteConfig.phoneDisplay,
     subtext: "Mon–Sat, 7AM–8PM",
-    href: "tel:+97714445566",
+    href: phoneLink(),
+    external: false,
     accent: "from-emerald-500 to-teal-500",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+977 98XXXXXXXX",
+    value: siteConfig.whatsappDisplay,
     subtext: "Fastest response",
-    href: "https://wa.me/97798XXXXXXXX",
-    accent: "from-green-500 to-emerald-500",
+    href: whatsappLink(defaultWhatsappMessage),
+    external: true,
+    accent: "from-[#25D366] to-emerald-500",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "care@nutriaplus.health",
+    value: siteConfig.email,
     subtext: "Reply within 1 hour",
-    href: "mailto:care@nutriaplus.health",
+    href: `mailto:${siteConfig.email}`,
+    external: false,
     accent: "from-sky-500 to-blue-500",
   },
 ];
@@ -108,6 +112,8 @@ export function Contact() {
               <motion.a
                 key={m.label}
                 href={m.href}
+                target={m.external ? "_blank" : undefined}
+                rel={m.external ? "noopener noreferrer" : undefined}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -160,8 +166,8 @@ export function Contact() {
                 <div className="flex items-start gap-2">
                   <Navigation className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-semibold">The Dietitian's Clinic Health Clinic</p>
-                    <p className="text-xs text-muted-foreground">Banasthali, Baluwatar-4, Kathmandu 44600, Nepal</p>
+                    <p className="text-sm font-semibold">{siteConfig.name}</p>
+                    <p className="text-xs text-muted-foreground">{siteConfig.address}</p>
                   </div>
                 </div>
               </div>

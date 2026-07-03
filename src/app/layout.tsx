@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -145,6 +146,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <FloatingWhatsApp />
           <Toaster />
           <Sonner />
         </ThemeProvider>

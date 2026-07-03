@@ -43,15 +43,15 @@ const leadSourceData = [
 ];
 
 const sidebarItems = [
-  { icon: LayoutDashboard, label: "Overview", active: true },
-  { icon: Users, label: "Clients", badge: "1.2k" },
-  { icon: CalendarDays, label: "Appointments" },
-  { icon: UserPlus, label: "Leads", badge: "12" },
-  { icon: FileText, label: "Diet Plans" },
-  { icon: CreditCard, label: "Payments" },
-  { icon: Megaphone, label: "Blog CMS" },
-  { icon: Star, label: "Testimonials" },
-  { icon: Settings, label: "Settings" },
+  { icon: LayoutDashboard, label: "Overview", active: true, href: "/admin" },
+  { icon: Users, label: "Clients", badge: "1.2k", href: "/admin" },
+  { icon: CalendarDays, label: "Appointments", href: "/admin" },
+  { icon: UserPlus, label: "Leads", badge: "12", href: "/admin" },
+  { icon: FileText, label: "Diet Plans", href: "/admin" },
+  { icon: CreditCard, label: "Payments", href: "/admin" },
+  { icon: Megaphone, label: "Blog CMS", href: "/admin" },
+  { icon: Star, label: "Testimonials", href: "/admin" },
+  { icon: Settings, label: "Settings", href: "/admin/settings" },
 ];
 
 const recentActivity = [
@@ -114,8 +114,9 @@ export default function AdminPage() {
                 </div>
               </div>
               {sidebarItems.map((item) => (
-                <button
+                <Link
                   key={item.label}
+                  href={item.href}
                   className={cn(
                     "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors",
                     item.active
@@ -133,7 +134,7 @@ export default function AdminPage() {
                       {item.badge}
                     </span>
                   )}
-                </button>
+                </Link>
               ))}
               <div className="mt-2 pt-2 border-t border-border/40">
                 <Link href="/" className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
