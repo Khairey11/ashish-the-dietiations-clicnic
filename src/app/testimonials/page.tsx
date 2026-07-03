@@ -8,6 +8,7 @@ import { SiteLayout, PageHero } from "@/components/site/site-layout";
 import { testimonials, type Testimonial } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { TestimonialSubmitForm } from "@/components/sections/testimonial-submit-form";
 
 const filters = [
   { id: "all", label: "All Stories" },
@@ -115,6 +116,24 @@ export default function TestimonialsPage() {
               </Button>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Submit your story */}
+      <section className="py-16 lg:py-20 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wider uppercase mb-4">
+              Share your story
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
+              Inspired to share <span className="gradient-text">your journey?</span>
+            </h2>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              Your story could inspire someone else to take the first step. Tell us about your experience — we'd love to hear it.
+            </p>
+          </div>
+          <TestimonialSubmitForm />
         </div>
       </section>
     </SiteLayout>

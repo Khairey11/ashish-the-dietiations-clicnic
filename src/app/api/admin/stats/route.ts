@@ -42,6 +42,77 @@ export async function GET(req: NextRequest) {
       where: { role: "CLIENT", createdAt: { gte: startOfMonth } },
     });
 
+    // Revenue by month (last 6 months)
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+    const paidPayments = await db.payment.findMany({
+      where: { status: "PAID", createdAt: { gte: sixMonthsAgo } },
+      select: { amount: true, createdAt: true },
+    });
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const revenueByMonth: Array<{ month: string; revenue: number; target: number }> = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      d.setDate(1);
+      const monthLabel = monthNames[d.getMonth()];
+      const monthRevenue = paidPayments
+        .filter((p) => {
+          const pd = new Date(p.createdAt);
+          return pd.getMonth() === d.getMonth() && pd.getFullYear() === d.getFullYear();
+        })
+        .reduce((sum, p) => sum + p.amount, 0);
+      // Target = previous month revenue + 10% growth baseline (or flat if 0)
+      const prevTarget = revenueByMonth.length > 0 ? revenueByMonth[revenueByMonth.length - 1].target : monthRevenue * 0.9;
+      revenueByMonth.push({
+        month: monthLabel,
+        revenue: monthRevenue,
+        target: Math.round(prevTarget * 1.1),
+      });
+    }
+
+    // Program mix (count of payments grouped by programId, status PAID)
+    const programPayments = await db.payment.groupBy({
+      by: ["programId"],
+      where: { status: "PAID", programId: { not: null } },
+      _count: { _all: true },
+    });
+    const programColors = [
+      "oklch(0.62 0.18 145)", "oklch(0.7 0.17 145)", "oklch(0.65 0.16 230)",
+      "oklch(0.78 0.16 90)", "oklch(0.55 0.2 280)",
+    ];
+    const programIds = programPayments.map((p) => p.programId!).filter(Boolean);
+    const programs = programIds.length > 0
+      ? await db.program.findMany({ where: { id: { in: programIds } }, select: { id: true, duration: true } })
+      : [];
+    const programData = programPayments.map((p, i) => ({
+      name: programs.find((pr) => pr.id === p.programId)?.duration || "Unknown",
+      value: p._count._all,
+      color: programColors[i % programColors.length],
+    }));
+
+    // Lead sources (last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const leadsBySource = await db.lead.groupBy({
+      by: ["source"],
+      where: { createdAt: { gte: thirtyDaysAgo } },
+      _count: { _all: true },
+    });
+    const leadSourceData = leadsBySource.map((l) => ({
+      source: l.source.charAt(0) + l.source.slice(1).toLowerCase(),
+      count: l._count._all,
+    }));
+
+    // Recent activity (last 10 audit log entries)
+    const recentActivityRaw = await db.auditLog.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      include: { user: { select: { name: true } } },
+    });
+
     return NextResponse.json({
       success: true,
       data: {
@@ -55,6 +126,11 @@ export async function GET(req: NextRequest) {
         approvedTestimonials,
         activePrograms,
         newClientsThisMonth,
+        // Chart data
+        revenueByMonth,
+        programData,
+        leadSourceData,
+        recentActivity: recentActivityRaw,
       },
     });
   } catch (error) {
