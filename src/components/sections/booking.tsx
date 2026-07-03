@@ -16,6 +16,8 @@ import {
   Phone,
   MapPin,
   Clock,
+  QrCode,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +29,7 @@ import { services, dietitians, programs } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createBooking } from "@/lib/actions/contact";
+import { siteConfig } from "@/lib/site-config";
 
 const steps = [
   { id: 0, label: "Service", icon: FileText },
@@ -377,62 +380,13 @@ export function Booking() {
 
                 {/* Step 4: Payment */}
                 {step === 4 && (
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">Choose a program & payment method</h3>
-                    <p className="text-sm text-muted-foreground mb-6">Your first discovery call is always free — payment starts your program.</p>
-
-                    <div className="space-y-2 mb-6">
-                      {programs.slice(0, 3).map((p) => (
-                        <button
-                          key={p.id}
-                          onClick={() => update("program", p.id)}
-                          className={cn(
-                            "w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all",
-                            data.program === p.id
-                              ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                              : "border-border hover:border-primary/40"
-                          )}
-                        >
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm font-semibold">{p.duration}</p>
-                              {p.popular && (
-                                <Badge className="bg-primary/15 text-primary border-0 text-[10px]">Popular</Badge>
-                              )}
-                            </div>
-                            <p className="text-xs text-muted-foreground">{p.tagline}</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-base font-bold">Rs. {p.price.toLocaleString()}</p>
-                            <p className="text-[10px] text-muted-foreground line-through">Rs. {p.originalPrice.toLocaleString()}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Payment method</p>
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { id: "khalti", label: "Khalti", color: "bg-purple-500" },
-                        { id: "esewa", label: "eSewa", color: "bg-green-500" },
-                        { id: "stripe", label: "Card", color: "bg-sky-500" },
-                      ].map((m) => (
-                        <button
-                          key={m.id}
-                          onClick={() => update("paymentMethod", m.id)}
-                          className={cn(
-                            "p-3 rounded-xl border text-center transition-all",
-                            data.paymentMethod === m.id
-                              ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                              : "border-border hover:border-primary/40"
-                          )}
-                        >
-                          <div className={cn("w-8 h-8 rounded-lg mx-auto mb-1.5", m.color)} />
-                          <p className="text-xs font-semibold">{m.label}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <PaymentStep
+                    data={data}
+                    update={update}
+                    selectedService={selectedService}
+                    selectedDietitian={selectedDietitian}
+                    selectedProgram={selectedProgram}
+                  />
                 )}
 
                 {/* Step 5: Confirmation */}
@@ -583,6 +537,253 @@ function SummaryRow({ label, value }: { label: string; value?: string }) {
       <span className="font-semibold text-right truncate max-w-[60%]">
         {value || <span className="text-muted-foreground/40 font-normal">—</span>}
       </span>
+    </div>
+  );
+}
+
+// ============================================================
+// Payment step — shows QR + amount + "Send proof via WhatsApp" button
+// ============================================================
+
+function PaymentStep({
+  data,
+  update,
+  selectedService,
+  selectedDietitian,
+  selectedProgram,
+}: {
+  data: any;
+  update: (k: string, v: string) => void;
+  selectedService: any;
+  selectedDietitian: any;
+  selectedProgram: any;
+}) {
+  const [config, setConfig] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch("/api/payments/config")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setConfig(d.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const methodMap: Record<string, { id: string; label: string; color: string; key: string }> = {
+    khalti: { id: "khalti", label: "Khalti", color: "bg-purple-500", key: "khalti" },
+    esewa: { id: "esewa", label: "eSewa", color: "bg-green-500", key: "esewa" },
+    bank: { id: "bank", label: "Bank Transfer", color: "bg-sky-500", key: "bank" },
+  };
+
+  const activeMethod = methodMap[data.paymentMethod] || methodMap.khalti;
+  const activeConfig = config?.[activeMethod.key];
+  const qrUrl = activeConfig?.qrUrl;
+  const amount = selectedProgram?.price;
+  const isLive = activeConfig?.apiKeyConfigured || activeConfig?.merchantCodeConfigured;
+
+  // Build prefilled WhatsApp message with booking details
+  const waMessage = [
+    `Hi The Dietitian's Clinic! I've just completed my booking.`,
+    ``,
+    `*Booking details:*`,
+    `• Name: ${data.name || "—"}`,
+    selectedService ? `• Service: ${selectedService.title}` : null,
+    selectedDietitian ? `• Dietitian: ${selectedDietitian.name}` : null,
+    data.date ? `• Date: ${new Date(data.date).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}` : null,
+    data.time ? `• Time: ${data.time}` : null,
+    selectedProgram ? `• Program: ${selectedProgram.duration}` : null,
+    amount ? `• Amount: Rs. ${amount.toLocaleString()}` : null,
+    `• Payment method: ${activeMethod.label}`,
+    ``,
+    `*Payment screenshot is attached.* Please verify and confirm my appointment. Thank you! 🙏`,
+  ].filter(Boolean).join("\n");
+
+  const waLink = config?.whatsappRaw
+    ? `https://wa.me/${config.whatsappRaw}?text=${encodeURIComponent(waMessage)}`
+    : `https://wa.me/${siteConfig.whatsappRaw}?text=${encodeURIComponent(waMessage)}`;
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-6 w-1/2 bg-muted rounded animate-pulse" />
+        <div className="h-32 bg-muted rounded animate-pulse" />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h3 className="text-xl font-semibold mb-1">Choose a program & payment method</h3>
+      <p className="text-sm text-muted-foreground mb-6">
+        Your first discovery call is always free — payment starts your program.
+      </p>
+
+      {/* Program selection */}
+      <div className="space-y-2 mb-6">
+        {programs.slice(0, 3).map((p) => (
+          <button
+            key={p.id}
+            onClick={() => update("program", p.id)}
+            className={cn(
+              "w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all",
+              data.program === p.id
+                ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                : "border-border hover:border-primary/40"
+            )}
+          >
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold">{p.duration}</p>
+                {p.popular && (
+                  <Badge className="bg-primary/15 text-primary border-0 text-[10px]">Popular</Badge>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">{p.tagline}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-base font-bold">Rs. {p.price.toLocaleString()}</p>
+              <p className="text-[10px] text-muted-foreground line-through">Rs. {p.originalPrice.toLocaleString()}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Payment method selection */}
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+        Payment method
+      </p>
+      <div className="grid grid-cols-3 gap-2 mb-6">
+        {Object.values(methodMap).map((m) => {
+          const cfg = config?.[m.key];
+          const enabled = cfg?.enabled !== false;
+          return (
+            <button
+              key={m.id}
+              onClick={() => enabled && update("paymentMethod", m.id)}
+              disabled={!enabled}
+              className={cn(
+                "p-3 rounded-xl border text-center transition-all relative",
+                data.paymentMethod === m.id
+                  ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                  : "border-border hover:border-primary/40",
+                !enabled && "opacity-40 cursor-not-allowed"
+              )}
+            >
+              <div className={cn("w-8 h-8 rounded-lg mx-auto mb-1.5 flex items-center justify-center text-white text-xs font-bold", m.color)}>
+                {m.label[0]}
+              </div>
+              <p className="text-xs font-semibold">{m.label}</p>
+              {isLive && data.paymentMethod === m.id && (
+                <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[8px] font-bold">
+                  LIVE
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* QR + Amount + WhatsApp proof */}
+      {selectedProgram && (
+        <div className="rounded-2xl border border-border/60 bg-muted/30 p-5 space-y-4">
+          {/* Amount due */}
+          <div className="flex items-center justify-between pb-4 border-b border-border/40">
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Amount to pay</p>
+              <p className="text-3xl font-bold text-primary">Rs. {amount?.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                via {activeMethod.label}
+                {activeMethod.key === "khalti" && activeConfig?.merchantMobile && ` · ${activeConfig.merchantMobile}`}
+                {activeMethod.key === "esewa" && activeConfig?.id && ` · ${activeConfig.id}`}
+                {activeMethod.key === "bank" && activeConfig?.accountNumber && ` · ${activeConfig.accountNumber}`}
+              </p>
+            </div>
+            {isLive ? (
+              <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-0">
+                <CheckCircle2 className="w-3 h-3 mr-1" />
+                Auto-verify
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-amber-500/40 text-amber-600 dark:text-amber-400">
+                Manual verify
+              </Badge>
+            )}
+          </div>
+
+          {/* QR code */}
+          {qrUrl ? (
+            <div className="flex flex-col items-center py-2">
+              <div className="w-48 h-48 rounded-2xl bg-white p-2 shadow-premium">
+                <img src={qrUrl} alt={`${activeMethod.label} QR code`} className="w-full h-full object-contain" />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 text-center max-w-xs">
+                Scan this QR with your {activeMethod.label} app to pay Rs. {amount?.toLocaleString()}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center py-6 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-3">
+                <QrCode className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-semibold">QR code not yet uploaded</p>
+              <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                Our team will share the {activeMethod.label} QR manually after you confirm.
+                Send the screenshot via WhatsApp to speed up verification.
+              </p>
+            </div>
+          )}
+
+          {/* Bank details (if bank transfer) */}
+          {activeMethod.key === "bank" && activeConfig && (
+            <div className="rounded-xl bg-background p-4 space-y-1.5 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Bank</span>
+                <span className="font-semibold">{activeConfig.bankName}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Account name</span>
+                <span className="font-semibold">{activeConfig.accountName}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Account number</span>
+                <span className="font-mono font-semibold">{activeConfig.accountNumber}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Branch</span>
+                <span className="font-semibold">{activeConfig.branch}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Instructions */}
+          <div className="flex items-start gap-2 p-3 rounded-xl bg-primary/5 border border-primary/20">
+            <Info className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-foreground/80 leading-relaxed">
+              {config?.instructions ||
+                "After paying, please send the screenshot to our WhatsApp to confirm your booking."}
+            </p>
+          </div>
+
+          {/* Send proof via WhatsApp */}
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-[#25D366] hover:bg-[#1da851] text-white font-semibold transition-colors"
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            Send payment proof on WhatsApp
+          </a>
+
+          <p className="text-[11px] text-center text-muted-foreground">
+            👆 Opens WhatsApp with your booking details pre-filled. Just attach the screenshot and send.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

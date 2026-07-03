@@ -138,6 +138,38 @@ export async function createBooking(input: BookingInput) {
       },
     });
 
+    // Create a pending Payment row (admin verifies the WhatsApp screenshot)
+    let paymentId: string | undefined;
+    if (programId) {
+      const program = await db.program.findUnique({ where: { id: programId } });
+      if (program) {
+        const methodMap: Record<string, "KHALTI" | "ESEWA" | "STRIPE" | "BANK_TRANSFER"> = {
+          khalti: "KHALTI",
+          esewa: "ESEWA",
+          stripe: "STRIPE",
+          bank: "BANK_TRANSFER",
+        };
+        const payment = await db.payment.create({
+          data: {
+            clientId: user.id,
+            programId,
+            amount: program.price,
+            currency: "NPR",
+            method: methodMap[parsed.paymentMethod] || "KHALTI",
+            status: "PENDING",
+            txnRef: `BOOKING-${appointment.id.slice(-8).toUpperCase()}`,
+            metadata: JSON.stringify({
+              appointmentId: appointment.id,
+              bookingRef: appointment.id,
+              method: parsed.paymentMethod,
+              mode: "qr_whatsapp",
+            }),
+          },
+        });
+        paymentId = payment.id;
+      }
+    }
+
     // Create notification
     await db.notification.create({
       data: {
@@ -156,13 +188,19 @@ export async function createBooking(input: BookingInput) {
         action: "BOOKING_CREATED",
         entity: "Appointment",
         entityId: appointment.id,
-        metadata: JSON.stringify({ service: parsed.service, dietitian: parsed.dietitian }),
+        metadata: JSON.stringify({
+          service: parsed.service,
+          dietitian: parsed.dietitian,
+          paymentId,
+          paymentStatus: paymentId ? "PENDING" : "NONE",
+        }),
       },
     });
 
     return {
       success: true,
       appointmentId: appointment.id,
+      paymentId,
       message: "Booking confirmed. A confirmation email is on its way.",
     };
   } catch (error) {

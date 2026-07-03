@@ -285,15 +285,43 @@ async function main() {
   console.log("→ Creating site settings...");
 
   const settings = [
+    // Clinic contact
     { key: "clinic_name", value: "The Dietitian's Clinic" },
     { key: "clinic_phone", value: "+977-1-4445566" },
+    { key: "clinic_phone_raw", value: "+97714445566" },
     { key: "clinic_email", value: "care@thedietitiansclinic.health" },
     { key: "clinic_address", value: "Banasthali, Baluwatar-4, Kathmandu 44600, Nepal" },
-    { key: "whatsapp_number", value: "+977 98XXXXXXXX" },
+    { key: "whatsapp_number", value: "+977 9800000000" },
+    { key: "whatsapp_raw", value: "9779800000000" },
     { key: "weekday_hours", value: "7:00 AM – 8:00 PM" },
     { key: "saturday_hours", value: "8:00 AM – 6:00 PM" },
     { key: "default_currency", value: "NPR" },
     { key: "default_locale", value: "en-US" },
+
+    // Payment: Khalti
+    { key: "payment_khalti_enabled", value: "true" },
+    { key: "payment_khalti_merchant_mobile", value: "9800000000" },
+    { key: "payment_khalti_qr_url", value: "" },        // Admin uploads via /admin/settings
+    { key: "payment_khalti_api_key", value: "" },        // Set via env: KHALTI_API_KEY
+    { key: "payment_khalti_secret", value: "" },         // Set via env: KHALTI_SECRET
+
+    // Payment: eSewa
+    { key: "payment_esewa_enabled", value: "true" },
+    { key: "payment_esewa_id", value: "thedietitiansclinic" },
+    { key: "payment_esewa_qr_url", value: "" },          // Admin uploads via /admin/settings
+    { key: "payment_esewa_merchant_code", value: "" },   // Set via env: ESEWA_MERCHANT_CODE
+
+    // Payment: Bank transfer
+    { key: "payment_bank_enabled", value: "true" },
+    { key: "payment_bank_name", value: "Nepal Investment Mega Bank" },
+    { key: "payment_bank_account_name", value: "The Dietitian's Clinic Pvt. Ltd." },
+    { key: "payment_bank_account_number", value: "01234567890123" },
+    { key: "payment_bank_branch", value: "Baluwatar Branch" },
+    { key: "payment_bank_qr_url", value: "" },           // Admin uploads via /admin/settings
+
+    // Payment: global
+    { key: "payment_proof_mode", value: "whatsapp" },    // "whatsapp" or "upload"
+    { key: "payment_instructions", value: "After paying, please send the screenshot to our WhatsApp to confirm your booking." },
   ];
 
   for (const s of settings) {
