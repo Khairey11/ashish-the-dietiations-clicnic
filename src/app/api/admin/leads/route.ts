@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
+import { writeAuditLog, serializeForAudit } from "@/lib/audit";
+
+function getClientIpSafe(req: NextRequest): string | undefined {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    req.headers.get("x-real-ip")?.trim() ||
+    undefined
+  );
+}
 
 const LeadStatus = z.enum(["NEW", "CONTACTED", "QUALIFIED", "BOOKED", "CONVERTED", "LOST"]);
 const LeadSource = z.enum(["WEBSITE", "WHATSAPP", "PHONE", "REFERRAL", "SOCIAL", "AD", "ORGANIC", "DIRECT"]);
@@ -101,6 +110,9 @@ export async function PATCH(req: NextRequest) {
     }
     const { id, status, assignedTo, notes, followUpAt } = parsed.data;
 
+    // Fetch before-state for audit
+    const before = await db.lead.findUnique({ where: { id } });
+
     const updateData: Record<string, unknown> = {};
     if (status) updateData.status = status;
     if (assignedTo !== undefined) updateData.assignedTo = assignedTo;
@@ -111,6 +123,16 @@ export async function PATCH(req: NextRequest) {
     const lead = await db.lead.update({
       where: { id },
       data: updateData,
+    });
+
+    await writeAuditLog({
+      userId: auth.userId,
+      action: "LEAD_UPDATED",
+      entity: "Lead",
+      entityId: id,
+      before: serializeForAudit(before),
+      after: serializeForAudit(lead),
+      ipAddress: getClientIpSafe(req),
     });
 
     return NextResponse.json({ success: true, data: lead });

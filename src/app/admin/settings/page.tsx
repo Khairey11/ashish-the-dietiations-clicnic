@@ -287,28 +287,8 @@ export default function AdminSettingsPage() {
               </SectionCard>
             </div>
 
-            {/* ============ Clinic contact (read-only display from siteConfig) ============ */}
-            <SectionCard
-              icon={Phone}
-              title="Clinic contact (read-only)"
-              description="Contact details are defined in src/lib/site-config.ts. Edit that file to change phone, WhatsApp, email, or address."
-            >
-              <div className="space-y-3 text-sm">
-                <ContactRow icon={Phone} label="Phone" value={siteConfig.phoneDisplay} />
-                <ContactRow icon={MessageCircle} label="WhatsApp" value={siteConfig.whatsappDisplay} />
-                <ContactRow icon={Mail} label="Email" value={siteConfig.email} />
-                <ContactRow icon={MapPin} label="Address" value={siteConfig.address} />
-                <Separator />
-                <ContactRow icon={Clock} label="Weekday hours" value={siteConfig.weekdayHours} />
-                <ContactRow icon={Clock} label="Saturday hours" value={siteConfig.saturdayHours} />
-              </div>
-              <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-foreground/80">
-                  To change these values, edit <code className="px-1 py-0.5 rounded bg-muted font-mono">src/lib/site-config.ts</code> and redeploy.
-                </p>
-              </div>
-            </SectionCard>
+            {/* ============ Clinic contact & social (editable) ============ */}
+            <ClinicConfigSection />
           </div>
         </div>
       </main>
@@ -496,5 +476,134 @@ function ContactRow({ icon: Icon, label, value }: { icon: any; label: string; va
       <span className="text-xs text-muted-foreground w-28">{label}</span>
       <span className="text-sm font-semibold flex-1">{value}</span>
     </div>
+  );
+}
+
+// ============================================================
+// Clinic config section (editable contact + hours + social)
+// ============================================================
+
+function ClinicConfigSection() {
+  const [config, setConfig] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch("/api/admin/clinic-config")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setConfig(d.data);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const update = (k: string, v: string) =>
+    setConfig((p: any) => ({ ...p, [k]: v }));
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/clinic-config", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Clinic settings saved", {
+          description: `${data.updated} fields updated.`,
+        });
+      } else {
+        toast.error("Save failed", { description: data.error });
+      }
+    } catch {
+      toast.error("Save failed", { description: "Network error." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <SectionCard icon={Phone} title="Clinic contact & social" description="Loading...">
+        <div className="space-y-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-10 bg-muted rounded animate-pulse" />
+          ))}
+        </div>
+      </SectionCard>
+    );
+  }
+
+  return (
+    <SectionCard
+      icon={Phone}
+      title="Clinic contact & social"
+      description="These values appear across the website (footer, contact page, floating WhatsApp, JSON-LD). Changes take effect immediately."
+    >
+      {/* Contact */}
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+          Contact
+        </p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Field label="Clinic name" value={config?.clinicName || ""} onChange={(v) => update("clinicName", v)} placeholder="The Dietitian's Clinic" />
+          <Field label="Email" value={config?.email || ""} onChange={(v) => update("email", v)} placeholder="care@thedietitiansclinic.health" />
+          <Field label="Phone (display)" value={config?.phoneDisplay || ""} onChange={(v) => update("phoneDisplay", v)} placeholder="+977-1-4445566" />
+          <Field label="Phone (raw, for tel:)" value={config?.phoneRaw || ""} onChange={(v) => update("phoneRaw", v)} placeholder="+97714445566" />
+          <Field label="WhatsApp (display)" value={config?.whatsappDisplay || ""} onChange={(v) => update("whatsappDisplay", v)} placeholder="+977 9800000000" />
+          <Field label="WhatsApp (raw, for wa.me)" value={config?.whatsappRaw || ""} onChange={(v) => update("whatsappRaw", v)} placeholder="9779800000000" />
+        </div>
+        <div className="mt-3">
+          <Field label="Address" value={config?.address || ""} onChange={(v) => update("address", v)} placeholder="Banasthali, Baluwatar-4, Kathmandu 44600, Nepal" />
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Hours */}
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+          Opening hours
+        </p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Field label="Weekday hours" value={config?.weekdayHours || ""} onChange={(v) => update("weekdayHours", v)} placeholder="7:00 AM – 8:00 PM" />
+          <Field label="Saturday hours" value={config?.saturdayHours || ""} onChange={(v) => update("saturdayHours", v)} placeholder="8:00 AM – 6:00 PM" />
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Social */}
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+          Social media
+        </p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Field label="Instagram URL" value={config?.instagram || ""} onChange={(v) => update("instagram", v)} placeholder="https://instagram.com/..." />
+          <Field label="Facebook URL" value={config?.facebook || ""} onChange={(v) => update("facebook", v)} placeholder="https://facebook.com/..." />
+          <Field label="Twitter/X URL" value={config?.twitter || ""} onChange={(v) => update("twitter", v)} placeholder="https://twitter.com/..." />
+          <Field label="YouTube URL" value={config?.youtube || ""} onChange={(v) => update("youtube", v)} placeholder="https://youtube.com/..." />
+          <Field label="LinkedIn URL" value={config?.linkedin || ""} onChange={(v) => update("linkedin", v)} placeholder="https://linkedin.com/..." />
+        </div>
+      </div>
+
+      <div className="pt-2">
+        <Button onClick={save} disabled={saving} className="bg-gradient-to-r from-primary to-secondary">
+          {saving ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-1.5" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4 mr-1.5" />
+              Save clinic settings
+            </>
+          )}
+        </Button>
+      </div>
+    </SectionCard>
   );
 }

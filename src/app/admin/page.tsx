@@ -10,7 +10,7 @@ import {
   LayoutDashboard, Users, CalendarDays, CreditCard, FileText,
   Megaphone, Star, Settings, Search, Bell, TrendingUp, DollarSign,
   UserPlus, Clock, ChevronRight, Activity, Wallet, ArrowUpRight,
-  ArrowDownRight, LogOut, Plus, Download, Loader2,
+  ArrowDownRight, LogOut, Plus, Download, Loader2, ShieldCheck,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
@@ -47,15 +47,23 @@ const leadSourceData = [
   { source: "Ads", count: 41 },
 ];
 
-const sidebarItems = [
+const sidebarItems: Array<{
+  icon: typeof LayoutDashboard;
+  label: string;
+  active?: boolean;
+  href: string;
+  badge?: string;
+}> = [
   { icon: LayoutDashboard, label: "Overview", active: true, href: "/admin" },
-  { icon: Users, label: "Clients", href: "/admin" },
+  { icon: Users, label: "Clients", href: "/admin/clients" },
   { icon: CalendarDays, label: "Appointments", href: "/admin/appointments" },
-  { icon: UserPlus, label: "Leads", badge: "12", href: "/admin" },
+  { icon: UserPlus, label: "Leads", href: "/admin" },
   { icon: FileText, label: "Diet Plans", href: "/admin" },
   { icon: CreditCard, label: "Payments", href: "/admin/payments" },
   { icon: Megaphone, label: "Blog CMS", href: "/admin" },
-  { icon: Star, label: "Testimonials", href: "/admin" },
+  { icon: Star, label: "Testimonials", href: "/admin/testimonials" },
+  { icon: Bell, label: "Newsletter", href: "/admin/newsletter" },
+  { icon: ShieldCheck, label: "Audit Log", href: "/admin/audit-log" },
   { icon: Settings, label: "Settings", href: "/admin/settings" },
 ];
 
@@ -86,6 +94,16 @@ export default function AdminPage() {
     approvedTestimonials: number;
     activePrograms: number;
     newClientsThisMonth: number;
+    revenueByMonth: Array<{ month: string; revenue: number; target: number }>;
+    programData: Array<{ name: string; value: number; color: string }>;
+    leadSourceData: Array<{ source: string; count: number }>;
+    recentActivity: Array<{
+      id: string;
+      action: string;
+      entity: string;
+      createdAt: string;
+      user: { name: string | null } | null;
+    }>;
   }>(null);
   const [leads, setLeads] = React.useState<Array<{
     id: string;
@@ -283,7 +301,7 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={240}>
-                    <AreaChart data={revenueData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <AreaChart data={stats?.revenueByMonth || []} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                       <defs>
                         <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="oklch(0.62 0.18 145 / 0.4)" />
@@ -308,8 +326,8 @@ export default function AdminPage() {
                   <p className="text-xs text-muted-foreground mb-4">Active subscriptions</p>
                   <ResponsiveContainer width="100%" height={180}>
                     <PieChart>
-                      <Pie data={programData} cx="50%" cy="50%" innerRadius={45} outerRadius={75} paddingAngle={2} dataKey="value">
-                        {programData.map((entry) => (
+                      <Pie data={stats?.programData || []} cx="50%" cy="50%" innerRadius={45} outerRadius={75} paddingAngle={2} dataKey="value">
+                        {(stats?.programData || []).map((entry) => (
                           <Cell key={entry.name} fill={entry.color} />
                         ))}
                       </Pie>
@@ -319,13 +337,17 @@ export default function AdminPage() {
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="grid grid-cols-2 gap-1.5 mt-3">
-                    {programData.map((p) => (
-                      <div key={p.name} className="flex items-center gap-1.5 text-[11px]">
-                        <div className="w-2 h-2 rounded-full" style={{ background: p.color }} />
-                        <span className="text-muted-foreground">{p.name}</span>
-                        <span className="font-semibold ml-auto">{p.value}</span>
-                      </div>
-                    ))}
+                    {(stats?.programData || []).length === 0 ? (
+                      <p className="text-xs text-muted-foreground col-span-2 text-center py-2">No paid programs yet.</p>
+                    ) : (
+                      (stats?.programData || []).map((p) => (
+                        <div key={p.name} className="flex items-center gap-1.5 text-[11px]">
+                          <div className="w-2 h-2 rounded-full" style={{ background: p.color }} />
+                          <span className="text-muted-foreground">{p.name}</span>
+                          <span className="font-semibold ml-auto">{p.value}</span>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -396,21 +418,40 @@ export default function AdminPage() {
                 </div>
 
                 <div className="p-5 rounded-2xl border border-border/40 bg-card">
-                  <h3 className="text-sm font-semibold mb-4">Recent activity</h3>
-                  <div className="space-y-3">
-                    {recentActivity.map((a, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-muted/60 flex items-center justify-center flex-shrink-0">
-                          <a.icon className={cn("w-3.5 h-3.5", a.color)} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold">{a.text}</p>
-                          <p className="text-[11px] text-muted-foreground truncate">{a.sub}</p>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground flex-shrink-0">{a.time}</span>
-                      </div>
-                    ))}
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-semibold">Recent activity</h3>
+                    <Link href="/admin/audit-log">
+                      <Button variant="ghost" size="sm" className="text-xs h-7">
+                        View all <ChevronRight className="w-3 h-3" />
+                      </Button>
+                    </Link>
                   </div>
+                  {(stats?.recentActivity || []).length === 0 ? (
+                    <p className="text-xs text-muted-foreground text-center py-6">
+                      No admin actions yet.
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {(stats?.recentActivity || []).map((a) => (
+                        <div key={a.id} className="flex items-start gap-3">
+                          <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Activity className="w-3.5 h-3.5 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold">
+                              {a.action.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}
+                            </p>
+                            <p className="text-[11px] text-muted-foreground truncate">
+                              {a.user?.name || "System"} · {a.entity}
+                            </p>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                            {new Date(a.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
