@@ -39,7 +39,7 @@ async function main() {
     },
   });
 
-  const dietitianUsers = [];
+  const dietitianUsers: Array<{ user: { id: string; name: string | null }; data: typeof dietitians[number] }> = [];
   for (const d of dietitians) {
     const email = d.id.includes("-")
       ? `${d.id.replace(/-/g, ".")}@thedietitiansclinic.health`
@@ -279,7 +279,7 @@ async function main() {
   ];
 
   const leadStatuses: LeadStatus[] = [LeadStatus.NEW, LeadStatus.CONTACTED, LeadStatus.QUALIFIED, LeadStatus.BOOKED, LeadStatus.CONVERTED];
-  const leadSources: LeadSource[] = [LeadSource.ORGANIC, LeadSource.REFERRAL, LeadSource.SOCIAL, LeadSource.DIRECT, LeadSource.ADS];
+  const leadSources: LeadSource[] = [LeadSource.ORGANIC, LeadSource.REFERRAL, LeadSource.SOCIAL, LeadSource.DIRECT, LeadSource.AD];
 
   for (let i = 0; i < demoLeads.length; i++) {
     const l = demoLeads[i];

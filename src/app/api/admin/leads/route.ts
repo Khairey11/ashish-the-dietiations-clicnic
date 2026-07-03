@@ -3,8 +3,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 
-const LeadStatus = z.enum(["NEW", "CONTACTED", "QUALIFIED", "BOOKED", "CONVERTED", "LOST", "ARCHIVED"]);
-const LeadSource = z.enum(["WEBSITE", "WHATSAPP", "PHONE", "REFERRAL", "SOCIAL", "OTHER"]);
+const LeadStatus = z.enum(["NEW", "CONTACTED", "QUALIFIED", "BOOKED", "CONVERTED", "LOST"]);
+const LeadSource = z.enum(["WEBSITE", "WHATSAPP", "PHONE", "REFERRAL", "SOCIAL", "AD", "ORGANIC", "DIRECT"]);
 
 const createSchema = z.object({
   name: z.string().min(1).max(120),
@@ -101,15 +101,16 @@ export async function PATCH(req: NextRequest) {
     }
     const { id, status, assignedTo, notes, followUpAt } = parsed.data;
 
+    const updateData: Record<string, unknown> = {};
+    if (status) updateData.status = status;
+    if (assignedTo !== undefined) updateData.assignedTo = assignedTo;
+    if (notes !== undefined) updateData.notes = notes;
+    if (followUpAt) updateData.followUpAt = new Date(followUpAt);
+    if (status === "CONVERTED") updateData.convertedAt = new Date();
+
     const lead = await db.lead.update({
       where: { id },
-      data: {
-        ...(status && { status }),
-        ...(assignedTo !== undefined && { assignedTo }),
-        ...(notes !== undefined && { notes }),
-        ...(followUpAt && { followUpAt: new Date(followUpAt) }),
-        ...(status === "CONVERTED" && { convertedAt: new Date() }),
-      },
+      data: updateData,
     });
 
     return NextResponse.json({ success: true, data: lead });

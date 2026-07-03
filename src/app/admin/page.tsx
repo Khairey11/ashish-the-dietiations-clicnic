@@ -419,8 +419,7 @@ export default function AdminPage() {
                                     lead.status === "QUALIFIED" && "bg-violet-500/15 text-violet-600 dark:text-violet-400",
                                     lead.status === "BOOKED" && "bg-primary/15 text-primary",
                                     lead.status === "CONVERTED" && "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
-                                    lead.status === "LOST" && "bg-rose-500/15 text-rose-600 dark:text-rose-400",
-                                    lead.status === "ARCHIVED" && "bg-muted text-muted-foreground"
+                                    lead.status === "LOST" && "bg-rose-500/15 text-rose-600 dark:text-rose-400"
                                   )}
                                 >
                                   <option value="NEW">New</option>
@@ -429,7 +428,6 @@ export default function AdminPage() {
                                   <option value="BOOKED">Booked</option>
                                   <option value="CONVERTED">Converted</option>
                                   <option value="LOST">Lost</option>
-                                  <option value="ARCHIVED">Archived</option>
                                 </select>
                               </TableCell>
                             </TableRow>

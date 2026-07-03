@@ -3,16 +3,25 @@ import { z } from "zod";
 import { updatePaymentConfig } from "@/lib/actions/payments";
 import { requireAdmin } from "@/lib/auth";
 
+const safeUrl = z
+  .string()
+  .url()
+  .refine((u) => u.startsWith("http://") || u.startsWith("https://"), {
+    message: "URL must start with http:// or https://",
+  })
+  .max(2048)
+  .or(z.literal(""));
+
 const updateSchema = z.object({
   khaltiMerchantMobile: z.string().max(32).optional(),
-  khaltiQrUrl: z.string().url().max(2048).or(z.literal("")).optional(),
+  khaltiQrUrl: safeUrl.optional(),
   esewaId: z.string().max(64).optional(),
-  esewaQrUrl: z.string().url().max(2048).or(z.literal("")).optional(),
+  esewaQrUrl: safeUrl.optional(),
   bankName: z.string().max(120).optional(),
   bankAccountName: z.string().max(120).optional(),
   bankAccountNumber: z.string().max(40).optional(),
   bankBranch: z.string().max(120).optional(),
-  bankQrUrl: z.string().url().max(2048).or(z.literal("")).optional(),
+  bankQrUrl: safeUrl.optional(),
   proofMode: z.enum(["whatsapp", "upload"]).optional(),
   instructions: z.string().max(2000).optional(),
 });
