@@ -110,19 +110,51 @@ export function Booking() {
     setSubmitting(true);
     try {
       const result = await createBooking(data);
-      if (result.success) {
-        setStep(5);
-        toast.success("Booking confirmed!", {
-          description: `A confirmation email is on its way to ${data.email}.`,
-        });
-      } else {
+      if (!result.success) {
         toast.error("Booking failed", {
           description: result.error || "Please try again.",
         });
+        return;
       }
+
+      // If a paymentId was created and the method is live Khalti/eSewa,
+      // initiate the gateway checkout and redirect.
+      if (
+        result.paymentId &&
+        (data.paymentMethod === "khalti" || data.paymentMethod === "esewa")
+      ) {
+        try {
+          const initRes = await fetch("/api/payments/initiate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              paymentId: result.paymentId,
+              method: data.paymentMethod,
+            }),
+          });
+          const initData = await initRes.json();
+          if (initData.success && initData.paymentUrl) {
+            // Redirect to gateway hosted checkout
+            toast.success("Redirecting to payment...", {
+              description: `Opening ${data.paymentMethod === "khalti" ? "Khalti" : "eSewa"} checkout.`,
+            });
+            window.location.href = initData.paymentUrl;
+            return;
+          }
+          // Else fall through to QR + WhatsApp flow (gateway not configured)
+        } catch {
+          // Network error — fall through to QR + WhatsApp confirmation
+        }
+      }
+
+      // Default: QR + WhatsApp manual verification flow
+      setStep(5);
+      toast.success("Booking confirmed!", {
+        description: `Our team will WhatsApp you on ${data.phone} to verify your payment and slot.`,
+      });
     } catch (e) {
       toast.error("Booking failed", {
-        description: "An unexpected error occurred. Please try again.",
+        description: e instanceof Error ? e.message : "An unexpected error occurred. Please try again.",
       });
     } finally {
       setSubmitting(false);

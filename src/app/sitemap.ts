@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { getDbBlogPosts, getDbServices } from "@/lib/queries";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://thedietitiansclinic.health";
   const now = new Date();
 
@@ -19,25 +20,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/login`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
   ];
 
-  // Service detail pages
-  const serviceSlugs = [
-    "weight-loss", "weight-gain", "pcos-diet", "diabetes-diet", "thyroid-diet",
-    "pregnancy-nutrition", "child-nutrition", "sports-nutrition", "corporate-wellness",
-    "body-composition", "medical-nutrition-therapy", "lifestyle-modification",
-  ];
-  const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
-    url: `${baseUrl}/services/${slug}`,
+  // Service detail pages (from DB)
+  const services = await getDbServices();
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((s) => ({
+    url: `${baseUrl}/services/${s.slug}`,
     lastModified: now,
-    changeFrequency: "monthly",
+    changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
-  // Blog detail pages
-  const blogIds = ["b1", "b2", "b3", "b4"];
-  const blogRoutes: MetadataRoute.Sitemap = blogIds.map((id) => ({
-    url: `${baseUrl}/blog/${id}`,
+  // Blog detail pages (from DB)
+  const posts = await getDbBlogPosts();
+  const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
+    url: `${baseUrl}/blog/${p.id}`,
     lastModified: now,
-    changeFrequency: "monthly",
+    changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 

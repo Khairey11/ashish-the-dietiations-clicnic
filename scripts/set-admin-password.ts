@@ -1,4 +1,4 @@
-// One-off script to set admin password (run after seed if admin user already existed)
+// One-off script to set admin + demo client passwords (run after seed if users already existed)
 import { PrismaClient } from "@prisma/client";
 import { scryptSync, randomBytes } from "node:crypto";
 
@@ -11,12 +11,19 @@ function hashPassword(plain: string): string {
 }
 
 async function main() {
-  const updated = await prisma.user.update({
+  const admin = await prisma.user.update({
     where: { email: "aarav@thedietitiansclinic.health" },
     data: { passwordHash: hashPassword("admin123") },
     select: { email: true, role: true },
   });
-  console.log("✅ Admin password set for:", updated);
+  console.log("✅ Admin password set for:", admin);
+
+  const client = await prisma.user.update({
+    where: { email: "sneha@example.com" },
+    data: { passwordHash: hashPassword("client123") },
+    select: { email: true, role: true },
+  });
+  console.log("✅ Demo client password set for:", client);
 }
 
 main()

@@ -49,11 +49,11 @@ const leadSourceData = [
 
 const sidebarItems = [
   { icon: LayoutDashboard, label: "Overview", active: true, href: "/admin" },
-  { icon: Users, label: "Clients", badge: "1.2k", href: "/admin" },
-  { icon: CalendarDays, label: "Appointments", href: "/admin" },
+  { icon: Users, label: "Clients", href: "/admin" },
+  { icon: CalendarDays, label: "Appointments", href: "/admin/appointments" },
   { icon: UserPlus, label: "Leads", badge: "12", href: "/admin" },
   { icon: FileText, label: "Diet Plans", href: "/admin" },
-  { icon: CreditCard, label: "Payments", href: "/admin" },
+  { icon: CreditCard, label: "Payments", href: "/admin/payments" },
   { icon: Megaphone, label: "Blog CMS", href: "/admin" },
   { icon: Star, label: "Testimonials", href: "/admin" },
   { icon: Settings, label: "Settings", href: "/admin/settings" },
@@ -96,6 +96,14 @@ export default function AdminPage() {
     status: string;
     createdAt: string;
   }>>([]);
+  const [todayAppts, setTodayAppts] = React.useState<Array<{
+    id: string;
+    scheduledAt: string;
+    status: string;
+    mode: string;
+    client: { name: string | null } | null;
+    dietitian: { name: string } | null;
+  }>>([]);
   const [loading, setLoading] = React.useState(true);
   const [todayStr, setTodayStr] = React.useState("");
 
@@ -108,13 +116,16 @@ export default function AdminPage() {
         year: "numeric",
       })
     );
+    const today = new Date().toISOString().split("T")[0];
     Promise.all([
       fetch("/api/admin/stats").then((r) => r.json()),
       fetch("/api/admin/leads?limit=10").then((r) => r.json()),
+      fetch(`/api/admin/appointments?date=${today}&limit=20`).then((r) => r.json()),
     ])
-      .then(([s, l]) => {
+      .then(([s, l, a]) => {
         if (s.success) setStats(s.data);
         if (l.success) setLeads(l.data);
+        if (a.success) setTodayAppts(a.data);
       })
       .catch(() => {
         // Silent fail — admin page still shows fallback mock charts
@@ -325,25 +336,63 @@ export default function AdminPage() {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <h3 className="text-sm font-semibold">Today&apos;s schedule</h3>
-                      <p className="text-xs text-muted-foreground">5 appointments remaining</p>
+                      <p className="text-xs text-muted-foreground">
+                        {todayAppts.length} appointment{todayAppts.length === 1 ? "" : "s"} today
+                      </p>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-xs">View all <ChevronRight className="w-3 h-3" /></Button>
+                    <Link href="/admin/appointments">
+                      <Button variant="ghost" size="sm" className="text-xs">
+                        View all <ChevronRight className="w-3 h-3" />
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="space-y-2">
-                    {upcomingAppointments.map((a) => (
-                      <div key={a.time} className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors">
-                        <div className="text-xs font-mono font-semibold w-20 text-muted-foreground">{a.time}</div>
-                        <div className={cn("w-9 h-9 rounded-lg bg-gradient-to-br flex items-center justify-center text-white text-xs font-bold flex-shrink-0", a.accent)}>
-                          {a.initials}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold">{a.client}</p>
-                          <p className="text-xs text-muted-foreground">{a.dietitian} · {a.type}</p>
-                        </div>
-                        <Button variant="outline" size="sm" className="text-xs h-7">Manage</Button>
-                      </div>
-                    ))}
-                  </div>
+                  {loading ? (
+                    <div className="space-y-2">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <Skeleton key={i} className="h-14 w-full" />
+                      ))}
+                    </div>
+                  ) : todayAppts.length === 0 ? (
+                    <div className="text-center py-10 text-sm text-muted-foreground">
+                      No appointments scheduled for today.
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {todayAppts.map((a) => {
+                        const d = new Date(a.scheduledAt);
+                        const time = d.toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                        });
+                        const initials = (a.client?.name || "?")
+                          .split(" ")
+                          .map((s) => s[0])
+                          .slice(0, 2)
+                          .join("")
+                          .toUpperCase();
+                        return (
+                          <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors">
+                            <div className="text-xs font-mono font-semibold w-20 text-muted-foreground">
+                              {time}
+                            </div>
+                            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                              {initials}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold">{a.client?.name || "Client"}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {a.dietitian?.name || "—"} · {a.mode === "VIDEO" ? "Video" : "In-clinic"}
+                              </p>
+                            </div>
+                            <span className="text-[10px] font-bold uppercase px-2 py-1 rounded-md bg-muted text-muted-foreground">
+                              {a.status}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-5 rounded-2xl border border-border/40 bg-card">
