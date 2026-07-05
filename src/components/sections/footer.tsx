@@ -163,9 +163,9 @@ export function Footer() {
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
               <img
-                src="/icon.svg"
+                src="/logo.jpg"
                 alt="The Dietitian's Clinic logo"
-                className="w-9 h-9 rounded-xl"
+                className="w-9 h-9 rounded-xl object-cover"
               />
               <div className="flex flex-col leading-none">
                 <span className="text-base font-bold tracking-tight">

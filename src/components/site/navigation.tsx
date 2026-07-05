@@ -99,9 +99,9 @@ export function Navigation() {
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 <img
-                  src="/icon.svg"
+                  src="/logo.jpg"
                   alt=""
-                  className="relative w-9 h-9 rounded-xl shadow-glow"
+                  className="relative w-9 h-9 rounded-xl shadow-glow object-cover"
                 />
               </div>
               <div className="flex flex-col leading-none">
