@@ -85,7 +85,7 @@ function LoginForm() {
             className="w-full max-w-md"
           >
             <div className="lg:hidden mb-8 flex justify-center">
-              <img src="/logo.jpg" alt="" className="w-12 h-12 rounded-xl object-cover" />
+              <img src="/logo-transparent.png" alt="" className="w-12 h-12 rounded-xl object-contain" />
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight">
