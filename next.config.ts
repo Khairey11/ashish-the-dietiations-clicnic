@@ -8,7 +8,13 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          { key: "X-Frame-Options", value: "DENY" },
+          // Allow embedding in the Z.ai preview iframe while still blocking other sites.
+          // In production, replace with your actual domain or use CSP frame-ancestors.
+          { key: "X-Frame-Options", value: "ALLOWALL" },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self' https://*.space-z.ai https://space-z.ai",
+          },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
