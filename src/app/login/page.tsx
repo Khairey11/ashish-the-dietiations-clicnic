@@ -66,7 +66,7 @@ export default function LoginPage() {
             className="w-full max-w-md"
           >
             <div className="lg:hidden mb-8 flex justify-center">
-              <img src="/icon.svg" alt="" className="w-12 h-12" />
+              <img src="/logo.jpg" alt="" className="w-12 h-12 rounded-xl object-cover" />
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight">

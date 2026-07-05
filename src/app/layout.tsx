@@ -74,9 +74,9 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: [{ url: "/logo.jpg", type: "image/jpeg", sizes: "639x536" }],
+    shortcut: "/logo.jpg",
+    apple: "/logo.jpg",
   },
   category: "health",
 };
@@ -99,7 +99,7 @@ export default function RootLayout({
               description:
                 "Premium dietitian & nutrition consultancy offering personalized diet programs, online consultations, and continuous progress tracking.",
               url: "https://thedietitiansclinic.health",
-              logo: "https://thedietitiansclinic.health/logo.svg",
+              logo: "https://thedietitiansclinic.health/logo.jpg",
               email: "care@thedietitiansclinic.health",
               telephone: "+977-1-4445566",
               address: {
