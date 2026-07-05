@@ -9,7 +9,7 @@ import { verifySession } from "@/lib/auth";
 const PROTECTED_PAGES = ["/admin", "/dashboard"];
 const PROTECTED_API = "/api/admin";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Protect admin API routes

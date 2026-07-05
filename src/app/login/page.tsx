@@ -195,6 +195,7 @@ export default function LoginPage() {
             <p className="mt-8 text-center text-sm text-muted-foreground">
               {mode === "login" ? "Don't have an account? " : "Already have an account? "}
               <button
+                type="button"
                 onClick={() => setMode(mode === "login" ? "register" : "login")}
                 className="text-primary font-semibold hover:underline"
               >
