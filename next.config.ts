@@ -8,12 +8,10 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          // Allow embedding in any preview iframe (Z.ai platform, etc.)
-          // Remove this in production or restrict to your actual domain.
-          { key: "X-Frame-Options", value: "ALLOWALL" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors *",
+            value: "frame-ancestors 'self'",
           },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
