@@ -5,7 +5,7 @@
 export const siteConfig = {
   name: "The Dietitian's Clinic",
   shortName: "TDC",
-  tagline: "Premium Nutrition Consultancy",
+  tagline: "Center for Clinical & Performance Nutrition",
   domain: "https://thedietitiansclinic.health",
 
   // ===== Contact =====

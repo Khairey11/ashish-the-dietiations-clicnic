@@ -101,7 +101,7 @@ export function Navigation() {
                 <img
                   src="/logo-transparent.png"
                   alt=""
-                  className="relative w-9 h-9 rounded-xl shadow-glow object-contain"
+                  className="relative w-9 h-9 object-contain"
                 />
               </div>
               <div className="flex flex-col leading-none">
@@ -109,7 +109,7 @@ export function Navigation() {
                   The Dietitian&apos;s Clinic
                 </span>
                 <span className="text-[10px] text-muted-foreground font-medium tracking-wide">
-                  PREMIUM NUTRITION CONSULTANCY
+                  CENTER FOR CLINICAL & PERFORMANCE NUTRITION
                 </span>
               </div>
             </Link>

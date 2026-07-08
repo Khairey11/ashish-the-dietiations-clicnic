@@ -165,14 +165,14 @@ export function Footer() {
               <img
                 src="/logo-transparent.png"
                 alt="The Dietitian's Clinic logo"
-                className="w-9 h-9 rounded-xl object-contain"
+                className="w-9 h-9 object-contain"
               />
               <div className="flex flex-col leading-none">
                 <span className="text-base font-bold tracking-tight">
                   The Dietitian&apos;s Clinic
                 </span>
                 <span className="text-[10px] text-background/60 font-medium tracking-wide">
-                  PREMIUM NUTRITION CONSULTANCY
+                  CENTER FOR CLINICAL & PERFORMANCE NUTRITION
                 </span>
               </div>
             </div>
