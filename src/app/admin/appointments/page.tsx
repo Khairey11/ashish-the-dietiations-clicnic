@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   CalendarDays, ChevronLeft, Loader2, Video, MapPin, Clock,
 } from "lucide-react";
-import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -103,9 +102,6 @@ export default function AdminAppointmentsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-muted/30">
-      <Navigation />
-      <main id="main" className="flex-1 pt-20">
         <div className="container mx-auto px-4 sm:px-6 py-8">
           {/* Header */}
           <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
@@ -247,7 +243,5 @@ export default function AdminAppointmentsPage() {
             )}
           </div>
         </div>
-      </main>
-    </div>
   );
 }

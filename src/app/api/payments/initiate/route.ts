@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { initiateKhaltiPayment, initiateEsewaPayment } from "@/lib/actions/payment-gateways";
 import { rateLimit, getClientIp, rateLimitResponse } from "@/lib/ratelimit";
+import { requireClient } from "@/lib/auth";
 
 /**
  * POST /api/payments/initiate
@@ -35,6 +36,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // Auth: must be logged in as client or staff
+    const auth = await requireClient(req);
+    if (!auth.ok) return auth.response;
+
     const body = await req.json();
     const parsed = schema.safeParse(body);
     if (!parsed.success) {
@@ -69,6 +74,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: "Missing client or program on payment" },
         { status: 400 }
+      );
+    }
+    // Ownership check: clients can only initiate their own payments; staff can initiate any
+    if (auth.role === "CLIENT" && payment.clientId !== auth.userId) {
+      return NextResponse.json(
+        { success: false, error: "Forbidden" },
+        { status: 403 }
       );
     }
 

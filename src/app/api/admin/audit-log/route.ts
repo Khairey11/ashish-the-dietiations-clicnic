@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireSuperAdmin } from "@/lib/auth";
 
 const querySchema = z.object({
   limit: z.coerce.number().min(1).max(200).default(50),
@@ -14,7 +14,7 @@ const querySchema = z.object({
  * Returns paginated audit log entries with the acting user's name.
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireSuperAdmin(req);
   if (!auth.ok) return auth.response;
 
   try {

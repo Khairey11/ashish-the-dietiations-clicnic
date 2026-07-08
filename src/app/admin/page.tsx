@@ -201,16 +201,13 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-muted/30">
-      <Navigation />
-      <main className="flex-1 pt-20">
-        <div className="container mx-auto px-4 sm:px-6 py-8">
-          {/* Top bar */}
-          <div className="flex items-center justify-between gap-3 flex-wrap mb-6">
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-2xl sm:text-3xl font-bold">Admin Portal</h1>
-                <Badge className="bg-primary/15 text-primary border-0">Super Admin</Badge>
+    <>
+      {/* Top bar */}
+      <div className="flex items-center justify-between gap-3 flex-wrap mb-6">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">Admin Portal</h1>
+            <Badge className="bg-primary/15 text-primary border-0">Super Admin</Badge>
               </div>
               <p className="text-xs text-muted-foreground mt-1">{todayStr || ""} · Welcome back, Aarav</p>
             </div>
@@ -233,52 +230,8 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-6">
-            {/* Sidebar */}
-            <aside className="hidden lg:flex lg:col-span-2 flex-col gap-1 p-4 rounded-2xl border border-border/60 bg-card h-fit sticky top-24">
-              <div className="flex items-center gap-2 px-2 py-3 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold">Admin Portal</p>
-                  <p className="text-[10px] text-muted-foreground">v2.4.1</p>
-                </div>
-              </div>
-              {sidebarItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors",
-                    item.active
-                      ? "bg-primary text-primary-foreground shadow-glow"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <item.icon className="w-3.5 h-3.5" />
-                  <span className="flex-1 text-left">{item.label}</span>
-                  {item.badge && (
-                    <span className={cn(
-                      "px-1.5 py-0.5 rounded text-[9px] font-bold",
-                      item.active ? "bg-white/20" : "bg-primary/15 text-primary"
-                    )}>
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              ))}
-              <div className="mt-2 pt-2 border-t border-border/40">
-                <Link href="/" className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-                  <LogOut className="w-3.5 h-3.5" />
-                  Back to site
-                </Link>
-              </div>
-            </aside>
-
-            {/* Main content */}
-            <div className="lg:col-span-10 space-y-6">
-              {/* KPI cards */}
+          <div className="space-y-6">
+            {/* KPI cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   { icon: DollarSign, label: "Total Revenue", value: stats ? fmtNPR(stats.totalRevenue) : null, change: stats ? `${stats.activePrograms} active programs` : null, trend: "up", accent: "from-emerald-500 to-teal-500" },
@@ -584,10 +537,7 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }

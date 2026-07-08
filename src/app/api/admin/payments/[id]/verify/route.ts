@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { markPaymentPaid } from "@/lib/actions/payment-gateways";
-import { requireAdmin } from "@/lib/auth";
+import { requireSuperAdmin } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 
 const schema = z.object({
@@ -25,7 +25,7 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAdmin(req);
+  const auth = await requireSuperAdmin(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -46,6 +46,18 @@ export async function POST(
       );
     }
 
+    // Fetch before-state for audit
+    const before = await db.payment.findUnique({
+      where: { id },
+      select: { id: true, status: true, amount: true, method: true, txnRef: true },
+    });
+    if (!before) {
+      return NextResponse.json(
+        { success: false, error: "Payment not found" },
+        { status: 404 }
+      );
+    }
+
     const result = await markPaymentPaid(id, parsed.data.txnRef);
     if (!result.success) {
       return NextResponse.json(
@@ -59,7 +71,8 @@ export async function POST(
       action: "PAYMENT_VERIFIED",
       entity: "Payment",
       entityId: id,
-      after: { status: "PAID", txnRef: parsed.data.txnRef },
+      before: { status: before.status, amount: before.amount, method: before.method },
+      after: { status: "PAID", txnRef: parsed.data.txnRef, amount: before.amount, method: before.method },
       ipAddress: getClientIpSafe(req),
     });
 
