@@ -8,8 +8,6 @@ import { Dietitians } from "@/components/sections/dietitians";
 import { BMICalculator } from "@/components/sections/bmi-calculator";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Booking } from "@/components/sections/booking";
-import { ClientDashboard } from "@/components/sections/client-dashboard";
-import { AdminPortal } from "@/components/sections/admin-portal";
 import { Blog } from "@/components/sections/blog";
 import { About } from "@/components/sections/about";
 import { FAQ } from "@/components/sections/faq";
@@ -30,8 +28,6 @@ export default function Home() {
         <BMICalculator />
         <Testimonials />
         <Booking />
-        <ClientDashboard />
-        <AdminPortal />
         <Blog />
         <About />
         <FAQ />

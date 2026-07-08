@@ -55,7 +55,6 @@ const sidebarItems = [
   { icon: Calendar, label: "Appointments" },
   { icon: FileText, label: "Reports" },
   { icon: MessageCircle, label: "Messages" },
-  { icon: Bell, label: "Notifications" },
   { icon: Settings, label: "Settings" },
 ];
 

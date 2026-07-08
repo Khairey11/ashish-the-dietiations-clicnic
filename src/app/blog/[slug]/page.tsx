@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Calendar, Clock, User, ChevronRight, Share2, Tag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, Clock, User, ChevronRight, Tag } from "lucide-react";
 import { SiteLayout } from "@/components/site/site-layout";
+import { ShareButton } from "@/components/site/share-button";
 import { blogArticles, getBlogArticle, blogPosts } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -74,10 +75,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                   </div>
                 </div>
               </div>
-              <Button variant="outline" size="sm">
-                <Share2 className="w-3.5 h-3.5 mr-1.5" />
-                Share
-              </Button>
+              <ShareButton title={article.title} url={`/blog/${slug}`} />
             </div>
 
             {/* Cover */}

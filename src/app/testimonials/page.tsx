@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Star, Quote, TrendingDown, TrendingUp, ArrowRight, Play } from "lucide-react";
+import { Star, Quote, TrendingDown, TrendingUp, ArrowRight } from "lucide-react";
 import { SiteLayout, PageHero } from "@/components/site/site-layout";
 import { testimonials, type Testimonial } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -61,15 +61,21 @@ export default function TestimonialsPage() {
         </div>
       </section>
 
-      {/* Video testimonial placeholder */}
+      {/* Featured testimonial highlight */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-br from-primary to-secondary p-8 sm:p-12 text-white text-center shadow-glow">
-            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mx-auto mb-4 cursor-pointer hover:scale-110 transition-transform">
-              <Play className="w-7 h-7 fill-white text-white ml-1" />
+            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mx-auto mb-4">
+              <Quote className="w-7 h-7 fill-white text-white" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Watch Sneha's 16-week transformation</h2>
-            <p className="mt-2 text-white/85 max-w-2xl mx-auto">From PCOS diagnosis to regular cycles and -11 kg — hear Sneha share her journey in her own words.</p>
+            <h2 className="text-2xl sm:text-3xl font-bold">Sneha's 16-week transformation</h2>
+            <p className="mt-2 text-white/85 max-w-2xl mx-auto">From PCOS diagnosis to regular cycles and -11 kg — Sneha shares her journey in her own words.</p>
+            <Link href="/booking" className="inline-block mt-6">
+              <Button className="bg-white text-primary hover:bg-white/90">
+                Start your journey
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

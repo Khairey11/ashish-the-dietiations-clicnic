@@ -57,10 +57,7 @@ const sidebarItems: Array<{
   { icon: LayoutDashboard, label: "Overview", active: true, href: "/admin" },
   { icon: Users, label: "Clients", href: "/admin/clients" },
   { icon: CalendarDays, label: "Appointments", href: "/admin/appointments" },
-  { icon: UserPlus, label: "Leads", href: "/admin" },
-  { icon: FileText, label: "Diet Plans", href: "/admin" },
   { icon: CreditCard, label: "Payments", href: "/admin/payments" },
-  { icon: Megaphone, label: "Blog CMS", href: "/admin" },
   { icon: Star, label: "Testimonials", href: "/admin/testimonials" },
   { icon: Bell, label: "Newsletter", href: "/admin/newsletter" },
   { icon: ShieldCheck, label: "Audit Log", href: "/admin/audit-log" },
@@ -172,6 +169,37 @@ export default function AdminPage() {
 
   const fmtNPR = (n: number) => `Rs. ${n.toLocaleString("en-IN")}`;
 
+  const exportLeadsCsv = () => {
+    if (leads.length === 0) {
+      toast.error("No leads to export");
+      return;
+    }
+    const header = "Name,Email,Phone,Service,Status,Created\n";
+    const rows = leads
+      .map((l) =>
+        [
+          `"${l.name}"`,
+          `"${l.email}"`,
+          `"${l.phone || ""}"`,
+          `"${l.service || ""}"`,
+          `"${l.status}"`,
+          `"${new Date(l.createdAt).toISOString()}"`,
+        ].join(",")
+      )
+      .join("\n");
+    const csv = header + rows;
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Exported", { description: `${leads.length} leads downloaded.` });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-muted/30">
       <Navigation />
@@ -192,14 +220,16 @@ export default function AdminPage() {
                 <span className="text-muted-foreground">Search everything...</span>
                 <kbd className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-mono">⌘K</kbd>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={exportLeadsCsv}>
                 <Download className="w-3.5 h-3.5 mr-1.5" />
                 Export
               </Button>
-              <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">
-                <Plus className="w-3.5 h-3.5 mr-1.5" />
-                New appointment
-              </Button>
+              <Link href="/booking">
+                <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">
+                  <Plus className="w-3.5 h-3.5 mr-1.5" />
+                  New appointment
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -533,10 +563,10 @@ export default function AdminPage() {
                   <div className="space-y-2">
                     {[
                       { icon: CalendarDays, label: "New appointment", href: "/booking" },
-                      { icon: FileText, label: "Create diet plan", href: "/admin" },
-                      { icon: UserPlus, label: "Add lead", href: "/admin" },
                       { icon: CreditCard, label: "Payment settings", href: "/admin/settings" },
-                      { icon: Megaphone, label: "Publish blog", href: "/blog" },
+                      { icon: Star, label: "Review testimonials", href: "/admin/testimonials" },
+                      { icon: Users, label: "View clients", href: "/admin/clients" },
+                      { icon: Megaphone, label: "Visit blog", href: "/blog" },
                       { icon: Settings, label: "Settings", href: "/admin/settings" },
                     ].map((a) => (
                       <Link
