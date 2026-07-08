@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://thedietitiansclinic.health"),
   title: {
-    default: "The Dietitian's Clinic | Premium Nutrition Consultancy",
+    default: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
     template: "%s | The Dietitian's Clinic",
   },
   description:
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "The Dietitian's Clinic | Premium Nutrition Consultancy",
+    title: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans. Book your consultation today.",
     url: "https://thedietitiansclinic.health",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Dietitian's Clinic | Premium Nutrition Consultancy",
+    title: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans.",
   },
