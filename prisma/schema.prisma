@@ -1,5 +1,5 @@
 // The Dietitian's Clinic — Prisma schema
-// All models defined per the platform specification (25+ models)
+// Database models for The Dietitian's Clinic
 // SQLite is used for development; production should switch to PostgreSQL.
 
 generator client {
