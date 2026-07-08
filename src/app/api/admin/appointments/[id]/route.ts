@@ -2,12 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
+import { writeAuditLog, serializeForAudit } from "@/lib/audit";
 
 const schema = z.object({
   status: z.enum([
     "PENDING", "CONFIRMED", "SCHEDULED", "COMPLETED", "CANCELLED", "NO_SHOW", "RESCHEDULED",
   ]),
 });
+
+function getClientIpSafe(req: NextRequest): string | undefined {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    req.headers.get("x-real-ip")?.trim() ||
+    undefined
+  );
+}
 
 /**
  * PATCH /api/admin/appointments/[id]
@@ -38,9 +47,28 @@ export async function PATCH(
       );
     }
 
+    // Fetch before-state for audit + 404 check
+    const before = await db.appointment.findUnique({ where: { id } });
+    if (!before) {
+      return NextResponse.json(
+        { success: false, error: "Appointment not found" },
+        { status: 404 }
+      );
+    }
+
     const appointment = await db.appointment.update({
       where: { id },
       data: { status: parsed.data.status },
+    });
+
+    await writeAuditLog({
+      userId: auth.userId,
+      action: "APPOINTMENT_UPDATED",
+      entity: "Appointment",
+      entityId: id,
+      before: serializeForAudit(before),
+      after: serializeForAudit(appointment),
+      ipAddress: getClientIpSafe(req),
     });
 
     return NextResponse.json({ success: true, data: appointment });

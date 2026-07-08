@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireSuperAdmin } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 
 const safeUrl = z
@@ -35,7 +35,7 @@ const schema = z.object({
  * Returns the current clinic configuration from SiteSetting (with siteConfig fallback).
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireSuperAdmin(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
  * Updates editable clinic contact and social settings.
  */
 export async function PUT(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireSuperAdmin(req);
   if (!auth.ok) return auth.response;
 
   try {

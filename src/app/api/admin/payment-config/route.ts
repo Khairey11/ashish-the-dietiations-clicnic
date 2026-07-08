@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { updatePaymentConfig } from "@/lib/actions/payments";
-import { requireAdmin } from "@/lib/auth";
+import { requireSuperAdmin } from "@/lib/auth";
 
 const safeUrl = z
   .string()
@@ -27,7 +27,7 @@ const updateSchema = z.object({
 });
 
 export async function PUT(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireSuperAdmin(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -51,7 +51,7 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireSuperAdmin(req);
   if (!auth.ok) return auth.response;
 
   try {

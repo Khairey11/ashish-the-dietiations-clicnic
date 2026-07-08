@@ -2,14 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
+import { writeAuditLog, serializeForAudit } from "@/lib/audit";
 
 const schema = z.object({
   action: z.enum(["approve", "unapprove", "feature", "unfeature", "delete"]),
 });
 
+function getClientIpSafe(req: NextRequest): string | undefined {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    req.headers.get("x-real-ip")?.trim() ||
+    undefined
+  );
+}
+
+const ACTION_MAP: Record<string, string> = {
+  approve: "TESTIMONIAL_APPROVED",
+  unapprove: "TESTIMONIAL_UNAPPROVED",
+  feature: "TESTIMONIAL_FEATURED",
+  unfeature: "TESTIMONIAL_UNFEATURED",
+  delete: "TESTIMONIAL_DELETED",
+};
+
 /**
  * PATCH /api/admin/testimonials/[id]
- * Approve / unapprove / feature / unfeature a testimonial.
+ * Approve / unapprove / feature / unfeature / delete a testimonial.
  */
 export async function PATCH(
   req: NextRequest,
@@ -36,8 +53,32 @@ export async function PATCH(
       );
     }
 
+    // Fetch before-state for audit + 404 check
+    const before = await db.testimonial.findUnique({ where: { id } });
+    if (!before) {
+      return NextResponse.json(
+        { success: false, error: "Testimonial not found" },
+        { status: 404 }
+      );
+    }
+
+    const action = parsed.data.action;
+
+    if (action === "delete") {
+      await db.testimonial.delete({ where: { id } });
+      await writeAuditLog({
+        userId: auth.userId,
+        action: ACTION_MAP[action],
+        entity: "Testimonial",
+        entityId: id,
+        before: serializeForAudit(before),
+        ipAddress: getClientIpSafe(req),
+      });
+      return NextResponse.json({ success: true, deleted: true });
+    }
+
     let data: Record<string, unknown> = {};
-    switch (parsed.data.action) {
+    switch (action) {
       case "approve":
         data = { isApproved: true };
         break;
@@ -50,15 +91,23 @@ export async function PATCH(
       case "unfeature":
         data = { isFeatured: false };
         break;
-      case "delete":
-        await db.testimonial.delete({ where: { id } });
-        return NextResponse.json({ success: true, deleted: true });
     }
 
     const updated = await db.testimonial.update({
       where: { id },
       data,
     });
+
+    await writeAuditLog({
+      userId: auth.userId,
+      action: ACTION_MAP[action],
+      entity: "Testimonial",
+      entityId: id,
+      before: serializeForAudit(before),
+      after: serializeForAudit(updated),
+      ipAddress: getClientIpSafe(req),
+    });
+
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("Failed to update testimonial:", error);
