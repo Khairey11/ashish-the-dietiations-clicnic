@@ -214,6 +214,21 @@ export async function createBooking(input: BookingInput) {
       },
     });
 
+    // Send booking confirmation email (non-blocking — don't fail if email fails)
+    const { sendBookingConfirmation } = await import("@/lib/email");
+    sendBookingConfirmation({
+      clientName: parsed.name,
+      clientEmail: parsed.email,
+      service: service?.name || parsed.service,
+      dietitian: dietitian?.name || "Assigned dietitian",
+      date: scheduledAt.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+      time: parsed.time,
+      program: program?.duration,
+      amount: program?.price,
+    }).catch(() => {
+      // Email failure shouldn't break the booking
+    });
+
     return {
       success: true,
       appointmentId: appointment.id,
@@ -282,6 +297,17 @@ export async function submitContactForm(input: ContactInput) {
         entityId: lead.id,
         metadata: JSON.stringify({ source: "contact_form" }),
       },
+    });
+
+    // Send lead notification email to admin (non-blocking)
+    const { sendLeadNotification } = await import("@/lib/email");
+    sendLeadNotification({
+      leadName: parsed.name,
+      leadEmail: parsed.email,
+      leadPhone: parsed.phone,
+      message: parsed.message,
+    }).catch(() => {
+      // Email failure shouldn't break the form submission
     });
 
     return {
