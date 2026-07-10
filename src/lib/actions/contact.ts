@@ -121,11 +121,13 @@ export async function createBooking(input: BookingInput) {
 
     // Resolve program
     let programId: string | undefined;
+    let programData: { duration: string; price: number } | null = null;
     if (parsed.program) {
       const program = await db.program.findUnique({
         where: { slug: parsed.program },
       });
       programId = program?.id;
+      if (program) programData = { duration: program.duration, price: program.price };
     }
 
     // Build scheduledAt from date + time
@@ -219,12 +221,12 @@ export async function createBooking(input: BookingInput) {
     sendBookingConfirmation({
       clientName: parsed.name,
       clientEmail: parsed.email,
-      service: service?.name || parsed.service,
+      service: service?.title || parsed.service,
       dietitian: dietitian?.name || "Assigned dietitian",
       date: scheduledAt.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
       time: parsed.time,
-      program: program?.duration,
-      amount: program?.price,
+      program: programData?.duration,
+      amount: programData?.price,
     }).catch(() => {
       // Email failure shouldn't break the booking
     });
