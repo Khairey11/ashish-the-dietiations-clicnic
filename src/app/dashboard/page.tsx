@@ -51,11 +51,11 @@ type DashboardData = {
 };
 
 const sidebarItems = [
-  { icon: Home, label: "Dashboard", active: true },
-  { icon: Calendar, label: "Appointments" },
-  { icon: FileText, label: "Reports" },
-  { icon: MessageCircle, label: "Messages" },
-  { icon: Settings, label: "Settings" },
+  { icon: Home, label: "Dashboard", href: "/dashboard", active: true },
+  { icon: Calendar, label: "Appointments", href: "/dashboard/appointments" },
+  { icon: FileText, label: "Reports", href: "/dashboard/reports" },
+  { icon: MessageCircle, label: "Messages", href: "/dashboard/messages" },
+  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
 ];
 
 export default function DashboardPage() {
@@ -123,25 +123,28 @@ export default function DashboardPage() {
     .toUpperCase();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navigation />
-      <main id="main" className="flex-1 pt-20">
-        <div className="container mx-auto px-4 sm:px-6 py-8">
-          {/* Header */}
-          <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
-            <div>
-              <p className="text-xs text-muted-foreground">Welcome back</p>
-              <h1 className="text-2xl sm:text-3xl font-bold">
-                {loading ? <Skeleton className="h-8 w-48" /> : `${userName} 👋`}
-              </h1>
-            </div>
-            {data && (
-              <div className="flex items-center gap-2">
-                {data.upcomingAppointments.length > 0 && (
-                  <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    {data.upcomingAppointments.length} upcoming
-                  </Badge>
+    <>
+      {error && (
+        <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-sm text-rose-700 dark:text-rose-300">
+          {error}
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+        <div>
+          <p className="text-xs text-muted-foreground">Welcome back</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">
+            {loading ? <Skeleton className="h-8 w-48" /> : `${userName} 👋`}
+          </h1>
+        </div>
+        {data && (
+          <div className="flex items-center gap-2">
+            {data.upcomingAppointments.length > 0 && (
+              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {data.upcomingAppointments.length} upcoming
+              </Badge>
                 )}
                 <Button variant="outline" size="sm" onClick={signOut}>
                   <LogOut className="w-3.5 h-3.5 mr-1.5" />
@@ -157,45 +160,7 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <div className="grid lg:grid-cols-12 gap-6">
-            {/* Sidebar */}
-            <aside className="hidden lg:flex lg:col-span-2 flex-col gap-1 p-4 rounded-2xl border border-border/60 bg-card h-fit sticky top-24">
-              <div className="flex items-center gap-2 px-2 py-3 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold">
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : initials}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold truncate">{userName}</p>
-                  <p className="text-[10px] text-muted-foreground">Client</p>
-                </div>
-              </div>
-              {sidebarItems.map((item) => (
-                <button
-                  key={item.label}
-                  className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors text-left",
-                    item.active
-                      ? "bg-primary text-primary-foreground shadow-glow"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <item.icon className="w-3.5 h-3.5" />
-                  <span className="flex-1">{item.label}</span>
-                </button>
-              ))}
-              <div className="mt-2 pt-2 border-t border-border/40">
-                <button
-                  onClick={signOut}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Sign out
-                </button>
-              </div>
-            </aside>
-
-            {/* Main content */}
-            <div className="lg:col-span-10 space-y-6">
+          <div className="space-y-6">
               {/* Profile + goal cards */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 <div className="p-4 rounded-2xl border border-border/40 bg-card">
@@ -364,10 +329,7 @@ export default function DashboardPage() {
                   </div>
                 )}
               </div>
-            </div>
           </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }
