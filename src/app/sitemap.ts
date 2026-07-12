@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getDbBlogPosts, getDbServices } from "@/lib/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://thedietitiansclinic.health";
+  const baseUrl = "https://thedietitiansclinic.com";
   const now = new Date();
 
   // Static routes

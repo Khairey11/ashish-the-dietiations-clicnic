@@ -7,7 +7,7 @@
  * To enable real emails in production:
  *   1. bun add resend
  *   2. Set RESEND_API_KEY=re_xxx in .env
- *   3. Set FROM_EMAIL=care@thedietitiansclinic.health in .env
+ *   3. Set FROM_EMAIL=care@thedietitiansclinic.com in .env
  */
 
 import { siteConfig } from "@/lib/site-config";

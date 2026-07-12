@@ -107,7 +107,7 @@ export function AdminPortal() {
             <div className="w-3 h-3 rounded-full bg-emerald-400" />
           </div>
           <div className="flex-1 max-w-md mx-auto px-3 py-1 rounded-md bg-background/60 text-center text-xs text-muted-foreground">
-            app.thedietitiansclinic.health/admin
+            app.thedietitiansclinic.com/admin
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-semibold">

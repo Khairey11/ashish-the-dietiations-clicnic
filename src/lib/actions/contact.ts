@@ -97,7 +97,7 @@ export async function createBooking(input: BookingInput) {
 
     // Resolve dietitian by slug — the parsed.dietitian value is a slug
     // like "anita-shrestha"; we derive the matching seeded email.
-    const dietitianEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.health`;
+    const dietitianEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.com`;
     const dietitian = await db.dietitian.findFirst({
       where: { user: { email: dietitianEmail } },
       include: { user: true },
