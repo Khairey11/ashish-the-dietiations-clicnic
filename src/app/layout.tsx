@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://thedietitiansclinic.health"),
+  metadataBase: new URL("https://thedietitiansclinic.com"),
   title: {
     default: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
     template: "%s | The Dietitian's Clinic",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     title: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans. Book your consultation today.",
-    url: "https://thedietitiansclinic.health",
+    url: "https://thedietitiansclinic.com",
     siteName: "The Dietitian's Clinic",
     type: "website",
     locale: "en_US",
@@ -98,9 +98,9 @@ export default function RootLayout({
               name: "The Dietitian's Clinic",
               description:
                 "Premium dietitian & nutrition consultancy offering personalized diet programs, online consultations, and continuous progress tracking.",
-              url: "https://thedietitiansclinic.health",
-              logo: "https://thedietitiansclinic.health/logo-transparent.png",
-              email: "care@thedietitiansclinic.health",
+              url: "https://thedietitiansclinic.com",
+              logo: "https://thedietitiansclinic.com/logo-transparent.png",
+              email: "care@thedietitiansclinic.com",
               telephone: "+977-1-4445566",
               address: {
                 "@type": "PostalAddress",

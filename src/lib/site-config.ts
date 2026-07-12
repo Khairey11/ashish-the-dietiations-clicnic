@@ -6,7 +6,7 @@ export const siteConfig = {
   name: "The Dietitian's Clinic",
   shortName: "TDC",
   tagline: "Center for Clinical & Performance Nutrition",
-  domain: "https://thedietitiansclinic.health",
+  domain: "https://thedietitiansclinic.com",
 
   // ===== Contact =====
   // Use international format without "+" or spaces for wa.me / tel: links
@@ -14,7 +14,7 @@ export const siteConfig = {
   phoneRaw: "+97714445566",                // tel: link
   whatsappDisplay: "+977 9800000000",      // Display format
   whatsappRaw: "9779800000000",            // wa.me link (no +, no spaces)
-  email: "care@thedietitiansclinic.health",
+  email: "care@thedietitiansclinic.com",
   address: "Banasthali, Baluwatar-4, Kathmandu 44600, Nepal",
 
   // ===== Hours =====

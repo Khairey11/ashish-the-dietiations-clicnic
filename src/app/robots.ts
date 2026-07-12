@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/dashboard", "/api"],
       },
     ],
-    sitemap: "https://thedietitiansclinic.health/sitemap.xml",
-    host: "https://thedietitiansclinic.health",
+    sitemap: "https://thedietitiansclinic.com/sitemap.xml",
+    host: "https://thedietitiansclinic.com",
   };
 }

@@ -158,7 +158,7 @@ function LoginForm() {
                     type="button"
                     onClick={() =>
                       toast.info("Password reset", {
-                        description: "Email care@thedietitiansclinic.health to reset your password.",
+                        description: "Email care@thedietitiansclinic.com to reset your password.",
                       })
                     }
                     className="text-primary font-medium hover:underline"

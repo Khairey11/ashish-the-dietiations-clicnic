@@ -68,7 +68,7 @@ export function ClientDashboard() {
             <div className="w-3 h-3 rounded-full bg-emerald-400" />
           </div>
           <div className="flex-1 max-w-md mx-auto px-3 py-1 rounded-md bg-background/60 text-center text-xs text-muted-foreground">
-            app.thedietitiansclinic.health/dashboard
+            app.thedietitiansclinic.com/dashboard
           </div>
         </div>
 
