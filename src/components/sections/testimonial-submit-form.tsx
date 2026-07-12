@@ -107,7 +107,7 @@ export function TestimonialSubmitForm() {
             id="t-city"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="Kathmandu"
+            placeholder="Dharan"
             className="h-11"
           />
         </div>
@@ -117,7 +117,7 @@ export function TestimonialSubmitForm() {
             id="t-condition"
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
-            placeholder="PCOS, Weight Loss, Diabetes..."
+            placeholder="PCOS (PMOS), Weight Loss, Diabetes..."
             required
             className="h-11"
           />

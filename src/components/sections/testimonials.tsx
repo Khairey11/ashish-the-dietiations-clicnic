@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const filters = [
   { id: "all", label: "All Stories" },
   { id: "weight-loss", label: "Weight Loss" },
-  { id: "pcos", label: "PCOS" },
+  { id: "pcos", label: "PCOS (PMOS)" },
   { id: "diabetes", label: "Diabetes" },
   { id: "pregnancy", label: "Pregnancy" },
   { id: "thyroid", label: "Thyroid" },

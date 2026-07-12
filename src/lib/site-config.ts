@@ -15,7 +15,7 @@ export const siteConfig = {
   whatsappDisplay: "+977 9800000000",      // Display format
   whatsappRaw: "9779800000000",            // wa.me link (no +, no spaces)
   email: "care@thedietitiansclinic.com",
-  address: "Banasthali, Baluwatar-4, Kathmandu 44600, Nepal",
+  address: "Dharan-14, Sunsari, Nepal",
 
   // ===== Hours =====
   weekdayHours: "7:00 AM – 8:00 PM",
@@ -37,7 +37,7 @@ export const siteConfig = {
     bankName: "Nepal Investment Mega Bank",
     bankAccountName: "The Dietitian's Clinic Pvt. Ltd.",
     bankAccountNumber: "01234567890123",
-    bankBranch: "Baluwatar Branch",
+    bankBranch: "Dharan Branch",
   },
 } as const;
 
