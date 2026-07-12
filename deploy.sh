@@ -22,7 +22,7 @@ echo ""
 # ===== Step 1: Install system dependencies =====
 echo ">>> Step 1/7: Installing system dependencies..."
 apt-get update -y
-apt-get install -y curl git build-essential python3 ufw
+apt-get install -y curl git build-essential python3 ufw unzip
 echo "✓ System packages installed"
 
 # ===== Step 2: Install Node.js 20 LTS =====
