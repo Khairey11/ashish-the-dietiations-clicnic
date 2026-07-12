@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     template: "%s | The Dietitian's Clinic",
   },
   description:
-    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PCOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
+    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PCOS (PMOS), diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
   keywords: [
     "dietitian",
     "nutritionist",
     "diet plan",
     "weight loss",
-    "PCOS diet",
+    "PCOS (PMOS) diet",
     "diabetes diet",
     "thyroid diet",
     "pregnancy nutrition",
@@ -104,9 +104,9 @@ export default function RootLayout({
               telephone: "+977-1-4445566",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "Banasthali, Baluwatar-4",
-                addressLocality: "Kathmandu",
-                postalCode: "44600",
+                streetAddress: "Dharan-14",
+                addressLocality: "Dharan",
+                postalCode: "56700",
                 addressCountry: "NP",
               },
               openingHoursSpecification: [

@@ -211,7 +211,7 @@ export function ClientDashboard() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Dr. Anita Shrestha</p>
-                    <p className="text-xs text-muted-foreground">PCOS & Hormonal Health</p>
+                    <p className="text-xs text-muted-foreground">PCOS (PMOS) & Hormonal Health</p>
                   </div>
                 </div>
                 <div className="space-y-2 text-xs">

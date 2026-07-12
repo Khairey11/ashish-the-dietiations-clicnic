@@ -13,7 +13,7 @@ import { TestimonialSubmitForm } from "@/components/sections/testimonial-submit-
 const filters = [
   { id: "all", label: "All Stories" },
   { id: "weight-loss", label: "Weight Loss" },
-  { id: "pcos", label: "PCOS" },
+  { id: "pcos", label: "PCOS (PMOS)" },
   { id: "diabetes", label: "Diabetes" },
   { id: "pregnancy", label: "Pregnancy" },
   { id: "thyroid", label: "Thyroid" },
@@ -69,7 +69,7 @@ export default function TestimonialsPage() {
               <Quote className="w-7 h-7 fill-white text-white" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold">Sneha's 16-week transformation</h2>
-            <p className="mt-2 text-white/85 max-w-2xl mx-auto">From PCOS diagnosis to regular cycles and -11 kg — Sneha shares her journey in her own words.</p>
+            <p className="mt-2 text-white/85 max-w-2xl mx-auto">From PCOS (PMOS) diagnosis to regular cycles and -11 kg — Sneha shares her journey in her own words.</p>
             <Link href="/booking" className="inline-block mt-6">
               <Button className="bg-white text-primary hover:bg-white/90">
                 Start your journey

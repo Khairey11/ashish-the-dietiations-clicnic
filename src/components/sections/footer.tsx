@@ -30,7 +30,7 @@ const footerNav = [
     links: [
       { label: "Weight Loss", href: "/services/weight-loss" },
       { label: "Weight Gain", href: "/services/weight-gain" },
-      { label: "PCOS Diet", href: "/services/pcos-diet" },
+      { label: "PCOS (PMOS) Diet", href: "/services/pcos-diet" },
       { label: "Diabetes Diet", href: "/services/diabetes-diet" },
       { label: "Thyroid Diet", href: "/services/thyroid-diet" },
       { label: "Pregnancy Nutrition", href: "/services/pregnancy-nutrition" },

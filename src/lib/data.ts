@@ -67,11 +67,11 @@ export const services: Service[] = [
   },
   {
     slug: "pcos-diet",
-    title: "PCOS Nutrition",
+    title: "PCOS (PMOS) Nutrition",
     icon: Heart,
     tagline: "Balance hormones with food",
     problem:
-      "Insulin resistance, irregular cycles and weight gain from PCOS disrupt daily life and long-term health.",
+      "Insulin resistance, irregular cycles and weight gain from PCOS (PMOS) disrupt daily life and long-term health.",
     solution:
       "Low-glycaemic, anti-inflammatory meal architecture combined with chromium & inositol-rich food protocols.",
     benefits: [
@@ -384,7 +384,7 @@ export const dietitians: Dietitian[] = [
     id: "anita-shrestha",
     name: "Dr. Anita Shrestha",
     credentials: "RD, PhD Clinical Nutrition",
-    specialty: "PCOS & Hormonal Health",
+    specialty: "PCOS (PMOS) & Hormonal Health",
     experience: 14,
     languages: ["English", "Nepali", "Hindi"],
     rating: 4.97,
@@ -393,7 +393,7 @@ export const dietitians: Dietitian[] = [
     initials: "AS",
     accent: "from-emerald-500 to-teal-500",
     availability: "Next available: Tomorrow, 10:00 AM",
-    focus: ["PCOS", "Thyroid", "Fertility"],
+    focus: ["PCOS (PMOS)", "Thyroid", "Fertility"],
   },
   {
     id: "rohan-thapa",
@@ -464,8 +464,8 @@ export const testimonials: Testimonial[] = [
     id: "t1",
     name: "Sneha K.",
     age: 29,
-    city: "Kathmandu",
-    condition: "PCOS",
+    city: "Dharan",
+    condition: "PCOS (PMOS)",
     rating: 5,
     beforeWeight: 78,
     afterWeight: 67,
@@ -532,7 +532,7 @@ export const testimonials: Testimonial[] = [
     id: "t5",
     name: "Rekha S.",
     age: 38,
-    city: "Kathmandu",
+    city: "Dharan",
     condition: "Hypothyroidism",
     rating: 5,
     beforeWeight: 85,
@@ -580,14 +580,14 @@ export type BlogPost = {
 export const blogPosts: BlogPost[] = [
   {
     id: "b1",
-    title: "The Truth About PCOS and Carbohydrates: What 2025 Research Tells Us",
+    title: "The Truth About PCOS (PMOS) and Carbohydrates: What 2025 Research Tells Us",
     excerpt:
-      "PCOS isn't a carbs problem — it's an insulin problem. Here's how to build a low-glycaemic plate that actually works for hormonal balance, with evidence from 12 recent RCTs.",
+      "PCOS (PMOS) isn't a carbs problem — it's an insulin problem. Here's how to build a low-glycaemic plate that actually works for hormonal balance, with evidence from 12 recent RCTs.",
     category: "Hormonal Health",
     author: "Dr. Anita Shrestha",
     date: "2025-06-18",
     readingTime: 8,
-    tags: ["PCOS", "Insulin", "Carbohydrates"],
+    tags: ["PCOS (PMOS)", "Insulin", "Carbohydrates"],
     accent: "from-pink-500 to-rose-500",
     featured: true,
   },
@@ -645,7 +645,7 @@ export const faqs: FAQ[] = [
   {
     question: "Are consultations available online or only in-clinic?",
     answer:
-      "Both. All our dietitians offer secure video consultations via the platform, and in-clinic appointments are available at our Kathmandu location for body composition analysis and hands-on assessments. Video consultations are equally effective for most conditions.",
+      "Both. All our dietitians offer secure video consultations via the platform, and in-clinic appointments are available at our Dharan location for body composition analysis and hands-on assessments. Video consultations are equally effective for most conditions.",
     category: "Booking",
   },
   {
@@ -802,7 +802,7 @@ export const serviceDetails: Record<string, ServiceDetail> = {
       { step: 4, title: "Cycle tracking & adjustment", description: "We sync nutrition with your cycle phases and adjust based on symptom changes." },
     ],
     faqs: [
-      { question: "Can PCOS be managed with diet alone?", answer: "For many women, yes — particularly with insulin-resistant PCOS. Some cases benefit from adjunct supplements or medications, which we coordinate with your physician." },
+      { question: "Can PCOS (PMOS) be managed with diet alone?", answer: "For many women, yes — particularly with insulin-resistant PCOS (PMOS). Some cases benefit from adjunct supplements or medications, which we coordinate with your physician." },
       { question: "Will this help with fertility?", answer: "Yes. Improving insulin sensitivity and reducing inflammation significantly improves ovulation regularity and fertility outcomes." },
       { question: "How long until I see cycle improvements?", answer: "Most clients see cycle changes within 8–12 weeks of consistent adherence." },
     ],
@@ -906,7 +906,7 @@ export const teamMembers: TeamMember[] = [
     bio: "Anita founded The Dietitian's Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
     initials: "AS",
     accent: "from-emerald-500 to-teal-500",
-    specialties: ["PCOS", "Thyroid", "Fertility"],
+    specialties: ["PCOS (PMOS)", "Thyroid", "Fertility"],
     yearsExperience: 14,
   },
   {
@@ -983,15 +983,15 @@ export const blogArticles: BlogArticle[] = [
     authorAccent: "from-emerald-500 to-teal-500",
     content: [
       {
-        heading: "The insulin-PCOS connection",
-        body: "Polycystic Ovary Syndrome affects approximately 1 in 10 women of reproductive age worldwide, and insulin resistance is present in 70–80% of those cases. When insulin levels are chronically elevated, the ovaries respond by producing more androgens — which worsens every other PCOS symptom, from irregular cycles to weight gain to acne. This is why targeting insulin sensitivity, rather than simply restricting calories, is the cornerstone of evidence-based PCOS nutrition therapy. A 2024 meta-analysis in the Journal of Clinical Endocrinology & Metabolism confirmed that low-glycaemic-load diets improve both metabolic and reproductive outcomes in PCOS more effectively than iso-caloric high-GI controls.",
+        heading: "The insulin-PCOS (PMOS) connection",
+        body: "Polycystic Ovary Syndrome affects approximately 1 in 10 women of reproductive age worldwide, and insulin resistance is present in 70–80% of those cases. When insulin levels are chronically elevated, the ovaries respond by producing more androgens — which worsens every other PCOS (PMOS) symptom, from irregular cycles to weight gain to acne. This is why targeting insulin sensitivity, rather than simply restricting calories, is the cornerstone of evidence-based PCOS (PMOS) nutrition therapy. A 2024 meta-analysis in the Journal of Clinical Endocrinology & Metabolism confirmed that low-glycaemic-load diets improve both metabolic and reproductive outcomes in PCOS (PMOS) more effectively than iso-caloric high-GI controls.",
       },
       {
         heading: "Why carbohydrates are not the enemy",
-        body: "The internet would have you believe that women with PCOS must adopt strict keto or carnivore protocols. The evidence tells a different story. Fibre-rich, low-glycaemic carbohydrates — think lentils, chickpeas, sweet potatoes, oats, berries and most whole fruits — actually improve insulin sensitivity over time. The problem isn't carbs; it's the dose, the timing, the processing and the company they keep. A bowl of white rice with grilled chicken and vegetables will spike glucose far less than the same rice alone. Pairing, processing and portion matter more than elimination.",
+        body: "The internet would have you believe that women with PCOS (PMOS) must adopt strict keto or carnivore protocols. The evidence tells a different story. Fibre-rich, low-glycaemic carbohydrates — think lentils, chickpeas, sweet potatoes, oats, berries and most whole fruits — actually improve insulin sensitivity over time. The problem isn't carbs; it's the dose, the timing, the processing and the company they keep. A bowl of white rice with grilled chicken and vegetables will spike glucose far less than the same rice alone. Pairing, processing and portion matter more than elimination.",
       },
       {
-        heading: "The Dietitian's Clinic PCOS framework",
+        heading: "The Dietitian's Clinic PCOS (PMOS) framework",
         body: "Our clinical protocol rests on four pillars. First, we build meals around a low-glycaemic-load architecture with 25–30g of protein per meal. Second, we incorporate chromium and inositol-rich foods (and supplement where appropriate). Third, we sync movement — particularly post-meal walks and resistance training — to lower postprandial glucose. Fourth, we address the often-overlooked lifestyle factors: sleep architecture, stress regulation and circadian alignment. Most clients see cycle regularity improve within 8–12 weeks, with weight loss following naturally as insulin levels normalise.",
       },
       {
@@ -1012,7 +1012,7 @@ export const blogArticles: BlogArticle[] = [
       },
       {
         heading: "When CGMs make sense for non-diabetics",
-        body: "For people with pre-diabetes, insulin resistance, PCOS or a strong family history of metabolic disease, a 14-day CGM trial can be genuinely illuminating. It reveals which foods cause unexpected spikes, how sleep affects your fasting glucose, and how exercise improves your glucose tolerance. For otherwise healthy people with no metabolic risk factors, however, the actionable insights are usually fewer — and the risk of obsessive tracking outweighs the benefits. We recommend CGMs selectively, not universally.",
+        body: "For people with pre-diabetes, insulin resistance, PCOS (PMOS) or a strong family history of metabolic disease, a 14-day CGM trial can be genuinely illuminating. It reveals which foods cause unexpected spikes, how sleep affects your fasting glucose, and how exercise improves your glucose tolerance. For otherwise healthy people with no metabolic risk factors, however, the actionable insights are usually fewer — and the risk of obsessive tracking outweighs the benefits. We recommend CGMs selectively, not universally.",
       },
       {
         heading: "How we use CGM data at The Dietitian's Clinic",

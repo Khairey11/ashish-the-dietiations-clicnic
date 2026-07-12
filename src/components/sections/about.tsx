@@ -42,7 +42,7 @@ const values = [
 ];
 
 const milestones = [
-  { year: "2018", event: "Founded in Kathmandu with 1 dietitian and a big idea" },
+  { year: "2018", event: "Founded in Dharan with 1 dietitian and a big idea" },
   { year: "2020", event: "Launched online consultations during the pandemic — 5,000+ clients" },
   { year: "2022", event: "Raised Series A · Built our proprietary meal planning engine" },
   { year: "2024", event: "Crossed 12,400 transformations · Expanded to 28 clinicians" },
