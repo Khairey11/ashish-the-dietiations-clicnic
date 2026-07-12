@@ -1,3 +1,37 @@
+# Production Caddyfile for thedietitiansclinic.com
+# Serves the Next.js app on the custom domain with automatic HTTPS
+
+# ===== Custom domain (production) =====
+thedietitiansclinic.com, www.thedietitiansclinic.com {
+	# Reverse proxy to Next.js
+	reverse_proxy localhost:3000 {
+		header_up Host {host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
+	}
+
+	# Compression
+	encode gzip zstd
+
+	# Security headers
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+	}
+
+	# Cache static assets
+	@static path /_next/static/* /logo-transparent.png /uploads/*
+	header @static Cache-Control "public, max-age=31536000, immutable"
+
+	# Enable Caddy's automatic HTTPS via Let's Encrypt
+	# (Caddy provisions and renews SSL certs automatically)
+}
+
+# ===== Sandbox preview (keep existing functionality) =====
 :81 {
 	@transform_port_query {
 		query XTransformPort=*
