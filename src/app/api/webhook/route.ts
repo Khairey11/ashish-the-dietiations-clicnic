@@ -12,24 +12,53 @@ import { execSync } from "node:child_process";
  * 3. Content type: application/json
  * 4. Secret: Set WEBHOOK_SECRET env var on the VPS to the same value
  * 5. Events: Just the "push" event
+ *
+ * SECURITY: WEBHOOK_SECRET has NO default. If unset, the endpoint 503s
+ * instead of accepting forged requests with a known-default secret.
  */
 
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "dietitians-webhook-secret";
+function getWebhookSecret(): string {
+  const s = process.env.WEBHOOK_SECRET;
+  if (!s) {
+    throw new Error("WEBHOOK_SECRET is not set — refusing to process webhook.");
+  }
+  if (s.length < 16) {
+    throw new Error("WEBHOOK_SECRET must be at least 16 characters.");
+  }
+  return s;
+}
 
 function verifySignature(payload: string, signature: string, secret: string): boolean {
   if (!signature?.startsWith("sha256=")) return false;
   const expected = "sha256=" + createHmac("sha256", secret).update(payload).digest("hex");
-  return signature === expected;
+  // Constant-time comparison.
+  if (expected.length !== signature.length) return false;
+  let diff = 0;
+  for (let i = 0; i < expected.length; i++) {
+    diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
+  }
+  return diff === 0;
 }
 
 export async function POST(req: NextRequest) {
+  let secret: string;
+  try {
+    secret = getWebhookSecret();
+  } catch (err) {
+    console.error("❌ Webhook misconfigured:", err instanceof Error ? err.message : err);
+    return NextResponse.json(
+      { success: false, error: "Webhook not configured" },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = await req.text();
     const signature = req.headers.get("x-hub-signature-256") || "";
     const event = req.headers.get("x-github-event") || "";
 
     // Verify webhook signature
-    if (!verifySignature(body, signature, WEBHOOK_SECRET)) {
+    if (!verifySignature(body, signature, secret)) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -38,7 +67,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Ignored: not a push event" });
     }
 
-    const payload = JSON.parse(body);
+    let payload: { ref?: string; head_commit?: { message?: string }; pusher?: { name?: string } };
+    try {
+      payload = JSON.parse(body);
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
+    }
     const ref = payload.ref;
 
     // Only deploy on pushes to main
@@ -91,7 +125,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     service: "GitHub Webhook Auto-Deploy",
-    status: "active",
+    status: process.env.WEBHOOK_SECRET ? "active" : "misconfigured",
     message: "Send POST requests from GitHub webhooks to trigger deployment",
   });
 }

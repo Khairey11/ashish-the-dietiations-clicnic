@@ -1,5 +1,9 @@
 // Seed script for The Dietitian's Clinic
 // Run: bun run db:seed
+//
+// Passwords are read from env vars (SEED_ADMIN_PASSWORD, SEED_CLIENT_PASSWORD,
+// SEED_DIETITIAN_PASSWORD) so they never land in the repo. If unset, the seed
+// aborts with a clear message — it does NOT fall back to a hardcoded default.
 
 import { PrismaClient, UserRole, LeadStatus, LeadSource } from "@prisma/client";
 import { hashPassword } from "../src/lib/password";
@@ -7,8 +11,26 @@ import { services, programs, dietitians, blogPosts, faqs, testimonials } from ".
 
 const prisma = new PrismaClient();
 
+function requirePassword(envVar: string, description: string): string {
+  const v = process.env[envVar];
+  if (!v) {
+    console.error(`❌ ${envVar} is not set. Required for seeding ${description}.`);
+    console.error(`   Example: ${envVar}="change-me-now" bun run db:seed`);
+    process.exit(1);
+  }
+  if (v.length < 10) {
+    console.error(`❌ ${envVar} must be at least 10 characters long.`);
+    process.exit(1);
+  }
+  return v;
+}
+
 async function main() {
   console.log("🌱 Seeding database...");
+
+  const adminPassword = requirePassword("SEED_ADMIN_PASSWORD", "the admin user");
+  const clientPassword = requirePassword("SEED_CLIENT_PASSWORD", "the demo client");
+  const dietitianPassword = requirePassword("SEED_DIETITIAN_PASSWORD", "dietitian users");
 
   // ============================================================
   // 1. USERS (Admin + Dietitians + Demo Client)
@@ -24,8 +46,7 @@ async function main() {
       phone: "+977 9800000001",
       role: UserRole.SUPER_ADMIN,
       isActive: true,
-      // Default admin password — change immediately after first login.
-      passwordHash: hashPassword("admin123"),
+      passwordHash: hashPassword(adminPassword),
     },
   });
 
@@ -43,6 +64,9 @@ async function main() {
         phone: "+977 9800000" + Math.floor(Math.random() * 999).toString().padStart(3, "0"),
         role: UserRole.DIETITIAN,
         isActive: true,
+        // Dietitians previously had no passwordHash and could never log in.
+        // Give them all the same seeded password (rotate on first login).
+        passwordHash: hashPassword(dietitianPassword),
       },
     });
     dietitianUsers.push({ user, data: d });
@@ -58,6 +82,7 @@ async function main() {
       phone: "+977 98XXXXXXXX",
       role: UserRole.CLIENT,
       isActive: true,
+      passwordHash: hashPassword(clientPassword),
     },
   });
 
@@ -345,6 +370,8 @@ async function main() {
   console.log(`   - ${demoLeads.length} leads`);
   console.log(`   - 1 admin user (aarav@thedietitiansclinic.health)`);
   console.log(`   - 1 demo client (sneha@example.com)`);
+  console.log("");
+  console.log("🔐 Passwords were read from env vars. Rotate them on first login.");
 }
 
 main()

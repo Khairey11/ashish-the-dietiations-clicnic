@@ -2,17 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifySession } from "@/lib/auth";
 
 /**
- * Protects /admin and /dashboard pages and /api/admin/* routes.
- * Public site, /api/payments/*, /login, and static assets are not affected.
+ * Next.js middleware — protects /admin and /dashboard pages and /api/admin/* routes.
+ *
+ * Public site, /api/payments/*, /login, and static assets are NOT affected.
+ *
+ * Note: this file MUST be named `middleware.ts` (not `proxy.ts`) and live at the
+ * `src/` root for Next.js to recognise and invoke it.
  */
 
 const PROTECTED_PAGES = ["/admin", "/dashboard"];
 const PROTECTED_API = "/api/admin";
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Protect admin API routes
+  // Protect admin API routes (except /api/admin/login which is the auth endpoint).
   if (pathname.startsWith(PROTECTED_API) && !pathname.startsWith("/api/admin/login")) {
     const token = req.cookies.get("admin_session")?.value;
     const userId = await verifySession(token);
@@ -25,7 +29,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Protect admin / dashboard pages (server-side render, redirect to login)
+  // Protect admin / dashboard pages (server-side redirect to /login).
   if (PROTECTED_PAGES.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     const token = req.cookies.get("admin_session")?.value;
     const userId = await verifySession(token);
