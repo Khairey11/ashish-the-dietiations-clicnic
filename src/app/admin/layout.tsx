@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Users, CalendarDays, CreditCard, Star, Bell,
-  ShieldCheck, Settings, Menu, ChevronLeft, FileText,
+  ShieldCheck, Settings, Menu, ChevronLeft, FileText, MessageCircle, Utensils,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,8 @@ const sidebarItems: Array<{
   { icon: LayoutDashboard, label: "Overview", href: "/admin" },
   { icon: Users, label: "Clients", href: "/admin/clients" },
   { icon: CalendarDays, label: "Appointments", href: "/admin/appointments" },
+  { icon: Utensils, label: "Meal Plans", href: "/admin/meal-plans" },
+  { icon: MessageCircle, label: "Messages", href: "/admin/messages" },
   { icon: CreditCard, label: "Payments", href: "/admin/payments" },
   { icon: Star, label: "Testimonials", href: "/admin/testimonials" },
   { icon: FileText, label: "Blog CMS", href: "/admin/blog" },
