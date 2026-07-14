@@ -41,9 +41,21 @@ function LoginForm() {
   const [password, setPassword] = React.useState("");
   const [name, setName] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [errors, setErrors] = React.useState<{ email?: string; password?: string }>({});
+
+  const validate = () => {
+    const e: { email?: string; password?: string } = {};
+    if (!email) e.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "Please enter a valid email";
+    if (!password) e.password = "Password is required";
+    else if (password.length < 6) e.password = "Password must be at least 6 characters";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch("/api/admin/login", {
@@ -122,13 +134,14 @@ function LoginForm() {
                     id="email"
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => { setEmail(e.target.value); setErrors({}); }}
                     placeholder="you@email.com"
-                    className="h-11 pl-9"
+                    className={`h-11 pl-9 ${errors.email ? "border-rose-500" : ""}`}
                     autoComplete="email"
                     required
                   />
                 </div>
+                {errors.email && <p className="text-xs text-rose-600 dark:text-rose-400">{errors.email}</p>}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="password" className="text-xs">Password</Label>
@@ -138,14 +151,15 @@ function LoginForm() {
                     id="password"
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => { setPassword(e.target.value); setErrors({}); }}
                     placeholder="••••••••"
-                    className="h-11 pl-9"
+                    className={`h-11 pl-9 ${errors.password ? "border-rose-500" : ""}`}
                     autoComplete="current-password"
                     minLength={6}
                     required
                   />
                 </div>
+                {errors.password && <p className="text-xs text-rose-600 dark:text-rose-400">{errors.password}</p>}
               </div>
 
               {mode === "login" && (
@@ -154,17 +168,12 @@ function LoginForm() {
                     <input type="checkbox" className="rounded" />
                     <span className="text-muted-foreground">Remember me</span>
                   </label>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      toast.info("Password reset", {
-                        description: "Email care@thedietitiansclinic.com to reset your password.",
-                      })
-                    }
+                  <Link
+                    href="/forgot-password"
                     className="text-primary font-medium hover:underline"
                   >
                     Forgot password?
-                  </button>
+                  </Link>
                 </div>
               )}
 
