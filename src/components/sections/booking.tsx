@@ -26,7 +26,7 @@ import { services, dietitians, programs } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createBooking } from "@/lib/actions/contact";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, type DynamicConfig } from "@/lib/site-config";
 
 const steps = [
   { id: 0, label: "Service", icon: FileText },
@@ -43,7 +43,9 @@ const timeSlots = [
   "05:00 PM", "06:00 PM",
 ];
 
-export function Booking() {
+export function Booking({ config }: { config?: DynamicConfig }) {
+  const email = config?.email || siteConfig.email;
+  const whatsappRaw = config?.whatsappRaw || siteConfig.whatsappRaw;
   // Compute next 14 days inside the component to avoid SSR/CSR hydration mismatch.
   const nextDays = React.useMemo(
     () =>
@@ -416,7 +418,7 @@ export function Booking() {
                     <div className="rounded-xl border border-border/60 bg-muted/30 p-4 flex items-start gap-3">
                       <Info className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        Bring any recent lab reports (thyroid panel, HbA1c, lipid profile, etc.) to your consultation, or email them to <a href={`mailto:${siteConfig.email}`} className="text-primary font-medium hover:underline">{siteConfig.email}</a> ahead of time.
+                        Bring any recent lab reports (thyroid panel, HbA1c, lipid profile, etc.) to your consultation, or email them to <a href={`mailto:${email}`} className="text-primary font-medium hover:underline">{email}</a> ahead of time.
                       </p>
                     </div>
                   </div>

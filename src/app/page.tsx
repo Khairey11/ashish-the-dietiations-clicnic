@@ -12,8 +12,12 @@ import { About } from "@/components/sections/about";
 import { FAQ } from "@/components/sections/faq";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
+import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
+import { getDynamicConfig, type DynamicConfig } from "@/lib/site-config";
 
-export default function Home() {
+export default async function Home() {
+  const config = await getDynamicConfig();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navigation />
@@ -25,13 +29,14 @@ export default function Home() {
         <Programs />
         <BMICalculator />
         <Testimonials />
-        <Booking />
+        <Booking config={config} />
         <Blog />
         <About />
         <FAQ />
-        <Contact />
+        <Contact config={config} />
       </main>
-      <Footer />
+      <Footer config={config} />
+      <FloatingWhatsApp config={config} />
     </div>
   );
 }
