@@ -117,16 +117,23 @@ export async function PUT(req: NextRequest) {
     };
 
     let updated = 0;
+    const upserts: ReturnType<typeof db.siteSetting.upsert>[] = [];
     for (const [field, value] of Object.entries(parsed.data)) {
       if (value === undefined) continue;
       const key = keyMap[field];
       if (!key) continue;
-      await db.siteSetting.upsert({
-        where: { key },
-        update: { value: String(value) },
-        create: { key, value: String(value) },
-      });
+      upserts.push(
+        db.siteSetting.upsert({
+          where: { key },
+          update: { value: String(value) },
+          create: { key, value: String(value) },
+        })
+      );
       updated++;
+    }
+    // Run all upserts in parallel inside a transaction for atomicity + speed.
+    if (upserts.length > 0) {
+      await db.$transaction(upserts);
     }
 
     await writeAuditLog({

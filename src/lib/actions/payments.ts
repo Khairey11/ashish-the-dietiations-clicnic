@@ -135,12 +135,16 @@ export async function updatePaymentConfig(input: {
   if (input.instructions !== undefined)
     updates.push({ key: "payment_instructions", value: input.instructions });
 
-  for (const u of updates) {
-    await db.siteSetting.upsert({
-      where: { key: u.key },
-      update: { value: u.value },
-      create: { key: u.key, value: u.value },
-    });
+  if (updates.length > 0) {
+    await db.$transaction(
+      updates.map((u) =>
+        db.siteSetting.upsert({
+          where: { key: u.key },
+          update: { value: u.value },
+          create: { key: u.key, value: u.value },
+        })
+      )
+    );
   }
 
   return { success: true, updated: updates.length };
