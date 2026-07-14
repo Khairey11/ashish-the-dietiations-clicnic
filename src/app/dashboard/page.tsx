@@ -74,16 +74,19 @@ export default function DashboardPage() {
         if (r.status === 401) { router.push("/login?next=/dashboard"); return null; }
         return r.json();
       }),
-      fetch("/api/client/measurements").then((r) => r.json()),
+      fetch("/api/client/measurements").then(async (r) => {
+        if (r.status === 401) return { success: false };
+        return r.json();
+      }),
     ])
       .then(([d, m]) => {
         if (d?.success) {
-          setData(d.data);
           // Redirect to onboarding if not completed
           if (d.data?.patient && !d.data.patient.onboardingCompleted) {
             router.push("/dashboard/onboarding");
             return;
           }
+          setData(d.data);
         }
         if (m?.success) setMeasurements(m.data);
       })

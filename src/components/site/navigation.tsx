@@ -22,12 +22,23 @@ export function Navigation() {
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [cmdOpen, setCmdOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [cmdQuery, setCmdQuery] = React.useState("");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const pathname = usePathname();
 
   React.useEffect(() => setMounted(true), []);
+
+  // Check if user is logged in (hide login CTA if so)
+  React.useEffect(() => {
+    fetch("/api/admin/me")
+      .then((r) => {
+        if (r.ok) setIsLoggedIn(true);
+        else setIsLoggedIn(false);
+      })
+      .catch(() => setIsLoggedIn(false));
+  }, [pathname]);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -161,15 +172,17 @@ export function Navigation() {
                 </button>
               )}
 
-              <Link href="/login" className="hidden sm:inline-flex">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-sm font-medium"
-                >
-                  Client Login
-                </Button>
-              </Link>
+              {!isLoggedIn && (
+                <Link href="/login" className="hidden sm:inline-flex">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-sm font-medium"
+                  >
+                    Client Login
+                  </Button>
+                </Link>
+              )}
 
               <Link href="/booking">
                 <Button
@@ -225,11 +238,13 @@ export function Navigation() {
                   <ChevronDown className="w-4 h-4 -rotate-90 text-muted-foreground" />
                 </Link>
               ))}
-              <Link href="/login" className="block mt-4">
-                <Button variant="outline" className="w-full">
-                  Client Login
-                </Button>
-              </Link>
+              {!isLoggedIn && (
+                <Link href="/login" className="block mt-4">
+                  <Button variant="outline" className="w-full">
+                    Client Login
+                  </Button>
+                </Link>
+              )}
               <Link href="/booking">
                 <Button
                   className="mt-2 bg-gradient-to-r from-primary to-secondary w-full"
