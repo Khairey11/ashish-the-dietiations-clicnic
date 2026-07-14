@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from "recharts";
-import { Calendar, Target, Wallet, Plus, TrendingDown, Loader2, Activity, Clock } from "lucide-react";
+import { Calendar, Target, Wallet, Plus, TrendingDown, Loader2, Activity, Clock, MailCheck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,7 +27,7 @@ type Measurement = {
 };
 
 type DashboardData = {
-  user: { id: string; name: string | null; email: string; phone: string | null; createdAt: string } | null;
+  user: { id: string; name: string | null; email: string; phone: string | null; createdAt: string; emailVerified: string | null } | null;
   patient: {
     id: string;
     primaryGoal: string | null;
@@ -67,6 +67,7 @@ export default function DashboardPage() {
   const [showAddWeight, setShowAddWeight] = React.useState(false);
   const [newWeight, setNewWeight] = React.useState("");
   const [savingWeight, setSavingWeight] = React.useState(false);
+  const [resendingVerification, setResendingVerification] = React.useState(false);
 
   // Personalised greeting keyed on the user's name — uses browser locale + timezone.
   const greeting = useGreeting(data?.user?.name);
@@ -171,6 +172,46 @@ export default function DashboardPage() {
 
   return (
     <>
+      {/* Email verification banner */}
+      {data?.user && !data.user.emailVerified && (
+        <div className="mb-6 p-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 flex items-start gap-3 flex-wrap">
+          <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+            <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">Verify your email</p>
+            <p className="text-xs text-amber-700/80 dark:text-amber-400/80 mt-0.5">
+              We sent a verification link to <span className="font-medium">{data.user.email}</span>. Check your inbox to activate your account.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={resendingVerification}
+            onClick={async () => {
+              setResendingVerification(true);
+              try {
+                const res = await fetch("/api/auth/send-verification", { method: "POST" });
+                const d = await res.json();
+                if (d.success) {
+                  toast.success("Verification email sent", { description: "Check your inbox for the new link." });
+                } else {
+                  toast.error("Failed to resend", { description: d.error });
+                }
+              } catch {
+                toast.error("Network error");
+              } finally {
+                setResendingVerification(false);
+              }
+            }}
+            className="border-amber-500/40 hover:bg-amber-500/10 text-amber-700 dark:text-amber-300"
+          >
+            {resendingVerification ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <MailCheck className="w-3.5 h-3.5 mr-1" />}
+            Resend email
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>

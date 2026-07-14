@@ -159,3 +159,57 @@ export async function sendLeadNotification(opts: {
     text: `New lead from ${opts.leadName} (${opts.leadEmail}, ${opts.leadPhone}). Message: ${opts.message}`,
   });
 }
+
+/**
+ * Send an email verification link to a newly-registered user.
+ * The token is a random URL-safe string; the link points to
+ * /verify-email?token=... which calls /api/auth/verify-email.
+ */
+export async function sendVerificationEmail(opts: {
+  to: string;
+  name: string;
+  token: string;
+}) {
+  const baseUrl =
+    process.env.APP_BASE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.NODE_ENV === "production" ? "" : "http://localhost:3000");
+  if (!baseUrl) {
+    console.warn("APP_BASE_URL not set — verification email link will use a placeholder.");
+  }
+  const verifyUrl = `${baseUrl.replace(/\/$/, "")}/verify-email?token=${opts.token}`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #28abe3 0%, #70a442 100%); padding: 30px; border-radius: 12px 12px 0 0;">
+        <h1 style="color: white; margin: 0; font-size: 22px;">Verify your email</h1>
+      </div>
+      <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
+        <p style="color: #374151; font-size: 16px;">Hi ${opts.name},</p>
+        <p style="color: #6b7280; font-size: 15px; line-height: 1.6;">
+          Welcome to The Dietitian's Clinic! Please confirm your email address to activate your account and access your dashboard.
+        </p>
+        <a href="${verifyUrl}" style="display: inline-block; padding: 12px 28px; background: #28abe3; color: white; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600;">Verify email</a>
+        <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+          Or copy this link into your browser:<br>
+          <span style="color: #28abe3; word-break: break-all; font-size: 13px;">${verifyUrl}</span>
+        </p>
+        <p style="color: #9ca3af; font-size: 13px; margin-top: 24px;">
+          This link expires in 24 hours. If you didn't create an account, you can safely ignore this email.
+        </p>
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
+        <p style="color: #9ca3af; font-size: 12px;">
+          The Dietitian's Clinic — Center for Clinical & Performance Nutrition<br>
+          ${siteConfig.address}<br>
+          ${siteConfig.phoneDisplay} · ${siteConfig.email}
+        </p>
+      </div>
+    </div>
+  `;
+
+  return sendEmail({
+    to: opts.to,
+    subject: "Verify your email — The Dietitian's Clinic",
+    html,
+    text: `Hi ${opts.name}, please verify your email by visiting: ${verifyUrl}`,
+  });
+}
