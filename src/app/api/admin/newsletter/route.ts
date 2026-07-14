@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireContentEditor } from "@/lib/auth";
 
 const querySchema = z.object({
   active: z.enum(["ALL", "ACTIVE", "INACTIVE"]).optional(),
@@ -14,7 +14,7 @@ const querySchema = z.object({
  * Returns newsletter subscribers, optionally as CSV.
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {

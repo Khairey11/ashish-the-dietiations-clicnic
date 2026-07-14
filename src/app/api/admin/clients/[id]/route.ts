@@ -34,6 +34,7 @@ export async function GET(
         patient: {
           select: {
             id: true,
+            dietitianId: true,
             primaryGoal: true,
             medicalHistory: true,
             allergies: true,
@@ -94,6 +95,22 @@ export async function GET(
         { success: false, error: "Client not found" },
         { status: 404 }
       );
+    }
+
+    // Scope check: DIETITIANs can only view clients assigned to them.
+    // SUPER_ADMIN can view any client.
+    if (auth.role === "DIETITIAN") {
+      const dietitian = await db.dietitian.findUnique({
+        where: { userId: auth.userId },
+        select: { id: true },
+      });
+      const patient = client.patient;
+      if (!dietitian || !patient || patient.dietitianId !== dietitian.id) {
+        return NextResponse.json(
+          { success: false, error: "Forbidden: this client is not assigned to you" },
+          { status: 403 }
+        );
+      }
     }
 
     return NextResponse.json({ success: true, data: client });

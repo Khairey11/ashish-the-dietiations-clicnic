@@ -76,8 +76,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // Ownership check: clients can only initiate their own payments; staff can initiate any
-    if (auth.role === "CLIENT" && payment.clientId !== auth.userId) {
+    // Ownership check: clients can only initiate their own payments.
+    // (requireClient now restricts to CLIENT role only, so this always applies.)
+    if (payment.clientId !== auth.userId) {
       return NextResponse.json(
         { success: false, error: "Forbidden" },
         { status: 403 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireContentEditor } from "@/lib/auth";
 
 const querySchema = z.object({
   status: z.enum(["ALL", "PENDING", "APPROVED", "REJECTED"]).optional(),
@@ -18,7 +18,7 @@ const querySchema = z.object({
  * For this implementation: PENDING = not approved, APPROVED = approved. REJECTED not supported (delete instead).
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {

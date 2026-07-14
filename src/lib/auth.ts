@@ -1,14 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import type { UserRole } from "@prisma/client";
 
 /**
- * Admin authentication using an HMAC-signed session cookie.
+ * Authentication using an HMAC-signed session cookie.
  *
  * Login flow:
- *   1. POST /api/admin/login with { email, password }
+ *   1. POST /api/admin/login (or /api/auth/register) with { email, password }
  *   2. Server verifies password against User.passwordHash (scrypt)
  *   3. Server sets httpOnly cookie `admin_session` = `<userId>.<hmac>`
- *   4. Subsequent admin requests verified via requireAdmin() / requireSuperAdmin()
+ *   4. Subsequent requests verified via requireUser / requireAdmin / etc.
+ *
+ * Role helpers:
+ *   - requireUser(roles?)      — any authenticated user; optionally restrict to roles
+ *   - requireClient            — CLIENT only (client dashboard, payments, measurements)
+ *   - requireClientOrStaff     — CLIENT + any staff role (file upload)
+ *   - requireAdmin             — SUPER_ADMIN + DIETITIAN (clinical data: appointments, clients)
+ *   - requireContentEditor     — SUPER_ADMIN + CONTENT_MANAGER (blog, testimonials, newsletter)
+ *   - requireSuperAdmin        — SUPER_ADMIN only (payment config, clinic config, audit log)
  */
 
 const COOKIE_NAME = "admin_session";
@@ -34,28 +43,16 @@ async function hmac(data: string, secret: string): Promise<string> {
   return Buffer.from(new Uint8Array(sig)).toString("base64url");
 }
 
-/** Constant-time comparison to prevent timing attacks. */
+/** Constant-time string comparison to prevent timing attacks. */
 async function safeEqual(a: string, b: string): Promise<boolean> {
   if (a.length !== b.length) return false;
   const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw",
-    enc.encode(getSecret()),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["verify"]
-  );
-  // Use Web Crypto verify which is constant-time
-  const aBuf = enc.encode(a);
-  const bBuf = enc.encode(b);
-  // XOR comparison
+  const aBytes = new Uint8Array(enc.encode(a));
+  const bBytes = new Uint8Array(enc.encode(b));
   let result = 0;
-  const aBytes = new Uint8Array(aBuf);
-  const bBytes = new Uint8Array(bBuf);
   for (let i = 0; i < aBytes.length; i++) {
     result |= aBytes[i] ^ bBytes[i];
   }
-  void key; // suppress unused warning
   return result === 0;
 }
 
@@ -70,17 +67,22 @@ export async function verifySession(token: string | undefined): Promise<string |
   const userId = token.slice(0, idx);
   const sig = token.slice(idx + 1);
   const expected = await hmac(userId, getSecret());
-  // Constant-time comparison to prevent timing attacks
   const ok = await safeEqual(sig, expected);
   if (!ok) return null;
   return userId;
 }
 
+// All valid roles from the Prisma enum.
+const ALL_ROLES: UserRole[] = [
+  "SUPER_ADMIN", "DIETITIAN", "NUTRITIONIST", "RECEPTIONIST",
+  "MANAGER", "CONTENT_MANAGER", "FINANCE", "CLIENT",
+];
+
 export async function requireUser(
   req: NextRequest,
-  allowedRoles?: Array<"SUPER_ADMIN" | "DIETITIAN" | "CLIENT" | "NUTRITIONIST" | "RECEPTIONIST" | "MANAGER" | "CONTENT_MANAGER" | "FINANCE">
+  allowedRoles?: UserRole[]
 ): Promise<
-  { ok: true; userId: string; role: string } | { ok: false; response: NextResponse }
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
 > {
   const token = req.cookies.get(COOKIE_NAME)?.value;
   const userId = await verifySession(token);
@@ -106,7 +108,7 @@ export async function requireUser(
       ),
     };
   }
-  if (allowedRoles && !allowedRoles.includes(user.role as any)) {
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
     return {
       ok: false,
       response: NextResponse.json(
@@ -118,29 +120,49 @@ export async function requireUser(
   return { ok: true, userId: user.id, role: user.role };
 }
 
-/** Admin = SUPER_ADMIN or DIETITIAN (can view clients, appointments, leads). */
+/** Client only — for client dashboard, measurements, onboarding, meal plans, payment initiation. */
+export async function requireClient(req: NextRequest): Promise<
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
+> {
+  const result = await requireUser(req, ["CLIENT"]);
+  if (!result.ok) return result;
+  return { ok: true, userId: result.userId, role: result.role };
+}
+
+/** Client or any staff role — for file upload (used by both clients and admins). */
+export async function requireClientOrStaff(req: NextRequest): Promise<
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
+> {
+  const result = await requireUser(req, ALL_ROLES);
+  if (!result.ok) return result;
+  return { ok: true, userId: result.userId, role: result.role };
+}
+
+/** Clinical staff — SUPER_ADMIN or DIETITIAN. Can view clients, appointments, leads.
+ *  NOTE: dietitian access to individual client records should be scoped to their
+ *  own patients at the route level (see /api/admin/clients/[id]). */
 export async function requireAdmin(req: NextRequest): Promise<
-  { ok: true; userId: string } | { ok: false; response: NextResponse }
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
 > {
   const result = await requireUser(req, ["SUPER_ADMIN", "DIETITIAN"]);
   if (!result.ok) return result;
-  return { ok: true, userId: result.userId };
+  return { ok: true, userId: result.userId, role: result.role };
+}
+
+/** Content management — SUPER_ADMIN or CONTENT_MANAGER. For blog, testimonials, newsletter. */
+export async function requireContentEditor(req: NextRequest): Promise<
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
+> {
+  const result = await requireUser(req, ["SUPER_ADMIN", "CONTENT_MANAGER"]);
+  if (!result.ok) return result;
+  return { ok: true, userId: result.userId, role: result.role };
 }
 
 /** Super admin only — for sensitive operations (payment config, clinic config, audit log, payment verification). */
 export async function requireSuperAdmin(req: NextRequest): Promise<
-  { ok: true; userId: string } | { ok: false; response: NextResponse }
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
 > {
   const result = await requireUser(req, ["SUPER_ADMIN"]);
-  if (!result.ok) return result;
-  return { ok: true, userId: result.userId };
-}
-
-/** Client or staff — for client dashboard and payment initiation. */
-export async function requireClient(req: NextRequest): Promise<
-  { ok: true; userId: string; role: string } | { ok: false; response: NextResponse }
-> {
-  const result = await requireUser(req, ["CLIENT", "SUPER_ADMIN", "DIETITIAN"]);
   if (!result.ok) return result;
   return { ok: true, userId: result.userId, role: result.role };
 }

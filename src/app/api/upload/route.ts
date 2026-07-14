@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { requireClient } from "@/lib/auth";
+import { requireClientOrStaff } from "@/lib/auth";
 import { rateLimit, getClientIp } from "@/lib/ratelimit";
 
 /**
@@ -21,7 +21,7 @@ const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "application/pdf
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 export async function POST(req: NextRequest) {
-  const auth = await requireClient(req);
+  const auth = await requireClientOrStaff(req);
   if (!auth.ok) return auth.response;
 
   const ip = getClientIp(req);
