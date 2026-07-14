@@ -4,7 +4,6 @@ import { TrustBar } from "@/components/sections/trust-bar";
 import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
 import { Programs } from "@/components/sections/programs";
-import { Dietitians } from "@/components/sections/dietitians";
 import { BMICalculator } from "@/components/sections/bmi-calculator";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Booking } from "@/components/sections/booking";
@@ -24,7 +23,6 @@ export default function Home() {
         <Services />
         <Process />
         <Programs />
-        <Dietitians />
         <BMICalculator />
         <Testimonials />
         <Booking />

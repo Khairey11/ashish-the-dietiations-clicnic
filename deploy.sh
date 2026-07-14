@@ -86,13 +86,15 @@ npx prisma db push
 # Seed the database (ignore errors if already seeded)
 bun run scripts/seed.ts || true
 
-# Generate session secret
+# Generate secrets
 SECRET=$(openssl rand -hex 32)
+WEBHOOK_SECRET=$(openssl rand -hex 16)
 
 # Create .env file
 cat > .env << EOF
 DATABASE_URL=file:$APP_DIR/db/custom.db
 ADMIN_SESSION_SECRET=$SECRET
+WEBHOOK_SECRET=$WEBHOOK_SECRET
 RESEND_API_KEY=
 FROM_EMAIL=care@$DOMAIN
 APP_BASE_URL=https://$DOMAIN
@@ -211,6 +213,10 @@ echo "  Client login: sneha@example.com"
 echo "  Client password: client123"
 echo ""
 echo "  ⚠️  IMPORTANT: Change the admin password after first login!"
+echo ""
+echo "  🔄 AUTO-DEPLOY WEBHOOK SECRET:"
+echo "  $WEBHOOK_SECRET"
+echo "  (Use this as the secret when setting up GitHub webhook)"
 echo ""
 echo "  Useful commands:"
 echo "  - Check app status:  systemctl status dietitians-clinic"

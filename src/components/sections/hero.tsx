@@ -79,16 +79,6 @@ export function Hero() {
             animate="show"
             className="lg:col-span-7"
           >
-            <motion.div variants={item}>
-              <Badge
-                variant="secondary"
-                className="mb-6 px-3 py-1.5 gap-1.5 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Now accepting new clients</span>
-              </Badge>
-            </motion.div>
-
             <motion.h1
               variants={item}
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.05] text-balance"
