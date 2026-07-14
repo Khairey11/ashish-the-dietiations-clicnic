@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Meet Our Dietitians",
-  description: "Meet the RDN-credentialed clinicians behind The Dietitian's Clinic. Specialists in PCOS (PMOS), diabetes, sports nutrition, pregnancy and more.",
+  description: "Meet the RDN-credentialed clinicians behind The Dietitian's Clinic. Specialists in PMOS, diabetes, sports nutrition, pregnancy and more.",
 };
 
 export default function DietitiansPage() {

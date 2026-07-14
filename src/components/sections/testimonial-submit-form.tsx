@@ -117,7 +117,7 @@ export function TestimonialSubmitForm() {
             id="t-condition"
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
-            placeholder="PCOS (PMOS), Weight Loss, Diabetes..."
+            placeholder="PMOS, Weight Loss, Diabetes..."
             required
             className="h-11"
           />
