@@ -1,6 +1,9 @@
 // Central site configuration for The Dietitian's Clinic.
-// Update these constants to match your real clinic details.
-// These are also mirrored in the database (SiteSetting table) for admin-editable overrides.
+// These are the FALLBACK values. The admin can override them via /admin/settings
+// (stored in the SiteSetting table). Use getDynamicConfig() in server components
+// to fetch the DB-overridden values.
+
+import { db } from "@/lib/db";
 
 export const siteConfig = {
   name: "The Dietitian's Clinic",
@@ -8,12 +11,11 @@ export const siteConfig = {
   tagline: "Center for Clinical & Performance Nutrition",
   domain: "https://thedietitiansclinic.com",
 
-  // ===== Contact =====
-  // Use international format without "+" or spaces for wa.me / tel: links
-  phoneDisplay: "+977-1-4445566",          // Display format
-  phoneRaw: "+97714445566",                // tel: link
-  whatsappDisplay: "+977 9800000000",      // Display format
-  whatsappRaw: "9779800000000",            // wa.me link (no +, no spaces)
+  // ===== Contact (fallbacks — overridden by DB in getDynamicConfig) =====
+  phoneDisplay: "+977-1-4445566",
+  phoneRaw: "+97714445566",
+  whatsappDisplay: "+977 9800000000",
+  whatsappRaw: "9779800000000",
   email: "care@thedietitiansclinic.com",
   address: "Dharan-14, Sunsari, Nepal",
 
@@ -30,7 +32,7 @@ export const siteConfig = {
     linkedin: "https://linkedin.com/company/thedietitiansclinic",
   },
 
-  // ===== Payment defaults (can be overridden in DB via admin settings) =====
+  // ===== Payment defaults =====
   payments: {
     khaltiMobile: "9800000000",
     esewaId: "thedietitiansclinic",
@@ -41,27 +43,103 @@ export const siteConfig = {
   },
 } as const;
 
-// ===== Helpers =====
+export type DynamicConfig = {
+  name: string;
+  phoneDisplay: string;
+  phoneRaw: string;
+  whatsappDisplay: string;
+  whatsappRaw: string;
+  email: string;
+  address: string;
+  weekdayHours: string;
+  saturdayHours: string;
+  social: {
+    instagram: string;
+    facebook: string;
+    twitter: string;
+    youtube: string;
+    linkedin: string;
+  };
+};
 
 /**
- * Build a wa.me link with an optional prefilled message.
- * @param message - Optional prefilled chat message
+ * Fetches the site configuration from the database (admin-editable overrides)
+ * with fallback to the static siteConfig values.
+ * MUST be called in a server component or server action.
  */
+export async function getDynamicConfig(): Promise<DynamicConfig> {
+  try {
+    const settings = await db.siteSetting.findMany({
+      where: {
+        key: {
+          in: [
+            "clinic_name", "clinic_phone_display", "clinic_phone_raw",
+            "clinic_whatsapp_display", "clinic_whatsapp_raw", "clinic_email",
+            "clinic_address", "clinic_weekday_hours", "clinic_saturday_hours",
+            "social_instagram", "social_facebook", "social_twitter",
+            "social_youtube", "social_linkedin",
+          ],
+        },
+      },
+    });
+    const map = new Map(settings.map((s) => [s.key, s.value]));
+    const get = (key: string, fallback: string) => map.get(key) || fallback;
+
+    return {
+      name: get("clinic_name", siteConfig.name),
+      phoneDisplay: get("clinic_phone_display", siteConfig.phoneDisplay),
+      phoneRaw: get("clinic_phone_raw", siteConfig.phoneRaw),
+      whatsappDisplay: get("clinic_whatsapp_display", siteConfig.whatsappDisplay),
+      whatsappRaw: get("clinic_whatsapp_raw", siteConfig.whatsappRaw),
+      email: get("clinic_email", siteConfig.email),
+      address: get("clinic_address", siteConfig.address),
+      weekdayHours: get("clinic_weekday_hours", siteConfig.weekdayHours),
+      saturdayHours: get("clinic_saturday_hours", siteConfig.saturdayHours),
+      social: {
+        instagram: get("social_instagram", siteConfig.social.instagram),
+        facebook: get("social_facebook", siteConfig.social.facebook),
+        twitter: get("social_twitter", siteConfig.social.twitter),
+        youtube: get("social_youtube", siteConfig.social.youtube),
+        linkedin: get("social_linkedin", siteConfig.social.linkedin),
+      },
+    };
+  } catch {
+    // DB not available — return static config
+    return {
+      name: siteConfig.name,
+      phoneDisplay: siteConfig.phoneDisplay,
+      phoneRaw: siteConfig.phoneRaw,
+      whatsappDisplay: siteConfig.whatsappDisplay,
+      whatsappRaw: siteConfig.whatsappRaw,
+      email: siteConfig.email,
+      address: siteConfig.address,
+      weekdayHours: siteConfig.weekdayHours,
+      saturdayHours: siteConfig.saturdayHours,
+      social: { ...siteConfig.social },
+    };
+  }
+}
+
+// ===== Helpers (use static config for client-side, dynamic for server-side) =====
+
 export function whatsappLink(message?: string): string {
   const base = `https://wa.me/${siteConfig.whatsappRaw}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 
-/**
- * Build a tel: link from the clinic phone number.
- */
+export function whatsappLinkFromConfig(config: { whatsappRaw: string }, message?: string): string {
+  const base = `https://wa.me/${config.whatsappRaw}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
+
 export function phoneLink(): string {
   return `tel:${siteConfig.phoneRaw.replace(/[^0-9+]/g, "")}`;
 }
 
-/**
- * Build a mailto: link with an optional subject + body.
- */
+export function phoneLinkFromConfig(config: { phoneRaw: string }): string {
+  return `tel:${config.phoneRaw.replace(/[^0-9+]/g, "")}`;
+}
+
 export function emailLink(subject?: string, body?: string): string {
   const params = new URLSearchParams();
   if (subject) params.set("subject", subject);
@@ -70,15 +148,17 @@ export function emailLink(subject?: string, body?: string): string {
   return `mailto:${siteConfig.email}${qs ? `?${qs}` : ""}`;
 }
 
-/**
- * Default prefilled WhatsApp message used by the floating button.
- */
+export function emailLinkFromConfig(config: { email: string }, subject?: string, body?: string): string {
+  const params = new URLSearchParams();
+  if (subject) params.set("subject", subject);
+  if (body) params.set("body", body);
+  const qs = params.toString();
+  return `mailto:${config.email}${qs ? `?${qs}` : ""}`;
+}
+
 export const defaultWhatsappMessage =
   `Hi ${siteConfig.name}! I'd like to know more about your nutrition programs and book a consultation.`;
 
-/**
- * Build a prefilled WhatsApp message for payment proof after a booking.
- */
 export function paymentProofMessage(opts: {
   clientName: string;
   service?: string;

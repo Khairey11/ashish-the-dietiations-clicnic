@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { toast } from "sonner";
 import { submitContactForm } from "@/lib/actions/contact";
-import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage } from "@/lib/site-config";
+import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage, type DynamicConfig } from "@/lib/site-config";
 
 const hours = [
   { day: "Sunday – Friday", time: siteConfig.weekdayHours },
@@ -57,7 +57,13 @@ const contactMethods = [
   },
 ];
 
-export function Contact() {
+export function Contact({ config }: { config?: DynamicConfig }) {
+  const phoneDisplay = config?.phoneDisplay || siteConfig.phoneDisplay;
+  const whatsappDisplay = config?.whatsappDisplay || siteConfig.whatsappDisplay;
+  const email = config?.email || siteConfig.email;
+  const address = config?.address || siteConfig.address;
+  const whatsappRaw = config?.whatsappRaw || siteConfig.whatsappRaw;
+  const phoneRaw = config?.phoneRaw || siteConfig.phoneRaw;
   const [form, setForm] = React.useState({
     name: "",
     email: "",
@@ -167,7 +173,7 @@ export function Contact() {
                   <Navigation className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-semibold">{siteConfig.name}</p>
-                    <p className="text-xs text-muted-foreground">{siteConfig.address}</p>
+                    <p className="text-xs text-muted-foreground">{address}</p>
                   </div>
                 </div>
               </div>

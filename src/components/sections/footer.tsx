@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { subscribeNewsletter } from "@/lib/actions/contact";
-import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage } from "@/lib/site-config";
+import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage, type DynamicConfig } from "@/lib/site-config";
 
 const footerNav = [
   {
@@ -74,14 +74,19 @@ const footerNav = [
 ];
 
 const socials = [
-  { icon: Instagram, href: siteConfig.social.instagram, label: "Instagram" },
-  { icon: Facebook, href: siteConfig.social.facebook, label: "Facebook" },
-  { icon: Twitter, href: siteConfig.social.twitter, label: "Twitter" },
-  { icon: Youtube, href: siteConfig.social.youtube, label: "YouTube" },
-  { icon: Linkedin, href: siteConfig.social.linkedin, label: "LinkedIn" },
+  { icon: Instagram, href: siteConfig.social.instagram || siteConfig.social.instagram, label: "Instagram" },
+  { icon: Facebook, href: siteConfig.social.facebook || siteConfig.social.facebook, label: "Facebook" },
+  { icon: Twitter, href: siteConfig.social.twitter || siteConfig.social.twitter, label: "Twitter" },
+  { icon: Youtube, href: siteConfig.social.youtube || siteConfig.social.youtube, label: "YouTube" },
+  { icon: Linkedin, href: siteConfig.social.linkedin || siteConfig.social.linkedin, label: "LinkedIn" },
 ];
 
-export function Footer() {
+export function Footer({ config }: { config?: DynamicConfig }) {
+  const phoneDisplay = config?.phoneDisplay || siteConfig.phoneDisplay;
+  const whatsappDisplay = config?.whatsappDisplay || siteConfig.whatsappDisplay;
+  const clinicEmail = config?.email || siteConfig.email;
+  const address = config?.address || siteConfig.address;
+  const whatsappRaw = config?.whatsappRaw || siteConfig.whatsappRaw;
   const [email, setEmail] = React.useState("");
 
   const subscribe = async (e: React.FormEvent) => {
@@ -194,7 +199,7 @@ export function Footer() {
                 <Input
                   type="email"
                   required
-                  value={email}
+                  value={clinicEmail}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
                   className="bg-background/10 border-background/20 text-background placeholder:text-background/50 h-10"
@@ -209,7 +214,7 @@ export function Footer() {
             <div className="space-y-1.5 text-xs text-background/70">
               <a href={phoneLink()} className="flex items-center gap-2 hover:text-background transition-colors">
                 <Phone className="w-3.5 h-3.5" />
-                {siteConfig.phoneDisplay}
+                {phoneDisplay}
               </a>
               <a
                 href={whatsappLink(defaultWhatsappMessage)}
@@ -218,15 +223,15 @@ export function Footer() {
                 className="flex items-center gap-2 hover:text-background transition-colors"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
-                WhatsApp: {siteConfig.whatsappDisplay}
+                WhatsApp: {whatsappDisplay}
               </a>
-              <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-2 hover:text-background transition-colors">
+              <a href={`mailto:${clinicEmail}`} className="flex items-center gap-2 hover:text-background transition-colors">
                 <Mail className="w-3.5 h-3.5" />
-                {siteConfig.email}
+                {clinicEmail}
               </a>
               <p className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
-                {siteConfig.address}
+                {address}
               </p>
             </div>
           </div>

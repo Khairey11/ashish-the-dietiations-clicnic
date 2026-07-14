@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Phone, Mail, Calendar } from "lucide-react";
-import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage } from "@/lib/site-config";
+import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage, type DynamicConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 /**
@@ -12,7 +12,11 @@ import { cn } from "@/lib/utils";
  * - Pinned to bottom-right on desktop, bottom-right on mobile.
  * - Click to expand: WhatsApp / Call / Email / Book.
  */
-export function FloatingWhatsApp() {
+export function FloatingWhatsApp({ config }: { config?: DynamicConfig }) {
+  const phoneDisplay = config?.phoneDisplay || siteConfig.phoneDisplay;
+  const whatsappDisplay = config?.whatsappDisplay || siteConfig.whatsappDisplay;
+  const whatsappRaw = config?.whatsappRaw || siteConfig.whatsappRaw;
+  const email = config?.email || siteConfig.email;
   const [open, setOpen] = React.useState(false);
   const [showLabel, setShowLabel] = React.useState(false);
 
@@ -36,7 +40,7 @@ export function FloatingWhatsApp() {
     },
     {
       label: "Call us",
-      sublabel: siteConfig.phoneDisplay,
+      sublabel: phoneDisplay,
       icon: Phone,
       href: phoneLink(),
       accent: "bg-primary text-primary-foreground",
@@ -46,7 +50,7 @@ export function FloatingWhatsApp() {
       label: "Email",
       sublabel: "Within 1 hour",
       icon: Mail,
-      href: `mailto:${siteConfig.email}`,
+      href: `mailto:${email}`,
       accent: "bg-accent text-accent-foreground",
       external: false,
     },
