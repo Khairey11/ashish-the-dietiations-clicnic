@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
     // Find the user by identifier (email).
     const user = await db.user.findUnique({
       where: { email: record.identifier },
-      select: { id: true, email: true, name: true, role: true, isActive: true, emailVerified: true },
+      select: { id: true, email: true, name: true, role: true, isActive: true, emailVerified: true, sessionVersion: true },
     });
     if (!user || !user.isActive) {
       return NextResponse.json(
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
     // existing cookie is fine — no need to re-issue.
     const existingCookie = req.cookies.get(ADMIN_COOKIE)?.value;
     if (!existingCookie) {
-      const sessionToken = await signSession(user.id);
+      const sessionToken = await signSession(user.id, user.sessionVersion);
       const res = NextResponse.json({
         success: true,
         message: "Email verified successfully!",

@@ -63,13 +63,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Hash the new password
+    // Hash the new password + bump sessionVersion so any pre-existing session
+    // cookies for this user are invalidated (forced logout everywhere).
     const passwordHash = hashPassword(parsed.data.password);
 
-    // Update the user's password
+    // Fetch the current sessionVersion so we can increment it.
+    const user = await db.user.findUnique({
+      where: { id: reset.userId },
+      select: { sessionVersion: true },
+    });
+
+    // Update the user's password + sessionVersion.
     await db.user.update({
       where: { id: reset.userId },
-      data: { passwordHash },
+      data: {
+        passwordHash,
+        sessionVersion: (user?.sessionVersion ?? 0) + 1,
+      },
     });
 
     // Mark the token as used
