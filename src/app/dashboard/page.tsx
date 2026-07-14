@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useGreeting } from "@/lib/use-greeting";
 import { toast } from "sonner";
 
 type Measurement = {
@@ -63,46 +64,12 @@ export default function DashboardPage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [todayStr, setTodayStr] = React.useState("");
-  const [greeting, setGreeting] = React.useState<{ text: string; firstName: string; tz: string; localTime: string } | null>(null);
   const [showAddWeight, setShowAddWeight] = React.useState(false);
   const [newWeight, setNewWeight] = React.useState("");
   const [savingWeight, setSavingWeight] = React.useState(false);
 
-  // Compute a personalised greeting based on the user's first name,
-  // using the timezone derived from their browser locale (navigator.language).
-  React.useEffect(() => {
-    if (!data?.user) return;
-    try {
-      const locale = typeof navigator !== "undefined" ? navigator.language || "en-US" : "en-US";
-      const tz = Intl.DateTimeFormat(locale).resolvedOptions().timeZone || "UTC";
-      const now = new Date();
-      // Hour in the user's timezone — drives the greeting word.
-      const hourStr = new Intl.DateTimeFormat(locale, {
-        hour: "numeric",
-        hour12: false,
-        timeZone: tz,
-      }).format(now);
-      const hour = parseInt(hourStr, 10);
-      const safeHour = Number.isFinite(hour) ? (hour === 24 ? 0 : hour) : 0;
-      let text = "Hello";
-      if (safeHour < 5) text = "Good night";
-      else if (safeHour < 12) text = "Good morning";
-      else if (safeHour < 17) text = "Good afternoon";
-      else if (safeHour < 21) text = "Good evening";
-      else text = "Good night";
-      const fullName = (data.user.name || "").trim();
-      const firstName = fullName ? fullName.split(/\s+/)[0] : "there";
-      const localTime = new Intl.DateTimeFormat(locale, {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: tz,
-      }).format(now);
-      setGreeting({ text, firstName, tz, localTime });
-    } catch {
-      // Fallback: keep greeting null, header falls back to plain name.
-    }
-  }, [data?.user?.name]);
+  // Personalised greeting keyed on the user's name — uses browser locale + timezone.
+  const greeting = useGreeting(data?.user?.name);
 
   React.useEffect(() => {
     setTodayStr(new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
