@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from "recharts";
-import { Calendar, Target, Wallet, Plus, TrendingDown, Loader2, Activity } from "lucide-react";
+import { Calendar, Target, Wallet, Plus, TrendingDown, Loader2, Activity, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -63,9 +63,46 @@ export default function DashboardPage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [todayStr, setTodayStr] = React.useState("");
+  const [greeting, setGreeting] = React.useState<{ text: string; firstName: string; tz: string; localTime: string } | null>(null);
   const [showAddWeight, setShowAddWeight] = React.useState(false);
   const [newWeight, setNewWeight] = React.useState("");
   const [savingWeight, setSavingWeight] = React.useState(false);
+
+  // Compute a personalised greeting based on the user's first name,
+  // using the timezone derived from their browser locale (navigator.language).
+  React.useEffect(() => {
+    if (!data?.user) return;
+    try {
+      const locale = typeof navigator !== "undefined" ? navigator.language || "en-US" : "en-US";
+      const tz = Intl.DateTimeFormat(locale).resolvedOptions().timeZone || "UTC";
+      const now = new Date();
+      // Hour in the user's timezone — drives the greeting word.
+      const hourStr = new Intl.DateTimeFormat(locale, {
+        hour: "numeric",
+        hour12: false,
+        timeZone: tz,
+      }).format(now);
+      const hour = parseInt(hourStr, 10);
+      const safeHour = Number.isFinite(hour) ? (hour === 24 ? 0 : hour) : 0;
+      let text = "Hello";
+      if (safeHour < 5) text = "Good night";
+      else if (safeHour < 12) text = "Good morning";
+      else if (safeHour < 17) text = "Good afternoon";
+      else if (safeHour < 21) text = "Good evening";
+      else text = "Good night";
+      const fullName = (data.user.name || "").trim();
+      const firstName = fullName ? fullName.split(/\s+/)[0] : "there";
+      const localTime = new Intl.DateTimeFormat(locale, {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: tz,
+      }).format(now);
+      setGreeting({ text, firstName, tz, localTime });
+    } catch {
+      // Fallback: keep greeting null, header falls back to plain name.
+    }
+  }, [data?.user?.name]);
 
   React.useEffect(() => {
     setTodayStr(new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
@@ -170,8 +207,22 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>
-          <p className="text-xs text-muted-foreground">{todayStr}</p>
-          <h1 className="text-2xl sm:text-3xl font-bold">{userName} 👋</h1>
+          <p className="text-xs text-muted-foreground flex items-center gap-1.5 flex-wrap">
+            <span>{todayStr}</span>
+            {greeting && (
+              <>
+                <span className="text-muted-foreground/40">·</span>
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  <span>{greeting.localTime}</span>
+                  <span className="text-muted-foreground/60">{greeting.tz}</span>
+                </span>
+              </>
+            )}
+          </p>
+          <h1 className="text-2xl sm:text-3xl font-bold">
+            {greeting ? `${greeting.text}, ${greeting.firstName}` : userName} 👋
+          </h1>
         </div>
         {data?.upcomingAppointments && data.upcomingAppointments.length > 0 && (
           <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 gap-1.5">
