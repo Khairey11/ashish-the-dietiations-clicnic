@@ -45,9 +45,15 @@ export default function OnboardingPage() {
 
   React.useEffect(() => {
     fetch("/api/client/onboarding")
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (r.status === 401) {
+          router.push("/login?next=/dashboard/onboarding");
+          return null;
+        }
+        return r.json();
+      })
       .then((d) => {
-        if (d.success && d.data?.onboardingCompleted) {
+        if (d?.success && d.data?.onboardingCompleted) {
           router.push("/dashboard");
         }
       })
@@ -72,6 +78,11 @@ export default function OnboardingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      if (res.status === 401) {
+        toast.error("Session expired", { description: "Please log in again." });
+        router.push("/login?next=/dashboard/onboarding");
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         toast.success("Assessment complete!", {
@@ -80,10 +91,10 @@ export default function OnboardingPage() {
         router.push("/dashboard");
         router.refresh();
       } else {
-        toast.error("Submission failed", { description: data.error });
+        toast.error("Submission failed", { description: data.error || "Please try again." });
       }
     } catch {
-      toast.error("Network error");
+      toast.error("Network error", { description: "Please check your connection and try again." });
     } finally {
       setSaving(false);
     }

@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 
 /**
  * GET /api/admin/me
- * Returns the currently logged-in admin user's profile.
+ * Returns the currently logged-in user's profile (admin, dietitian, or client).
+ * Used by the navbar to check if user is logged in (hide login CTA).
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireUser(req);
   if (!auth.ok) return auth.response;
 
   try {
