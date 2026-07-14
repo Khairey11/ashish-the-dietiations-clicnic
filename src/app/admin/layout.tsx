@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Users, CalendarDays, CreditCard, Star, Bell,
-  ShieldCheck, Settings, Menu, ChevronLeft, FileText, MessageCircle, Utensils,
+  ShieldCheck, Settings, Menu, ChevronLeft, FileText, MessageCircle, Utensils, UserCog,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ const sidebarItems: Array<{
 }> = [
   { icon: LayoutDashboard, label: "Overview", href: "/admin" },
   { icon: Users, label: "Clients", href: "/admin/clients" },
+  { icon: UserCog, label: "Dietitians", href: "/admin/dietitians" },
   { icon: CalendarDays, label: "Appointments", href: "/admin/appointments" },
   { icon: Utensils, label: "Meal Plans", href: "/admin/meal-plans" },
   { icon: MessageCircle, label: "Messages", href: "/admin/messages" },
@@ -36,6 +37,20 @@ const sidebarItems: Array<{
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [unreadCount, setUnreadCount] = React.useState(0);
+
+  React.useEffect(() => {
+    // Fetch unread message count
+    fetch("/api/messages")
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => {
+        if (d?.success) {
+          const unread = d.data.filter((m: any) => !m.isRead && m.recipient.role !== "CLIENT").length;
+          setUnreadCount(unread);
+        }
+      })
+      .catch(() => {});
+  }, [pathname]);
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
@@ -82,6 +97,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 >
                   <item.icon className="w-3.5 h-3.5" />
                   <span className="flex-1">{item.label}</span>
+                  {item.label === "Messages" && unreadCount > 0 && (
+                    <span className="bg-rose-500 text-white text-[9px] font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                      {unreadCount}
+                    </span>
+                  )}
                 </Link>
               ))}
               <div className="mt-2 pt-2 border-t border-border/40">
