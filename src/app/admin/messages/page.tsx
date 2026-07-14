@@ -50,11 +50,9 @@ export default function AdminMessagesPage() {
           // Group messages by conversation partner
           const convos: Map<string, Conversation> = new Map();
           for (const msg of d.data) {
-            const partnerId = msg.sender.id === "me" ? msg.recipient.id : msg.sender.id;
-            const partnerName = msg.sender.id === "me" ? msg.recipient.name : msg.sender.name;
-            // Determine partner — the one that isn't the current user
-            // Since we don't have "me" in the data, we need to figure out from role
-            const isSender = msg.sender.role !== "CLIENT"; // Admin is sender if sender role isn't CLIENT
+            // Determine partner — the one that isn't the current user.
+            // Admin is sender if sender role isn't CLIENT.
+            const isSender = msg.sender.role !== "CLIENT";
             const partner = isSender ? msg.recipient : msg.sender;
             const pid = partner.id;
             if (!convos.has(pid)) {

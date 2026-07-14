@@ -144,9 +144,12 @@ export async function createBooking(input: BookingInput) {
       if (program) programData = { duration: program.duration, price: program.price };
     }
 
-    // Build scheduledAt from date + time
+    // Build scheduledAt from date + time.
+    // Parse the date string as local (not UTC) to avoid timezone drift.
+    // `new Date("2026-07-15")` parses as UTC midnight; we want local midnight.
     const timeMatch = parsed.time.match(/(\d+):(\d+)\s*(AM|PM)/i);
-    let scheduledAt = new Date(parsed.date);
+    const [y, m, d] = parsed.date.split("-").map(Number);
+    const scheduledAt = new Date(y, m - 1, d);
     if (timeMatch) {
       let hours = parseInt(timeMatch[1], 10);
       const minutes = parseInt(timeMatch[2], 10);
