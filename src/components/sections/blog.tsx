@@ -4,14 +4,14 @@ import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock, Calendar, User } from "lucide-react";
-import { blogPosts } from "@/lib/data";
+import { blogPosts as staticBlogPosts, type BlogPost } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { cn } from "@/lib/utils";
 
-export function Blog() {
-  const [featured, ...rest] = blogPosts;
+export function Blog({ posts = staticBlogPosts }: { posts?: BlogPost[] }) {
+  const [featured, ...rest] = posts;
   return (
     <SectionWrapper id="blog" className="bg-background">
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-12">

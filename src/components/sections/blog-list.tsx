@@ -22,6 +22,11 @@ export type BlogPostItem = {
   tags: string[];
 };
 
+/** Resolve the URL slug for a post — falls back to `id` for static posts. */
+function postHref(p: BlogPostItem): string {
+  return `/blog/${p.slug || p.id}`;
+}
+
 export function BlogList({ posts }: { posts: BlogPostItem[] }) {
   const [search, setSearch] = React.useState("");
   const [category, setCategory] = React.useState("All");
@@ -87,7 +92,7 @@ export function BlogList({ posts }: { posts: BlogPostItem[] }) {
         {featured && (
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             <Link
-              href={`/blog/${featured.id}`}
+              href={postHref(featured)}
               className="group relative rounded-3xl overflow-hidden border border-border/60 bg-card hover:shadow-premium transition-all duration-300"
             >
               <div className={cn("relative h-64 bg-gradient-to-br", featured.accent)}>
@@ -119,7 +124,7 @@ export function BlogList({ posts }: { posts: BlogPostItem[] }) {
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
                   <Link
-                    href={`/blog/${post.id}`}
+                    href={postHref(post)}
                     className="group flex gap-4 p-4 rounded-2xl border border-border/60 bg-card hover:shadow-premium hover:-translate-y-0.5 transition-all duration-300"
                   >
                     <div className={cn("relative w-28 sm:w-36 h-28 sm:h-32 rounded-xl bg-gradient-to-br flex-shrink-0 overflow-hidden", post.accent)}>
@@ -151,7 +156,7 @@ export function BlogList({ posts }: { posts: BlogPostItem[] }) {
               {filtered.map((post) => (
                 <Link
                   key={post.id}
-                  href={`/blog/${post.id}`}
+                  href={postHref(post)}
                   className="group rounded-2xl border border-border/60 bg-card overflow-hidden hover:shadow-premium hover:-translate-y-1 transition-all"
                 >
                   <div className={cn("relative h-40 bg-gradient-to-br", post.accent)}>

@@ -2,19 +2,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, Clock, ChevronRight, FileText } from "lucide-react";
 import { SiteLayout } from "@/components/site/site-layout";
-import { services, getServiceDetail } from "@/lib/data";
+import { services as staticServices, getServiceDetail } from "@/lib/data";
+import { getDbServiceBySlug } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
 export async function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+  // Pre-render the static services at build time. DB-only services
+  // will be rendered on-demand via dynamicParams (default true).
+  return staticServices.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
+  const service = await getDbServiceBySlug(slug);
   if (!service) return { title: "Service Not Found" };
   return {
     title: service.title,
@@ -24,11 +27,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
+  const service = await getDbServiceBySlug(slug);
   if (!service) notFound();
   const detail = getServiceDetail(slug);
   const related = detail.relatedSlugs
-    .map((s) => services.find((svc) => svc.slug === s))
+    .map((s) => staticServices.find((svc) => svc.slug === s))
     .filter(Boolean);
 
   return (

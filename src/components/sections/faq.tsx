@@ -3,12 +3,12 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, HelpCircle, MessageCircleQuestion } from "lucide-react";
-import { faqs } from "@/lib/data";
+import { faqs as staticFaqs, type FAQ as FAQType } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { cn } from "@/lib/utils";
 
-export function FAQ() {
+export function FAQ({ faqs = staticFaqs }: { faqs?: FAQType[] }) {
   const [open, setOpen] = React.useState<number | null>(0);
 
   return (

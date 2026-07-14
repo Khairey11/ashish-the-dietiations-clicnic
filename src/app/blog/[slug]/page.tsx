@@ -3,18 +3,21 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Calendar, Clock, User, ChevronRight, Tag } from "lucide-react";
 import { SiteLayout } from "@/components/site/site-layout";
 import { ShareButton } from "@/components/site/share-button";
-import { blogArticles, getBlogArticle, blogPosts } from "@/lib/data";
+import { blogPosts as staticBlogPosts } from "@/lib/data";
+import { getDbBlogPostBySlug, getDbBlogPosts } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export async function generateStaticParams() {
-  return blogArticles.map((a) => ({ slug: a.id }));
+  // Pre-render the static blog articles at build time. DB-only articles
+  // will be rendered on-demand via dynamicParams (default true).
+  return staticBlogPosts.map((a) => ({ slug: a.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = getBlogArticle(slug);
+  const article = await getDbBlogPostBySlug(slug);
   if (!article) return { title: "Article Not Found" };
   return {
     title: article.title,
@@ -31,10 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = getBlogArticle(slug);
+  const article = await getDbBlogPostBySlug(slug);
   if (!article) notFound();
 
-  // Increment view count in DB (non-blocking, fire-and-forget)
+  // Increment view count in DB (non-blocking, fire-and-forget).
+  // Use the slug column — the `id` we set in getDbBlogPostBySlug is the slug.
   try {
     const { db } = await import("@/lib/db");
     db.blogPost.update({
@@ -43,8 +47,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     }).catch(() => {});
   } catch {}
 
-  const related = blogPosts.filter((p) => p.id !== article.id && p.category === article.category).slice(0, 2);
-  const fallbackRelated = blogPosts.filter((p) => p.id !== article.id).slice(0, 2);
+  const allPosts = await getDbBlogPosts();
+  const related = allPosts.filter((p) => p.id !== article.id && p.category === article.category).slice(0, 2);
+  const fallbackRelated = allPosts.filter((p) => p.id !== article.id).slice(0, 2);
   const finalRelated = related.length > 0 ? related : fallbackRelated;
 
   return (

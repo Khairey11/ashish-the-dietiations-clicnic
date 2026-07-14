@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, TrendingDown, TrendingUp, ArrowRight } from "lucide-react";
-import { testimonials, type Testimonial } from "@/lib/data";
+import { testimonials as staticTestimonials, type Testimonial } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { cn } from "@/lib/utils";
@@ -18,13 +18,13 @@ const filters = [
   { id: "sports", label: "Sports" },
 ];
 
-export function Testimonials() {
+export function Testimonials({ testimonials = staticTestimonials }: { testimonials?: Testimonial[] }) {
   const [active, setActive] = React.useState("all");
 
   const filtered = React.useMemo(() => {
     if (active === "all") return testimonials;
     return testimonials.filter((t) => t.tag === active);
-  }, [active]);
+  }, [active, testimonials]);
 
   return (
     <SectionWrapper id="testimonials" className="bg-muted/30">
