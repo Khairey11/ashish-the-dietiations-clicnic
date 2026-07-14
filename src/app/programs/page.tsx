@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Check, Star, ArrowRight, Zap, Crown, Shield } from "lucide-react";
 import { SiteLayout, PageHero } from "@/components/site/site-layout";
-import { programs } from "@/lib/data";
+import { getDbPrograms } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,8 @@ export const metadata = {
 
 const formatPrice = (n: number) => `Rs. ${n.toLocaleString()}`;
 
-export default function ProgramsPage() {
+export default async function ProgramsPage() {
+  const programs = await getDbPrograms();
   return (
     <SiteLayout>
       <PageHero

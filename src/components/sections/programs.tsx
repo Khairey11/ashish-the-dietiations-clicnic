@@ -3,13 +3,13 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Check, Star, ArrowRight, Zap, Crown } from "lucide-react";
-import { programs } from "@/lib/data";
+import { programs as staticPrograms, type Program } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { cn } from "@/lib/utils";
 
-export function Programs() {
+export function Programs({ programs = staticPrograms }: { programs?: Program[] }) {
   const formatPrice = (n: number) => `Rs. ${n.toLocaleString()}`;
 
   return (

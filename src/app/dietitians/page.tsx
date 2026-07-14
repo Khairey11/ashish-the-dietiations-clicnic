@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Star, Globe, ArrowRight, Award, Sparkles } from "lucide-react";
 import { SiteLayout, PageHero } from "@/components/site/site-layout";
-import { dietitians } from "@/lib/data";
+import { getDbDietitians } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,8 @@ export const metadata = {
   description: "Meet the RDN-credentialed clinicians behind The Dietitian's Clinic. Specialists in PMOS, diabetes, sports nutrition, pregnancy and more.",
 };
 
-export default function DietitiansPage() {
+export default async function DietitiansPage() {
+  const dietitians = await getDbDietitians();
   return (
     <SiteLayout>
       <PageHero

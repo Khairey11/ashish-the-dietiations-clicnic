@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader, SectionWrapper } from "./section-utils";
-import { services, dietitians, programs } from "@/lib/data";
+import { services as staticServices, dietitians as staticDietitians, programs as staticPrograms, type Service, type Dietitian, type Program } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createBooking } from "@/lib/actions/contact";
@@ -43,7 +43,17 @@ const timeSlots = [
   "05:00 PM", "06:00 PM",
 ];
 
-export function Booking({ config }: { config?: DynamicConfig }) {
+export function Booking({
+  config,
+  services = staticServices,
+  dietitians = staticDietitians,
+  programs = staticPrograms,
+}: {
+  config?: DynamicConfig;
+  services?: Service[];
+  dietitians?: Dietitian[];
+  programs?: Program[];
+}) {
   const email = config?.email || siteConfig.email;
   const whatsappRaw = config?.whatsappRaw || siteConfig.whatsappRaw;
   // Compute next 14 days inside the component to avoid SSR/CSR hydration mismatch.
@@ -432,6 +442,7 @@ export function Booking({ config }: { config?: DynamicConfig }) {
                     selectedService={selectedService}
                     selectedDietitian={selectedDietitian}
                     selectedProgram={selectedProgram}
+                    programs={programs}
                   />
                 )}
 
@@ -597,12 +608,14 @@ function PaymentStep({
   selectedService,
   selectedDietitian,
   selectedProgram,
+  programs,
 }: {
   data: any;
   update: (k: string, v: string) => void;
   selectedService: any;
   selectedDietitian: any;
   selectedProgram: any;
+  programs: Program[];
 }) {
   const [config, setConfig] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);

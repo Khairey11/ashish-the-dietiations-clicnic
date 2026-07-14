@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Blog detail pages (from DB)
+  // Blog detail pages (from DB). `p.id` is the slug (see getDbBlogPosts).
   const posts = await getDbBlogPosts();
   const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${baseUrl}/blog/${p.id}`,

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, Clock, X } from "lucide-react";
-import { services, type Service } from "@/lib/data";
+import { services as staticServices, type Service } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader, SectionWrapper } from "./section-utils";
@@ -18,14 +18,14 @@ const categories = [
   { id: "corporate", label: "Corporate" },
 ];
 
-export function Services() {
+export function Services({ services = staticServices }: { services?: Service[] }) {
   const [active, setActive] = React.useState("all");
   const [selected, setSelected] = React.useState<Service | null>(null);
 
   const filtered = React.useMemo(() => {
     if (active === "all") return services;
     return services.filter((s) => s.category === active);
-  }, [active]);
+  }, [active, services]);
 
   return (
     <SectionWrapper id="services" className="bg-background">

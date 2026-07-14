@@ -14,9 +14,25 @@ import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
 import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
 import { getDynamicConfig, type DynamicConfig } from "@/lib/site-config";
+import {
+  getDbServices,
+  getDbPrograms,
+  getDbTestimonials,
+  getDbBlogPosts,
+  getDbFaqs,
+  getDbDietitians,
+} from "@/lib/queries";
 
 export default async function Home() {
-  const config = await getDynamicConfig();
+  const [config, dbServices, dbPrograms, dbTestimonials, dbBlogPosts, dbFaqs, dbDietitians] = await Promise.all([
+    getDynamicConfig(),
+    getDbServices(),
+    getDbPrograms(),
+    getDbTestimonials(),
+    getDbBlogPosts(),
+    getDbFaqs(),
+    getDbDietitians(),
+  ]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -24,15 +40,15 @@ export default async function Home() {
       <main id="main" className="flex-1">
         <Hero />
         <TrustBar />
-        <Services />
+        <Services services={dbServices} />
         <Process />
-        <Programs />
+        <Programs programs={dbPrograms} />
         <BMICalculator />
-        <Testimonials />
-        <Booking config={config} />
-        <Blog />
+        <Testimonials testimonials={dbTestimonials} />
+        <Booking config={config} services={dbServices} dietitians={dbDietitians} programs={dbPrograms} />
+        <Blog posts={dbBlogPosts} />
         <About />
-        <FAQ />
+        <FAQ faqs={dbFaqs} />
         <Contact config={config} />
       </main>
       <Footer config={config} />
