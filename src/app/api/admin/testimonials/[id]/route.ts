@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getClientIp } from "@/lib/ratelimit";import { requireContentEditor } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
+import { deleteUploadByUrl } from "@/lib/file-cleanup";
 
 const schema = z.object({
   action: z.enum(["approve", "unapprove", "feature", "unfeature", "delete"]),
@@ -58,6 +59,10 @@ export async function PATCH(
 
     if (action === "delete") {
       await db.testimonial.delete({ where: { id } });
+      // Best-effort cleanup of any uploaded video file.
+      if (before.videoUrl) {
+        await deleteUploadByUrl(before.videoUrl);
+      }
       await writeAuditLog({
         userId: auth.userId,
         action: ACTION_MAP[action],
