@@ -19,7 +19,7 @@ type EmailParams = {
   text?: string;
 };
 
-const FROM_EMAIL = process.env.FROM_EMAIL || `noreply@${siteConfig.domain.replace("https://", "")}`;
+const FROM_EMAIL = process.env.FROM_EMAIL || "care@thedietitiansclinic.health";
 
 export async function sendEmail({ to, subject, html, text }: EmailParams): Promise<{ success: boolean; error?: string }> {
   // In development, just log
