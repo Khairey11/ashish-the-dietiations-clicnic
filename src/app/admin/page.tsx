@@ -22,31 +22,6 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const revenueData = [
-  { month: "Jan", revenue: 145000, target: 130000 },
-  { month: "Feb", revenue: 162000, target: 145000 },
-  { month: "Mar", revenue: 178000, target: 160000 },
-  { month: "Apr", revenue: 195000, target: 175000 },
-  { month: "May", revenue: 220000, target: 195000 },
-  { month: "Jun", revenue: 248000, target: 215000 },
-];
-
-const programData = [
-  { name: "30-day", value: 142, color: "oklch(0.62 0.18 145)" },
-  { name: "60-day", value: 218, color: "oklch(0.7 0.17 145)" },
-  { name: "90-day", value: 312, color: "oklch(0.65 0.16 230)" },
-  { name: "180-day", value: 168, color: "oklch(0.78 0.16 90)" },
-  { name: "365-day", value: 84, color: "oklch(0.55 0.2 280)" },
-];
-
-const leadSourceData = [
-  { source: "Organic", count: 145 },
-  { source: "Referral", count: 98 },
-  { source: "Social", count: 76 },
-  { source: "Direct", count: 62 },
-  { source: "Ads", count: 41 },
-];
-
 const sidebarItems: Array<{
   icon: typeof LayoutDashboard;
   label: string;
@@ -102,6 +77,8 @@ export default function AdminPage() {
       user: { name: string | null } | null;
     }>;
   }>(null);
+  const [adminUser, setAdminUser] = React.useState<{ name: string | null; role: string } | null>(null);
+  const [loadError, setLoadError] = React.useState(false);
   const [leads, setLeads] = React.useState<Array<{
     id: string;
     name: string;
@@ -136,14 +113,17 @@ export default function AdminPage() {
       fetch("/api/admin/stats").then((r) => r.json()),
       fetch("/api/admin/leads?limit=10").then((r) => r.json()),
       fetch(`/api/admin/appointments?date=${today}&limit=20`).then((r) => r.json()),
+      fetch("/api/admin/me").then((r) => r.json()),
     ])
-      .then(([s, l, a]) => {
+      .then(([s, l, a, me]) => {
         if (s.success) setStats(s.data);
         if (l.success) setLeads(l.data);
         if (a.success) setTodayAppts(a.data);
+        if (me.success) setAdminUser(me.data);
       })
       .catch(() => {
-        // Silent fail — admin page still shows fallback mock charts
+        setLoadError(true);
+        toast.error("Failed to load dashboard data");
       })
       .finally(() => setLoading(false));
   }, []);
@@ -207,9 +187,9 @@ export default function AdminPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold">Admin Portal</h1>
-            <Badge className="bg-primary/15 text-primary border-0">Super Admin</Badge>
+            <Badge className="bg-primary/15 text-primary border-0">{adminUser?.role?.replace(/_/g, " ") || "Admin"}</Badge>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">{todayStr || ""} · Welcome back, Aarav</p>
+              <p className="text-xs text-muted-foreground mt-1">{todayStr ? `${todayStr} · ` : ""}Welcome back, {adminUser?.name || "Admin"}</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/60 text-xs">
