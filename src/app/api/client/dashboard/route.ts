@@ -17,7 +17,13 @@ export async function GET(req: NextRequest) {
     const [user, patient, upcomingAppointments, recentNotifications, activePayment] = await Promise.all([
       db.user.findUnique({
         where: { id: userId },
-        select: { id: true, name: true, email: true, phone: true, createdAt: true },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          createdAt: true,
+        },
       }),
       db.patient.findUnique({
         where: { userId },
@@ -28,6 +34,8 @@ export async function GET(req: NextRequest) {
           startDate: true,
           targetWeight: true,
           currentWeight: true,
+          height: true,
+          onboardingCompleted: true,
         },
       }),
       db.appointment.findMany({

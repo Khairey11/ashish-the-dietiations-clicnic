@@ -15,6 +15,7 @@ import { toast } from "sonner";
 const sidebarItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
   { icon: Calendar, label: "Appointments", href: "/dashboard/appointments" },
+  { icon: FileText, label: "Assessment", href: "/dashboard/onboarding" },
   { icon: FileText, label: "Reports", href: "/dashboard/reports" },
   { icon: MessageCircle, label: "Messages", href: "/dashboard/messages" },
   { icon: Settings, label: "Settings", href: "/dashboard/settings" },
