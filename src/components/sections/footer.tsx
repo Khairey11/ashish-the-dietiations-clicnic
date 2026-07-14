@@ -87,18 +87,18 @@ export function Footer({ config }: { config?: DynamicConfig }) {
   const clinicEmail = config?.email || siteConfig.email;
   const address = config?.address || siteConfig.address;
   const whatsappRaw = config?.whatsappRaw || siteConfig.whatsappRaw;
-  const [email, setEmail] = React.useState("");
+  const [newsletterEmail, setNewsletterEmail] = React.useState("");
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!newsletterEmail) return;
     try {
-      const result = await subscribeNewsletter({ email });
+      const result = await subscribeNewsletter({ email: newsletterEmail });
       if (result.success) {
         toast.success("Subscribed!", {
           description: result.message,
         });
-        setEmail("");
+        setNewsletterEmail("");
       } else {
         toast.error("Subscription failed", {
           description: result.error || "Please try again.",
@@ -199,8 +199,8 @@ export function Footer({ config }: { config?: DynamicConfig }) {
                 <Input
                   type="email"
                   required
-                  value={clinicEmail}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="you@email.com"
                   className="bg-background/10 border-background/20 text-background placeholder:text-background/50 h-10"
                 />
