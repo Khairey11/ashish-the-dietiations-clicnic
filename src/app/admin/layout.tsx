@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Users, CalendarDays, CreditCard, Star, Bell,
-  ShieldCheck, Settings, Menu, X, ChevronLeft, FileText,
+  ShieldCheck, Settings, Menu, ChevronLeft, FileText,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";

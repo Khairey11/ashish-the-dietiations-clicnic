@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  CalendarDays, ChevronLeft, Loader2, Video, MapPin, Clock,
+  CalendarDays, ChevronLeft, Video, MapPin, Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  Users, ChevronLeft, Search, Loader2, Target, CalendarDays,
+  Users, ChevronLeft, Search, Target, CalendarDays,
   Wallet, ArrowUpRight, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

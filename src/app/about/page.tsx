@@ -1,7 +1,7 @@
 import { SiteLayout, PageHero } from "@/components/site/site-layout";
 import { About } from "@/components/sections/about";
 import { teamMembers, awards, certificationsList } from "@/lib/data";
-import { Award, GraduationCap, Globe2, ShieldCheck, CheckCircle2, Star } from "lucide-react";
+import { Award, GraduationCap, ShieldCheck, Star } from "lucide-react";
 
 export const metadata = {
   title: "About Us",

@@ -3,9 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import {
-  CreditCard, QrCode, Save, Upload, CheckCircle2, AlertCircle,
-  Banknote, Smartphone, MessageCircle, Phone, Mail, MapPin, Clock,
-} from "lucide-react";
+  CreditCard, QrCode, Save, Upload, CheckCircle2, Banknote, Smartphone, MessageCircle, Phone, } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

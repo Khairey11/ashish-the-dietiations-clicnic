@@ -2,18 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/ratelimit";
-import { scryptSync, randomBytes } from "node:crypto";
+import { hashPassword } from "@/lib/password";
 
 const schema = z.object({
   token: z.string().min(32, "Invalid token"),
   password: z.string().min(8, "Password must be at least 8 characters").max(128),
 });
-
-function hashPassword(plain: string): string {
-  const salt = randomBytes(16).toString("hex");
-  const derived = scryptSync(plain, salt, 64).toString("hex");
-  return `${salt}:${derived}`;
-}
 
 /**
  * POST /api/auth/reset-password

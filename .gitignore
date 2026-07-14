@@ -66,31 +66,17 @@ tool-results/
 
 # Z.ai platform infrastructure (not part of the project)
 .zscripts/
-dev.log
-server.log
 
 
-# Local database
-/db/*.db
-/db/*.db-journal
 
 # Env files
-.env
-.env.local
-.env.production
 
-# Tool artifacts
-tool-results/
-.zscripts/
-dev.log
-server.log
 
 # Upload directory (user-generated content)
 /public/uploads/
 
 # Skills (not part of project)
-/skills/
 
 # OS files
 Thumbs.db
-.DS_Store
+/upload/

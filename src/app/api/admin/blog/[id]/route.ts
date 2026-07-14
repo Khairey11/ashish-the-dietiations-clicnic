@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { getClientIp } from "@/lib/ratelimit";import { requireAdmin } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
 
 const updateSchema = z.object({
@@ -15,14 +15,6 @@ const updateSchema = z.object({
   isPublished: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
 });
-
-function getClientIpSafe(req: NextRequest): string | undefined {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-    req.headers.get("x-real-ip")?.trim() ||
-    undefined
-  );
-}
 
 /**
  * GET /api/admin/blog/[id] — fetch a single post for editing
@@ -112,7 +104,7 @@ export async function PATCH(
       entityId: id,
       before: serializeForAudit(before),
       after: serializeForAudit(post),
-      ipAddress: getClientIpSafe(req),
+      ipAddress: getClientIp(req),
     });
 
     return NextResponse.json({ success: true, data: post });
@@ -153,7 +145,7 @@ export async function DELETE(
       entity: "BlogPost",
       entityId: id,
       before: serializeForAudit(before),
-      ipAddress: getClientIpSafe(req),
+      ipAddress: getClientIp(req),
     });
 
     return NextResponse.json({ success: true, deleted: true });
