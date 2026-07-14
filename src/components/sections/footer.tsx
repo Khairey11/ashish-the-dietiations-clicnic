@@ -30,12 +30,16 @@ const footerNav = [
     links: [
       { label: "Weight Loss", href: "/services/weight-loss" },
       { label: "Weight Gain", href: "/services/weight-gain" },
-      { label: "PCOS (PMOS) Diet", href: "/services/pcos-diet" },
+      { label: "PMOS Diet", href: "/services/pcos-diet" },
       { label: "Diabetes Diet", href: "/services/diabetes-diet" },
       { label: "Thyroid Diet", href: "/services/thyroid-diet" },
       { label: "Pregnancy Nutrition", href: "/services/pregnancy-nutrition" },
+      { label: "Child Nutrition", href: "/services/child-nutrition" },
+      { label: "School Nutrition", href: "/services/school-nutrition" },
       { label: "Sports Nutrition", href: "/services/sports-nutrition" },
+      { label: "Healthy Aging", href: "/services/healthy-aging" },
       { label: "Corporate Wellness", href: "/services/corporate-wellness" },
+      { label: "Public Health", href: "/services/public-health-nutrition" },
     ],
   },
   {

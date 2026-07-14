@@ -85,7 +85,7 @@ export function Hero() {
                 className="mb-6 px-3 py-1.5 gap-1.5 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Now offering Continuous Glucose Monitoring</span>
+                <span>Now accepting new clients</span>
               </Badge>
             </motion.div>
 
@@ -104,7 +104,7 @@ export function Hero() {
               variants={item}
               className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed text-balance"
             >
-              Premium dietitian consultations, science-backed meal plans and
+              Personalized diet consultations, with evidence-based meal plans and
               continuous progress tracking — all on one intelligent platform.
               Lose weight, reverse metabolic conditions, and build habits that
               last a lifetime.

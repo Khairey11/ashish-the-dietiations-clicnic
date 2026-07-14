@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     template: "%s | The Dietitian's Clinic",
   },
   description:
-    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PCOS (PMOS), diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
+    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PMOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
   keywords: [
     "dietitian",
     "nutritionist",
     "diet plan",
     "weight loss",
-    "PCOS (PMOS) diet",
+    "PMOS diet",
     "diabetes diet",
     "thyroid diet",
     "pregnancy nutrition",
