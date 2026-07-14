@@ -161,14 +161,17 @@ model Patient {
   updatedAt         DateTime @updatedAt
 
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  dietitian      Dietitian?    @relation(fields: [dietitianId], references: [id])
-  program        Program?      @relation(fields: [programId], references: [id])
+  dietitian      Dietitian?    @relation(fields: [dietitianId], references: [id], onDelete: SetNull)
+  program        Program?      @relation(fields: [programId], references: [id], onDelete: SetNull)
   appointments   Appointment[]
   measurements   Measurement[]
   progressPhotos ProgressPhoto[]
   reports        Report[]
   mealPlans      MealPlan[]
   documents      Document[]
+
+  @@index([dietitianId])
+  @@index([programId])
 }
 
 // ============================================================
@@ -265,13 +268,21 @@ model Appointment {
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
 
-  client     User       @relation("ClientAppointments", fields: [clientId], references: [id])
-  patient    Patient?   @relation(fields: [patientId], references: [id])
-  dietitian  Dietitian  @relation(fields: [dietitianId], references: [id])
-  service    Service?   @relation(fields: [serviceId], references: [id])
-  program    Program?   @relation(fields: [programId], references: [id])
+  client     User       @relation("ClientAppointments", fields: [clientId], references: [id], onDelete: Restrict)
+  patient    Patient?   @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  dietitian  Dietitian  @relation(fields: [dietitianId], references: [id], onDelete: Restrict)
+  service    Service?   @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  program    Program?   @relation(fields: [programId], references: [id], onDelete: SetNull)
   reminders  Reminder[]
   feedback   AppointmentFeedback?
+
+  @@index([clientId])
+  @@index([patientId])
+  @@index([dietitianId])
+  @@index([serviceId])
+  @@index([programId])
+  @@index([scheduledAt])
+  @@index([status])
 }
 
 model AppointmentFeedback {
@@ -335,7 +346,11 @@ model Lead {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  assignedUser User? @relation(fields: [assignedTo], references: [id])
+  assignedUser User? @relation(fields: [assignedTo], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([assignedTo])
+  @@index([createdAt])
 }
 
 // ============================================================
@@ -359,8 +374,12 @@ model MealPlan {
   updatedAt   DateTime @updatedAt
 
   patient  Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  dietitian Dietitian @relation(fields: [dietitianId], references: [id])
+  dietitian Dietitian @relation(fields: [dietitianId], references: [id], onDelete: Restrict)
   items    MealItem[]
+
+  @@index([patientId])
+  @@index([dietitianId])
+  @@index([isActive])
 }
 
 model MealItem {
@@ -378,6 +397,8 @@ model MealItem {
   createdAt   DateTime @default(now())
 
   mealPlan MealPlan @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
+
+  @@index([mealPlanId])
 }
 
 // ============================================================
@@ -403,6 +424,9 @@ model Measurement {
   createdAt   DateTime @default(now())
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([measuredAt])
 }
 
 model ProgressPhoto {
@@ -416,6 +440,8 @@ model ProgressPhoto {
   uploadedAt  DateTime @default(now())
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
 }
 
 model Report {
@@ -428,6 +454,9 @@ model Report {
   uploadedAt  DateTime @default(now())
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([uploadedAt])
 }
 
 model Document {
@@ -440,6 +469,9 @@ model Document {
   uploadedAt DateTime @default(now())
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([uploadedAt])
 }
 
 // ============================================================
@@ -476,6 +508,8 @@ model Invoice {
   paidAt      DateTime?
 
   payments Payment[]
+
+  @@index([clientId])
 }
 
 model Payment {
@@ -487,15 +521,20 @@ model Payment {
   currency     String         @default("NPR")
   method       PaymentMethod
   status       PaymentStatus  @default(PENDING)
-  txnId        String?
+  txnId        String?  @unique
   txnRef       String?
   metadata     String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  invoice  Invoice?  @relation(fields: [invoiceId], references: [id])
-  client   User      @relation(fields: [clientId], references: [id])
-  program  Program?  @relation(fields: [programId], references: [id])
+  invoice  Invoice?  @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  client   User      @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  program  Program?  @relation(fields: [programId], references: [id], onDelete: SetNull)
+
+  @@index([clientId])
+  @@index([programId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // ============================================================
@@ -512,8 +551,12 @@ model Message {
   readAt      DateTime?
   sentAt      DateTime @default(now())
 
-  sender    User @relation("MessageSender", fields: [senderId], references: [id])
-  recipient User @relation("MessageRecipient", fields: [recipientId], references: [id])
+  sender    User @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([isRead])
 }
 
 model Notification {
@@ -528,6 +571,9 @@ model Notification {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
 }
 
 model NewsletterSubscriber {
@@ -649,7 +695,11 @@ model ActivityLog {
   userAgent String?
   createdAt DateTime @default(now())
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([entity])
 }
 
 model AuditLog {
@@ -663,5 +713,9 @@ model AuditLog {
   ipAddress String?
   createdAt DateTime @default(now())
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([entity])
 }
