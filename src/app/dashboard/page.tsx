@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Home, Calendar, FileText, MessageCircle, Bell, Settings, LogOut,
-  CheckCircle2, ChevronRight, Clock, Video, MapPin, Loader2, User,
+  CheckCircle2, Clock, Video, MapPin, User,
   Target, Wallet,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";

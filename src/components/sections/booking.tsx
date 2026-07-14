@@ -13,8 +13,6 @@ import {
   CheckCircle2,
   Mail,
   Phone,
-  MapPin,
-  Clock,
   QrCode,
   Info,
 } from "lucide-react";

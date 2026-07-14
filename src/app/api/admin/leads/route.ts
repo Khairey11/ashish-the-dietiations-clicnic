@@ -1,16 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { getClientIp } from "@/lib/ratelimit";import { requireAdmin } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
-
-function getClientIpSafe(req: NextRequest): string | undefined {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-    req.headers.get("x-real-ip")?.trim() ||
-    undefined
-  );
-}
 
 const LeadStatus = z.enum(["NEW", "CONTACTED", "QUALIFIED", "BOOKED", "CONVERTED", "LOST"]);
 const LeadSource = z.enum(["WEBSITE", "WHATSAPP", "PHONE", "REFERRAL", "SOCIAL", "AD", "ORGANIC", "DIRECT"]);
@@ -132,7 +124,7 @@ export async function PATCH(req: NextRequest) {
       entityId: id,
       before: serializeForAudit(before),
       after: serializeForAudit(lead),
-      ipAddress: getClientIpSafe(req),
+      ipAddress: getClientIp(req),
     });
 
     return NextResponse.json({ success: true, data: lead });

@@ -1,14 +1,8 @@
 // One-off script to set admin + demo client passwords (run after seed if users already existed)
 import { PrismaClient } from "@prisma/client";
-import { scryptSync, randomBytes } from "node:crypto";
+import { hashPassword } from "../src/lib/password";
 
 const prisma = new PrismaClient();
-
-function hashPassword(plain: string): string {
-  const salt = randomBytes(16).toString("hex");
-  const derived = scryptSync(plain, salt, 64).toString("hex");
-  return `${salt}:${derived}`;
-}
 
 async function main() {
   const admin = await prisma.user.update({

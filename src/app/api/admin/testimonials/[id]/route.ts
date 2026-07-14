@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { getClientIp } from "@/lib/ratelimit";import { requireAdmin } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
 
 const schema = z.object({
   action: z.enum(["approve", "unapprove", "feature", "unfeature", "delete"]),
 });
-
-function getClientIpSafe(req: NextRequest): string | undefined {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-    req.headers.get("x-real-ip")?.trim() ||
-    undefined
-  );
-}
 
 const ACTION_MAP: Record<string, string> = {
   approve: "TESTIMONIAL_APPROVED",
@@ -72,7 +64,7 @@ export async function PATCH(
         entity: "Testimonial",
         entityId: id,
         before: serializeForAudit(before),
-        ipAddress: getClientIpSafe(req),
+        ipAddress: getClientIp(req),
       });
       return NextResponse.json({ success: true, deleted: true });
     }
@@ -105,7 +97,7 @@ export async function PATCH(
       entityId: id,
       before: serializeForAudit(before),
       after: serializeForAudit(updated),
-      ipAddress: getClientIpSafe(req),
+      ipAddress: getClientIp(req),
     });
 
     return NextResponse.json({ success: true, data: updated });

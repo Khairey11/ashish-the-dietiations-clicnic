@@ -4,8 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import {
   CreditCard, CheckCircle2, Clock, XCircle, Loader2, ChevronLeft,
-  Search, ArrowUpRight,
-} from "lucide-react";
+  Search, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

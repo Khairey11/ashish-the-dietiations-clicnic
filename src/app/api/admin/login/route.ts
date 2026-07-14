@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { signSession, ADMIN_COOKIE } from "@/lib/auth";
 import { rateLimit, getClientIp, rateLimitResponse } from "@/lib/ratelimit";
+import { verifyPassword } from "@/lib/password";
 
 /**
  * POST /api/admin/login
@@ -9,21 +10,7 @@ import { rateLimit, getClientIp, rateLimitResponse } from "@/lib/ratelimit";
  *
  * Verifies credentials against the User table (SUPER_ADMIN or DIETITIAN role).
  * On success, sets an httpOnly HMAC-signed session cookie.
- *
- * NOTE: Password verification uses scrypt (Node built-in) — no external deps.
  */
-async function verifyPassword(plain: string, hash: string): Promise<boolean> {
-  // Hash format: "<salt>:<derived>" (hex)
-  try {
-    if (!hash.includes(":")) return false;
-    const [salt, derived] = hash.split(":");
-    const { scryptSync } = await import("node:crypto");
-    const buf = scryptSync(plain, salt, 64);
-    return buf.toString("hex") === derived;
-  } catch {
-    return false;
-  }
-}
 
 export async function POST(req: NextRequest) {
   // Rate limit: 10 attempts per 15 min per IP
@@ -73,7 +60,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ok = await verifyPassword(password, user.passwordHash);
+    const ok = verifyPassword(password, user.passwordHash);
     if (!ok) {
       return NextResponse.json(
         { success: false, error: "Invalid credentials" },

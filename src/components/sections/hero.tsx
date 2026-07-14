@@ -6,14 +6,12 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   Play,
-  Sparkles,
   ShieldCheck,
   Star,
   Activity,
   TrendingDown,
   Calendar,
   Stethoscope,
-  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

@@ -7,10 +7,9 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  LayoutDashboard, Users, CalendarDays, CreditCard, FileText,
-  Megaphone, Star, Settings, Search, Bell, TrendingUp, DollarSign,
-  UserPlus, Clock, ChevronRight, Activity, Wallet, ArrowUpRight,
-  ArrowDownRight, LogOut, Plus, Download, Loader2, ShieldCheck,
+  LayoutDashboard, Users, CalendarDays, CreditCard, Megaphone, Star, Settings, Search, Bell, DollarSign,
+  UserPlus, ChevronRight, Activity, Wallet, ArrowUpRight,
+  ArrowDownRight, Plus, Download, ShieldCheck,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";

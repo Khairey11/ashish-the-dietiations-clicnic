@@ -5,8 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import {
-  Home, Calendar, FileText, MessageCircle, Bell, Settings, LogOut, Menu, X,
-} from "lucide-react";
+  Home, Calendar, FileText, MessageCircle, Settings, LogOut, Menu, } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";

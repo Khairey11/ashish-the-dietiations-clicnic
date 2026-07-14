@@ -1,21 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { markPaymentPaid } from "@/lib/actions/payment-gateways";
+import { getClientIp } from "@/lib/ratelimit";import { markPaymentPaid } from "@/lib/actions/payment-gateways";
 import { requireSuperAdmin } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 
 const schema = z.object({
   txnRef: z.string().max(120).optional(),
 });
-
-function getClientIpSafe(req: NextRequest): string | undefined {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-    req.headers.get("x-real-ip")?.trim() ||
-    undefined
-  );
-}
 
 /**
  * POST /api/admin/payments/[id]/verify
@@ -73,7 +65,7 @@ export async function POST(
       entityId: id,
       before: { status: before.status, amount: before.amount, method: before.method },
       after: { status: "PAID", txnRef: parsed.data.txnRef, amount: before.amount, method: before.method },
-      ipAddress: getClientIpSafe(req),
+      ipAddress: getClientIp(req),
     });
 
     return NextResponse.json({ success: true, data: result.payment });
