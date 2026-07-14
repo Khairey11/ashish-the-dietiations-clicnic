@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { getClientIp } from "@/lib/ratelimit";import { requireAdmin } from "@/lib/auth";
+import { getClientIp } from "@/lib/ratelimit";import { requireContentEditor } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
 
 const updateSchema = z.object({
@@ -23,7 +23,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -52,7 +52,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -124,7 +124,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {

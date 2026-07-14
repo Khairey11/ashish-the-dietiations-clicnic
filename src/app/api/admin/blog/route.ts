@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireContentEditor } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
 
 const querySchema = z.object({
@@ -14,7 +14,7 @@ const querySchema = z.object({
  * GET /api/admin/blog — list all blog posts (including drafts)
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -72,7 +72,7 @@ const createSchema = z.object({
  * POST /api/admin/blog — create a new blog post
  */
 export async function POST(req: NextRequest) {
-  const auth = await requireAdmin(req);
+  const auth = await requireContentEditor(req);
   if (!auth.ok) return auth.response;
 
   try {
