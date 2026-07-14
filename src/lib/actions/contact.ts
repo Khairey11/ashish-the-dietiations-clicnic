@@ -51,7 +51,10 @@ export async function createBooking(input: BookingInput) {
 
     const parsed = bookingSchema.parse(input);
 
-    // Find or create the client (User + Patient)
+    // Find or create the client (User + Patient).
+    // NOTE: we do NOT set a passwordHash here — the user will register later
+    // to set their password and "claim" this account. The register endpoint
+    // allows claiming an existing passwordless account (see /api/auth/register).
     let user = await db.user.findUnique({
       where: { email: parsed.email.toLowerCase() },
       include: { patient: true },
@@ -64,6 +67,7 @@ export async function createBooking(input: BookingInput) {
           name: parsed.name,
           phone: parsed.phone,
           role: "CLIENT",
+          // No passwordHash — user sets it when they register.
           patient: {
             create: {
               primaryGoal: parsed.goal || undefined,
@@ -95,16 +99,26 @@ export async function createBooking(input: BookingInput) {
       throw new Error("Failed to create patient profile");
     }
 
-    // Resolve dietitian by slug — the parsed.dietitian value is a slug
-    // like "anita-shrestha"; we derive the matching seeded email.
-    const dietitianEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.com`;
-    const dietitian = await db.dietitian.findFirst({
-      where: { user: { email: dietitianEmail } },
+    // Resolve dietitian. The `parsed.dietitian` value can be:
+    //   - a Prisma Dietitian cuid (when data comes from getDbDietitians), or
+    //   - a slug like "anita-shrestha" (when the static fallback is used).
+    // Try by id first, then by slug-derived email, then fall back.
+    let dietitian = await db.dietitian.findUnique({
+      where: { id: parsed.dietitian },
       include: { user: true },
     });
+    if (!dietitian) {
+      // Try slug → email lookup. The seed creates dietitian users with email
+      // `${slug.replace(/-/g, ".")}@thedietitiansclinic.health`.
+      const slugEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.health`;
+      dietitian = await db.dietitian.findFirst({
+        where: { user: { email: slugEmail } },
+        include: { user: true },
+      });
+    }
 
     if (!dietitian) {
-      // Fallback: pick the first available dietitian
+      // Fallback: pick the first available dietitian.
       const fallback = await db.dietitian.findFirst({ where: { isActive: true } });
       if (!fallback) {
         throw new Error("No dietitian available");
