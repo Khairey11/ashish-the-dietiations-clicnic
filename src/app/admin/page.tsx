@@ -22,38 +22,6 @@ import { cn } from "@/lib/utils";
 import { useGreeting } from "@/lib/use-greeting";
 import { toast } from "sonner";
 
-const sidebarItems: Array<{
-  icon: typeof LayoutDashboard;
-  label: string;
-  active?: boolean;
-  href: string;
-  badge?: string;
-}> = [
-  { icon: LayoutDashboard, label: "Overview", active: true, href: "/admin" },
-  { icon: Users, label: "Clients", href: "/admin/clients" },
-  { icon: CalendarDays, label: "Appointments", href: "/admin/appointments" },
-  { icon: CreditCard, label: "Payments", href: "/admin/payments" },
-  { icon: Star, label: "Testimonials", href: "/admin/testimonials" },
-  { icon: Bell, label: "Newsletter", href: "/admin/newsletter" },
-  { icon: ShieldCheck, label: "Audit Log", href: "/admin/audit-log" },
-  { icon: Settings, label: "Settings", href: "/admin/settings" },
-];
-
-const recentActivity = [
-  { icon: UserPlus, color: "text-emerald-600 dark:text-emerald-400", text: "New client registered", sub: "Bishal T. · 60-day program", time: "5m ago" },
-  { icon: Wallet, color: "text-sky-600 dark:text-sky-400", text: "Payment received", sub: "Rs. 5,499 · Sneha K.", time: "12m ago" },
-  { icon: CalendarDays, color: "text-violet-600 dark:text-violet-400", text: "Appointment booked", sub: "Anita S. · Thu 10AM", time: "32m ago" },
-  { icon: Star, color: "text-amber-600 dark:text-amber-400", text: "New testimonial", sub: "5-star from Prakash R.", time: "1h ago" },
-];
-
-const upcomingAppointments = [
-  { time: "10:00 AM", client: "Sneha K.", dietitian: "Dr. Anita S.", type: "Video", initials: "SK", accent: "from-pink-500 to-rose-500" },
-  { time: "11:30 AM", client: "Bishal T.", dietitian: "Priya G.", type: "In-clinic", initials: "BT", accent: "from-sky-500 to-blue-500" },
-  { time: "01:00 PM", client: "Anjali M.", dietitian: "Meera R.", type: "Video", initials: "AM", accent: "from-rose-500 to-pink-500" },
-  { time: "02:30 PM", client: "Prakash R.", dietitian: "Dr. Rohan T.", type: "In-clinic", initials: "PR", accent: "from-cyan-500 to-blue-500" },
-  { time: "04:00 PM", client: "Rekha S.", dietitian: "Dr. Anita S.", type: "Video", initials: "RS", accent: "from-violet-500 to-purple-500" },
-];
-
 export default function AdminPage() {
   const [stats, setStats] = React.useState<null | {
     totalRevenue: number;
