@@ -20,6 +20,40 @@ const MAX_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "application/pdf"];
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
+/**
+ * Map a validated MIME type to a safe file extension.
+ * We NEVER trust the user-supplied extension from `file.name` — an attacker
+ * can upload `evil.html` with `Content-Type: image/png` and the saved file
+ * would be served as HTML → stored XSS.
+ */
+const MIME_TO_EXT: Record<string, string> = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/webp": "webp",
+  "application/pdf": "pdf",
+};
+
+/** Validate the file's magic bytes match its claimed MIME type. */
+function validateMagicBytes(buf: Buffer, mimeType: string): boolean {
+  if (mimeType === "image/png") {
+    // PNG: 89 50 4E 47 0D 0A 1A 0A
+    return buf.length >= 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
+  }
+  if (mimeType === "image/jpeg") {
+    // JPEG: FF D8 FF
+    return buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
+  }
+  if (mimeType === "image/webp") {
+    // WebP: "RIFF" .... "WEBP"
+    return buf.length >= 12 && buf.slice(0, 4).toString("ascii") === "RIFF" && buf.slice(8, 12).toString("ascii") === "WEBP";
+  }
+  if (mimeType === "application/pdf") {
+    // PDF: "%PDF-"
+    return buf.length >= 5 && buf.slice(0, 5).toString("ascii") === "%PDF-";
+  }
+  return false;
+}
+
 export async function POST(req: NextRequest) {
   const auth = await requireClientOrStaff(req);
   if (!auth.ok) return auth.response;
@@ -55,13 +89,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await mkdir(UPLOAD_DIR, { recursive: true });
+    const buffer = Buffer.from(await file.arrayBuffer());
 
-    const ext = file.name.split(".").pop() || "bin";
+    // Validate magic bytes to prevent MIME-type spoofing.
+    if (!validateMagicBytes(buffer, file.type)) {
+      return NextResponse.json(
+        { success: false, error: "File content does not match its declared type." },
+        { status: 400 }
+      );
+    }
+
+    // Derive the extension from the validated MIME type — never from the
+    // user-supplied filename (prevents stored XSS via .html uploads).
+    const ext = MIME_TO_EXT[file.type] || "bin";
     const filename = `${randomUUID()}.${ext}`;
     const filepath = path.join(UPLOAD_DIR, filename);
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    await mkdir(UPLOAD_DIR, { recursive: true });
     await writeFile(filepath, buffer);
 
     return NextResponse.json({
