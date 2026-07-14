@@ -34,6 +34,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const article = getBlogArticle(slug);
   if (!article) notFound();
 
+  // Increment view count in DB (non-blocking, fire-and-forget)
+  try {
+    const { db } = await import("@/lib/db");
+    db.blogPost.update({
+      where: { slug },
+      data: { views: { increment: 1 } },
+    }).catch(() => {});
+  } catch {}
+
   const related = blogPosts.filter((p) => p.id !== article.id && p.category === article.category).slice(0, 2);
   const fallbackRelated = blogPosts.filter((p) => p.id !== article.id).slice(0, 2);
   const finalRelated = related.length > 0 ? related : fallbackRelated;

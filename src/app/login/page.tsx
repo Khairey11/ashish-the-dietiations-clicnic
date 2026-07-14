@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight, User, ShieldCheck, Sparkles } from "lucide-react";
+import { Mail, Lock, ArrowRight, User, ShieldCheck, Sparkles, Phone } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,15 +40,21 @@ function LoginForm() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [name, setName] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const [errors, setErrors] = React.useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = React.useState<{ name?: string; email?: string; password?: string; phone?: string }>({});
 
   const validate = () => {
-    const e: { email?: string; password?: string } = {};
+    const e: { name?: string; email?: string; password?: string; phone?: string } = {};
+    if (mode === "register") {
+      if (!name || name.length < 2) e.name = "Name is required";
+      if (!phone || phone.length < 7) e.phone = "Valid phone is required";
+    }
     if (!email) e.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "Please enter a valid email";
     if (!password) e.password = "Password is required";
-    else if (password.length < 6) e.password = "Password must be at least 6 characters";
+    else if (mode === "register" && password.length < 8) e.password = "Password must be at least 8 characters";
+    else if (mode === "login" && password.length < 6) e.password = "Password must be at least 6 characters";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -58,27 +64,57 @@ function LoginForm() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success("Welcome back!", {
-          description: "Redirecting to your dashboard...",
+      if (mode === "register") {
+        // Registration flow
+        if (!name || name.length < 2) {
+          setErrors({ name: "Name is required" });
+          setLoading(false);
+          return;
+        }
+        if (password.length < 8) {
+          setErrors({ password: "Password must be at least 8 characters" });
+          setLoading(false);
+          return;
+        }
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password, phone }),
         });
-        router.push(next);
-        router.refresh();
+        const data = await res.json();
+        if (data.success) {
+          toast.success("Account created!", {
+            description: "Welcome! Let's set up your health profile.",
+          });
+          router.push("/dashboard/onboarding");
+          router.refresh();
+        } else {
+          toast.error("Registration failed", {
+            description: data.error || "Please try again.",
+          });
+        }
       } else {
-        toast.error("Sign-in failed", {
-          description: data.error || "Invalid credentials.",
+        // Login flow
+        const res = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
         });
+        const data = await res.json();
+        if (data.success) {
+          toast.success("Welcome back!", {
+            description: "Redirecting to your dashboard...",
+          });
+          router.push(next);
+          router.refresh();
+        } else {
+          toast.error("Sign-in failed", {
+            description: data.error || "Invalid credentials.",
+          });
+        }
       }
     } catch {
-      toast.error("Sign-in failed", {
-        description: "Network error. Please try again.",
-      });
+      toast.error("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -111,20 +147,39 @@ function LoginForm() {
 
             <form onSubmit={submit} className="mt-8 space-y-4">
               {mode === "register" && (
-                <div className="space-y-1.5">
-                  <Label htmlFor="name" className="text-xs">Full name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Sneha Karki"
-                      className="h-11 pl-9"
-                      required
-                    />
+                <>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="name" className="text-xs">Full name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        id="name"
+                        value={name}
+                        onChange={(e) => { setName(e.target.value); setErrors({}); }}
+                        placeholder="Sneha Karki"
+                        className={`h-11 pl-9 ${errors.name ? "border-rose-500" : ""}`}
+                        required
+                      />
+                    </div>
+                    {errors.name && <p className="text-xs text-rose-600 dark:text-rose-400">{errors.name}</p>}
                   </div>
-                </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phone" className="text-xs">Phone number</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => { setPhone(e.target.value); setErrors({}); }}
+                        placeholder="+977 9800000000"
+                        className={`h-11 pl-9 ${errors.phone ? "border-rose-500" : ""}`}
+                        required
+                      />
+                    </div>
+                    {errors.phone && <p className="text-xs text-rose-600 dark:text-rose-400">{errors.phone}</p>}
+                  </div>
+                </>
               )}
               <div className="space-y-1.5">
                 <Label htmlFor="email" className="text-xs">Email</Label>
