@@ -161,6 +161,16 @@ export function Navigation() {
                 </button>
               )}
 
+              <Link href="/login" className="hidden sm:inline-flex">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-sm font-medium"
+                >
+                  Client Login
+                </Button>
+              </Link>
+
               <Link href="/booking">
                 <Button
                   size="sm"
@@ -215,9 +225,14 @@ export function Navigation() {
                   <ChevronDown className="w-4 h-4 -rotate-90 text-muted-foreground" />
                 </Link>
               ))}
+              <Link href="/login" className="block mt-4">
+                <Button variant="outline" className="w-full">
+                  Client Login
+                </Button>
+              </Link>
               <Link href="/booking">
                 <Button
-                  className="mt-4 bg-gradient-to-r from-primary to-secondary w-full"
+                  className="mt-2 bg-gradient-to-r from-primary to-secondary w-full"
                 >
                   Book Consultation
                 </Button>

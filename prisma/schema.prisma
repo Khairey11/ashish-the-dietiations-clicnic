@@ -153,9 +153,12 @@ model Patient {
   emergencyPhone  String?
   address         String?
   city            String?
-  country         String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  country          String?
+  onboardingCompleted  Boolean  @default(false)
+  dietaryPreferences   String?
+  activityLevel        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   dietitian      Dietitian?    @relation(fields: [dietitianId], references: [id])
@@ -384,14 +387,15 @@ model MealItem {
 model Measurement {
   id          String   @id @default(cuid())
   patientId   String
-  weight      Float
+  weight      Float?
+  height      Float?
   waist       Float?
   hip         Float?
   chest       Float?
   arm         Float?
   thigh       Float?
-  bodyFatPct  Float?
-  muscleMassPct Float?
+  bodyFat     Float?
+  muscleMass  Float?
   visceralFat Float?
   bmr         Float?
   notes       String?
