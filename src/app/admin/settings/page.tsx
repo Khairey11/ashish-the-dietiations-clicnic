@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import {
-  CreditCard, QrCode, Save, Upload, CheckCircle2, Banknote, Smartphone, MessageCircle, Phone, } from "lucide-react";
+  CreditCard, QrCode, Save, Upload, CheckCircle2, Banknote, Smartphone, MessageCircle, Phone, ShieldCheck, } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -287,6 +287,7 @@ export default function AdminSettingsPage() {
 
             {/* ============ Clinic contact & social (editable) ============ */}
             <ClinicConfigSection />
+            <ChangePasswordSection />
           </div>
         </div>
       </main>
@@ -599,6 +600,83 @@ function ClinicConfigSection() {
               <Save className="w-4 h-4 mr-1.5" />
               Save clinic settings
             </>
+          )}
+        </Button>
+      </div>
+    </SectionCard>
+  );
+}
+
+// ============================================================
+// Change password section
+// ============================================================
+
+function ChangePasswordSection() {
+  const [currentPassword, setCurrentPassword] = React.useState("");
+  const [newPassword, setNewPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [saving, setSaving] = React.useState(false);
+
+  const handleChange = async () => {
+    if (!currentPassword || !newPassword) return;
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords don't match");
+      return;
+    }
+    if (newPassword.length < 8) {
+      toast.error("Password too short", { description: "Minimum 8 characters." });
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Password changed!", { description: "Use your new password next time you log in." });
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        toast.error("Failed", { description: data.error });
+      }
+    } catch {
+      toast.error("Network error");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <SectionCard
+      icon={ShieldCheck}
+      title="Account security"
+      description="Change your admin password. Use a strong password with at least 8 characters."
+    >
+      <div className="space-y-3 max-w-md">
+        <div>
+          <Label className="text-xs">Current password</Label>
+          <Input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="h-10" placeholder="••••••••" />
+        </div>
+        <div>
+          <Label className="text-xs">New password</Label>
+          <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="h-10" placeholder="••••••••" minLength={8} />
+        </div>
+        <div>
+          <Label className="text-xs">Confirm new password</Label>
+          <Input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="h-10" placeholder="••••••••" />
+        </div>
+        {newPassword && newPassword !== confirmPassword && (
+          <p className="text-xs text-rose-600">Passwords don&apos;t match</p>
+        )}
+        <Button onClick={handleChange} disabled={saving || !currentPassword || !newPassword || newPassword !== confirmPassword} className="bg-gradient-to-r from-primary to-secondary">
+          {saving ? (
+            <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-1.5" /> Saving...</>
+          ) : (
+            <><Save className="w-4 h-4 mr-1.5" /> Change password</>
           )}
         </Button>
       </div>
