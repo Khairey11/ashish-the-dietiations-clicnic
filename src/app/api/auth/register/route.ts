@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { randomBytes } from "node:crypto";
 import { db } from "@/lib/db";
 import { signSession, ADMIN_COOKIE } from "@/lib/auth";
 import { hashPassword } from "@/lib/password";
 import { rateLimit, getClientIp } from "@/lib/ratelimit";
+import { sendVerificationEmail } from "@/lib/email";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required").max(120),
@@ -43,7 +45,7 @@ export async function POST(req: NextRequest) {
     // Check if user already exists.
     const existing = await db.user.findUnique({
       where: { email: lowerEmail },
-      select: { id: true, passwordHash: true, role: true, isActive: true },
+      select: { id: true, passwordHash: true, role: true, isActive: true, emailVerified: true },
     });
 
     if (existing) {
@@ -80,12 +82,33 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      // Send verification email if their email isn't verified yet.
+      if (!existing.emailVerified) {
+        const verifyToken = randomBytes(32).toString("hex");
+        await db.verificationToken.create({
+          data: {
+            identifier: lowerEmail,
+            token: verifyToken,
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          },
+        });
+        sendVerificationEmail({
+          to: lowerEmail,
+          name,
+          token: verifyToken,
+        }).catch((err) => {
+          console.error("Failed to send verification email:", err);
+        });
+      }
+
       // Sign the session
       const token = await signSession(existing.id);
       const res = NextResponse.json({
         success: true,
         data: { id: existing.id, name, email: lowerEmail, role: existing.role },
-        message: "Account claimed successfully!",
+        message: existing.emailVerified
+          ? "Account claimed successfully!"
+          : "Account claimed! Check your inbox to verify your email.",
       });
       res.cookies.set(ADMIN_COOKIE, token, {
         httpOnly: true,
@@ -100,7 +123,9 @@ export async function POST(req: NextRequest) {
     // No existing user — create a new one.
     const passwordHash = hashPassword(password);
 
-    // Create the user with CLIENT role + empty patient record
+    // Create the user with CLIENT role + empty patient record.
+    // emailVerified is left null — the user must click the verification link
+    // we send to their inbox before they can access the dashboard.
     const user = await db.user.create({
       data: {
         email: lowerEmail,
@@ -131,12 +156,32 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Sign the session
+    // Generate + store an email verification token (24h expiry).
+    const verifyToken = randomBytes(32).toString("hex");
+    await db.verificationToken.create({
+      data: {
+        identifier: lowerEmail,
+        token: verifyToken,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      },
+    });
+
+    // Send the verification email (non-blocking — don't block registration).
+    sendVerificationEmail({
+      to: lowerEmail,
+      name,
+      token: verifyToken,
+    }).catch((err) => {
+      console.error("Failed to send verification email:", err);
+    });
+
+    // Sign the session — the user is logged in but the dashboard will show a
+    // "verify your email" banner until they click the link.
     const token = await signSession(user.id);
     const res = NextResponse.json({
       success: true,
       data: user,
-      message: "Account created successfully!",
+      message: "Account created! Check your inbox to verify your email.",
     });
     res.cookies.set(ADMIN_COOKIE, token, {
       httpOnly: true,

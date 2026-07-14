@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
           email: true,
           phone: true,
           createdAt: true,
+          emailVerified: true,
         },
       }),
       db.patient.findUnique({
