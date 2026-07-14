@@ -41,3 +41,31 @@ Work Log:
 Stage Summary:
 - The codebase is back to the pre-Google-login state. No env vars required, no Google Cloud Console setup needed.
 - Login page once again shows the Google button as disabled with "Coming soon".
+
+---
+Task ID: dashboard-greeting
+Agent: main
+Task: Add a personalised greeting on the client dashboard based on the user's first name, using the timezone derived from their browser locale.
+
+Work Log:
+- Reviewed `src/app/dashboard/page.tsx` — header previously rendered `{userName} 👋` with a hardcoded `en-US` date string and no timezone awareness.
+- Added a new `greeting` state slot `{ text, firstName, tz, localTime } | null`.
+- Added a `useEffect` keyed on `data?.user?.name` that:
+  - Reads `navigator.language` (browser locale, e.g. `en-GB`, `ne-NP`, `es-ES`).
+  - Resolves the timezone via `Intl.DateTimeFormat(locale).resolvedOptions().timeZone` — this is the timezone associated with the user's locale environment (e.g. `Asia/Katmandu`).
+  - Computes the current hour in that timezone via `Intl.DateTimeFormat(locale, { hour: 'numeric', hour12: false, timeZone: tz })`.
+  - Maps the hour to a greeting word: <5 → "Good night", <12 → "Good morning", <17 → "Good afternoon", <21 → "Good evening", else "Good night".
+  - Extracts the first name by splitting `user.name` on whitespace and taking the first token (fallback "there").
+  - Also formats the current local time in the user's locale + timezone for display.
+  - Wrapped in try/catch — any failure leaves `greeting` null and the header falls back to the previous plain-name rendering.
+- Updated the header JSX:
+  - `<h1>` now shows `{greeting.text}, {greeting.firstName} 👋` (e.g. "Good morning, Sneha 👋") when greeting is available, otherwise falls back to `{userName} 👋`.
+  - The `<p>` date line now appends `· <Clock icon> <localTime> <tz>` (e.g. "Tuesday, July 15 · 9:42 AM Asia/Katmandu").
+- Imported `Clock` from `lucide-react`.
+- Type-check (`tsc --noEmit`) and ESLint both pass.
+
+Stage Summary:
+- Files modified: `src/app/dashboard/page.tsx` only.
+- No env vars, no DB changes, no new dependencies.
+- Behaviour is client-only (uses `navigator.language` and `Intl`), so SSR renders the loading skeleton and the greeting only appears after data loads — no hydration mismatch.
+
