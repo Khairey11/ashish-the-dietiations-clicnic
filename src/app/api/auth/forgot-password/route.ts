@@ -90,7 +90,12 @@ export async function POST(req: NextRequest) {
           </div>
         `,
         text: `Reset your password: ${resetUrl}`,
-      }).catch(() => {});
+      }).catch((err) => {
+        // Log the error so ops can monitor email failures, but don't expose
+        // the failure to the user (to prevent email-enumeration via the
+        // forgot-password endpoint).
+        console.error("Password reset email failed to send:", err);
+      });
     }
 
     return NextResponse.json({

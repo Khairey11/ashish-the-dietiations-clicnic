@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { writeAuditLog, serializeForAudit } from "@/lib/audit";
@@ -63,7 +64,16 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { isActive } = body;
+    const parsed = z.object({
+      isActive: z.boolean().optional(),
+    }).safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Invalid input", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
+    const { isActive } = parsed.data;
 
     const before = await db.mealPlan.findUnique({ where: { id } });
     if (!before) {
