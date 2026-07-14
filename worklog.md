@@ -24,3 +24,20 @@ Stage Summary:
   - GOOGLE_CLIENT_SECRET
   - NEXT_PUBLIC_APP_URL  (e.g. https://thedietitiansclinic.com)
 - Google Cloud Console: add `https://<NEXT_PUBLIC_APP_URL>/api/auth/google/callback` to the OAuth client's authorized redirect URIs.
+
+---
+Task ID: google-login-revert
+Agent: main
+Task: User said "remove it" — fully revert the Google login feature added in task `google-login`.
+
+Work Log:
+- Deleted `src/lib/google-oauth.ts`.
+- Deleted `src/app/api/auth/google/route.ts` and `src/app/api/auth/google/callback/route.ts`, then removed the now-empty `src/app/api/auth/google/callback/` and `src/app/api/auth/google/` directories.
+- Reverted `src/app/login/page.tsx`:
+  - Removed the `React.useEffect` block that surfaced the OAuth error toast.
+  - Restored the original disabled `Button` (title="Coming soon") for Google, with the original monochrome Google icon SVG. Apple button was already disabled — left as-is.
+- Verified: `npx tsc --noEmit` exits 0 (no errors), `npx eslint src/app/login/page.tsx` passes, no leftover google-oauth references in `src/app/api/auth/` (only `forgot-password`, `register`, `reset-password` remain).
+
+Stage Summary:
+- The codebase is back to the pre-Google-login state. No env vars required, no Google Cloud Console setup needed.
+- Login page once again shows the Google button as disabled with "Coming soon".
