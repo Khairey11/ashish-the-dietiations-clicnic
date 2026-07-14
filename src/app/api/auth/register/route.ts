@@ -40,20 +40,64 @@ export async function POST(req: NextRequest) {
     const { name, email, password, phone } = parsed.data;
     const lowerEmail = email.toLowerCase();
 
-    // Check if user already exists
+    // Check if user already exists.
     const existing = await db.user.findUnique({
       where: { email: lowerEmail },
-      select: { id: true },
+      select: { id: true, passwordHash: true, role: true, isActive: true },
     });
 
     if (existing) {
-      return NextResponse.json(
-        { success: false, error: "An account with this email already exists. Please log in instead." },
-        { status: 409 }
-      );
+      // If the existing user has a passwordHash, they've already registered —
+      // tell them to log in instead.
+      if (existing.passwordHash) {
+        return NextResponse.json(
+          { success: false, error: "An account with this email already exists. Please log in instead." },
+          { status: 409 }
+        );
+      }
+      // If the existing user has NO passwordHash, they were created by a
+      // booking/lead action. Allow them to "claim" the account by setting
+      // their password now.
+      const passwordHash = hashPassword(password);
+      await db.user.update({
+        where: { id: existing.id },
+        data: {
+          name,
+          phone,
+          passwordHash,
+          isActive: true,
+        },
+      });
+
+      // Create welcome notification
+      await db.notification.create({
+        data: {
+          userId: existing.id,
+          type: "WELCOME",
+          title: "Welcome to The Dietitian's Clinic!",
+          body: "Complete your health assessment to get started with your personalized nutrition plan.",
+          link: "/dashboard/onboarding",
+        },
+      });
+
+      // Sign the session
+      const token = await signSession(existing.id);
+      const res = NextResponse.json({
+        success: true,
+        data: { id: existing.id, name, email: lowerEmail, role: existing.role },
+        message: "Account claimed successfully!",
+      });
+      res.cookies.set(ADMIN_COOKIE, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+      return res;
     }
 
-    // Hash the password
+    // No existing user — create a new one.
     const passwordHash = hashPassword(password);
 
     // Create the user with CLIENT role + empty patient record
@@ -97,7 +141,7 @@ export async function POST(req: NextRequest) {
     res.cookies.set(ADMIN_COOKIE, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
