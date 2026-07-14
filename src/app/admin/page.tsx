@@ -9,7 +9,7 @@ import {
 import {
   LayoutDashboard, Users, CalendarDays, CreditCard, Megaphone, Star, Settings, Search, Bell, DollarSign,
   UserPlus, ChevronRight, Activity, Wallet, ArrowUpRight,
-  ArrowDownRight, Plus, Download, ShieldCheck,
+  ArrowDownRight, Plus, Download, ShieldCheck, Clock,
 } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { useGreeting } from "@/lib/use-greeting";
 import { toast } from "sonner";
 
 const sidebarItems: Array<{
@@ -97,6 +98,9 @@ export default function AdminPage() {
   }>>([]);
   const [loading, setLoading] = React.useState(true);
   const [todayStr, setTodayStr] = React.useState("");
+
+  // Personalised greeting keyed on the admin's name — uses browser locale + timezone.
+  const greeting = useGreeting(adminUser?.name);
 
   React.useEffect(() => {
     setTodayStr(
@@ -185,11 +189,31 @@ export default function AdminPage() {
       <div className="flex items-center justify-between gap-3 flex-wrap mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-bold">Admin Portal</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">
+              {greeting ? `${greeting.text}, ${greeting.firstName}` : "Admin Portal"}
+            </h1>
             <Badge className="bg-primary/15 text-primary border-0">{adminUser?.role?.replace(/_/g, " ") || "Admin"}</Badge>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">{todayStr ? `${todayStr} · ` : ""}Welcome back, {adminUser?.name || "Admin"}</p>
-            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5 flex-wrap">
+            {todayStr && <span>{todayStr}</span>}
+            {greeting && (
+              <>
+                {todayStr && <span className="text-muted-foreground/40">·</span>}
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  <span>{greeting.localTime}</span>
+                  <span className="text-muted-foreground/60">{greeting.tz}</span>
+                </span>
+              </>
+            )}
+            {!greeting && adminUser?.name && (
+              <>
+                {todayStr && <span className="text-muted-foreground/40">·</span>}
+                <span>Welcome back, {adminUser.name}</span>
+              </>
+            )}
+          </p>
+        </div>
             <div className="flex items-center gap-2">
               <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/60 text-xs">
                 <Search className="w-3.5 h-3.5 text-muted-foreground" />

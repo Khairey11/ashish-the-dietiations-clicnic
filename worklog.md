@@ -69,3 +69,29 @@ Stage Summary:
 - No env vars, no DB changes, no new dependencies.
 - Behaviour is client-only (uses `navigator.language` and `Intl`), so SSR renders the loading skeleton and the greeting only appears after data loads — no hydration mismatch.
 
+---
+Task ID: admin-greeting
+Agent: main
+Task: Add the same time-of-day greeting to the admin dashboard, using the admin's first name and their browser-locale timezone.
+
+Work Log:
+- Reviewed `src/app/admin/page.tsx` — header previously rendered "Admin Portal" with a sub-line `Welcome back, {adminUser?.name || "Admin"}` and no timezone awareness.
+- Extracted the greeting logic from the client dashboard into a new shared hook `src/lib/use-greeting.ts` so both dashboards stay in sync:
+  - Hook signature: `useGreeting(fullName: string | null | undefined): Greeting | null`
+  - Returns `{ text, firstName, tz, localTime }` computed from `navigator.language` + `Intl.DateTimeFormat(...).resolvedOptions().timeZone` + the current hour in that timezone.
+  - Same hour → greeting mapping: <5 Good night · <12 Good morning · <17 Good afternoon · <21 Good evening · else Good night.
+  - Returns `null` on the server / while `fullName` is empty / on any Intl error — callers fall back to plain labels.
+- Refactored `src/app/dashboard/page.tsx` to call `useGreeting(data?.user?.name)` instead of the inlined `useEffect` + `useState`. Visual output unchanged.
+- Wired the hook into `src/app/admin/page.tsx`:
+  - Imported `Clock` from `lucide-react` and `useGreeting` from `@/lib/use-greeting`.
+  - Added `const greeting = useGreeting(adminUser?.name);` next to the existing `adminUser` state.
+  - Updated the top bar `<h1>`: now shows `{greeting.text}, {greeting.firstName}` (e.g. "Good morning, Priya") when greeting is available; falls back to "Admin Portal".
+  - Updated the sub-line to show date · local time · timezone (e.g. "Tuesday, July 15, 2026 · 🕘 9:42 AM Asia/Katmandu"). Falls back to "Welcome back, {name}" if the greeting hook returned null.
+- Type-check (`tsc --noEmit`) and ESLint both pass on all three files.
+
+Stage Summary:
+- New file: `src/lib/use-greeting.ts` (shared hook).
+- Modified files: `src/app/dashboard/page.tsx` (refactored to use the hook — no behaviour change), `src/app/admin/page.tsx` (added greeting + local time/timezone in header).
+- Both dashboards now greet the signed-in user by first name with a time-of-day word computed from the timezone of their browser locale.
+
+
