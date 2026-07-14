@@ -150,7 +150,7 @@ export function Footer() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/40 text-white hover:bg-white/10 hover:text-white h-12 px-6 text-base w-full sm:w-auto"
+                  className="border-2 border-white/60 text-white hover:bg-white hover:text-primary hover:border-white h-12 px-6 text-base w-full sm:w-auto font-semibold"
                 >
                   Explore programs
                 </Button>
