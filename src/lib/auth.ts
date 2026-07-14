@@ -5,10 +5,17 @@ import type { UserRole } from "@prisma/client";
 /**
  * Authentication using an HMAC-signed session cookie.
  *
+ * Session token format: `<userId>.<sessionVersion>.<hmac(userId.sessionVersion, secret)>`
+ *
+ * The `sessionVersion` is bumped on password change / forced logout. Including
+ * it in the HMAC payload means any existing session cookie becomes invalid
+ * the moment the version changes — enabling instant session invalidation
+ * without a server-side session store.
+ *
  * Login flow:
  *   1. POST /api/admin/login (or /api/auth/register) with { email, password }
  *   2. Server verifies password against User.passwordHash (scrypt)
- *   3. Server sets httpOnly cookie `admin_session` = `<userId>.<hmac>`
+ *   3. Server sets httpOnly cookie `admin_session` = signed token
  *   4. Subsequent requests verified via requireUser / requireAdmin / etc.
  *
  * Role helpers:
@@ -56,17 +63,37 @@ async function safeEqual(a: string, b: string): Promise<boolean> {
   return result === 0;
 }
 
-export async function signSession(userId: string): Promise<string> {
-  return `${userId}.${await hmac(userId, getSecret())}`;
+/**
+ * Sign a session token for a user.
+ * Format: `<userId>.<sessionVersion>.<hmac>`.
+ *
+ * The sessionVersion is fetched from the DB at sign time. To invalidate all
+ * existing sessions for a user, bump their `sessionVersion` (e.g. on password
+ * change) and any pre-existing cookie will fail verification.
+ */
+export async function signSession(userId: string, sessionVersion: number = 0): Promise<string> {
+  const payload = `${userId}.${sessionVersion}`;
+  const sig = await hmac(payload, getSecret());
+  return `${payload}.${sig}`;
 }
 
+/**
+ * Verify a session token. Returns the userId on success, null otherwise.
+ *
+ * Note: this only verifies the HMAC signature. It does NOT check that
+ * sessionVersion matches the current DB value — that check happens in
+ * requireUser() below, which fetches the user record anyway for role/isActive.
+ */
 export async function verifySession(token: string | undefined): Promise<string | null> {
   if (!token) return null;
-  const idx = token.lastIndexOf(".");
-  if (idx < 1) return null;
-  const userId = token.slice(0, idx);
-  const sig = token.slice(idx + 1);
-  const expected = await hmac(userId, getSecret());
+  // Token format: `<userId>.<sessionVersion>.<hmac>`. userId is a cuid (no dots),
+  // so we split on "." and expect exactly 3 parts.
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  const [userId, versionStr, sig] = parts;
+  if (!userId || !versionStr || !sig) return null;
+  const payload = `${userId}.${versionStr}`;
+  const expected = await hmac(payload, getSecret());
   const ok = await safeEqual(sig, expected);
   if (!ok) return null;
   return userId;
@@ -95,9 +122,13 @@ export async function requireUser(
       ),
     };
   }
+  // Extract the sessionVersion baked into the cookie so we can compare it
+  // against the DB value. If they differ, the session was invalidated
+  // (password changed, forced logout) and we reject.
+  const cookieVersion = token ? parseInt(token.split(".")[1] || "NaN", 10) : NaN;
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { id: true, role: true, isActive: true },
+    select: { id: true, role: true, isActive: true, sessionVersion: true },
   });
   if (!user || !user.isActive) {
     return {
@@ -105,6 +136,16 @@ export async function requireUser(
       response: NextResponse.json(
         { success: false, error: "Forbidden" },
         { status: 403 }
+      ),
+    };
+  }
+  if (!Number.isFinite(cookieVersion) || cookieVersion !== user.sessionVersion) {
+    // Session version mismatch — reject as 401 so the client redirects to /login.
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { success: false, error: "Session expired. Please log in again." },
+        { status: 401 }
       ),
     };
   }

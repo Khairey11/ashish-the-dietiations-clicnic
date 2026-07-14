@@ -101,8 +101,15 @@ export async function POST(req: NextRequest) {
         });
       }
 
+      // Re-fetch the user to get the current sessionVersion (the update above
+      // may have modified the row).
+      const claimed = await db.user.findUnique({
+        where: { id: existing.id },
+        select: { sessionVersion: true },
+      });
+
       // Sign the session
-      const token = await signSession(existing.id);
+      const token = await signSession(existing.id, claimed?.sessionVersion ?? 0);
       const res = NextResponse.json({
         success: true,
         data: { id: existing.id, name, email: lowerEmail, role: existing.role },
@@ -177,7 +184,8 @@ export async function POST(req: NextRequest) {
 
     // Sign the session — the user is logged in but the dashboard will show a
     // "verify your email" banner until they click the link.
-    const token = await signSession(user.id);
+    // sessionVersion is 0 for a brand-new user (schema default).
+    const token = await signSession(user.id, 0);
     const res = NextResponse.json({
       success: true,
       data: user,

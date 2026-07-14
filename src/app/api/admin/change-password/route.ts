@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireUser } from "@/lib/auth";
+import { requireUser, signSession, ADMIN_COOKIE } from "@/lib/auth";
 import { verifyPassword, hashPassword } from "@/lib/password";
 import { writeAuditLog } from "@/lib/audit";
 
@@ -13,6 +13,10 @@ const schema = z.object({
 /**
  * POST /api/admin/change-password
  * Changes the logged-in user's password.
+ *
+ * On success, bumps `sessionVersion` — this invalidates all other session
+ * cookies for this user (forced logout everywhere else). The current browser
+ * gets a fresh session cookie so they stay logged in.
  */
 export async function POST(req: NextRequest) {
   const auth = await requireUser(req);
@@ -30,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     const user = await db.user.findUnique({
       where: { id: auth.userId },
-      select: { id: true, passwordHash: true },
+      select: { id: true, passwordHash: true, sessionVersion: true },
     });
 
     if (!user || !user.passwordHash) {
@@ -49,11 +53,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Hash and save new password
+    // Hash the new password + bump sessionVersion in a single update.
     const newHash = hashPassword(parsed.data.newPassword);
+    const newVersion = user.sessionVersion + 1;
     await db.user.update({
       where: { id: user.id },
-      data: { passwordHash: newHash },
+      data: { passwordHash: newHash, sessionVersion: newVersion },
     });
 
     await writeAuditLog({
@@ -61,10 +66,22 @@ export async function POST(req: NextRequest) {
       action: "PASSWORD_CHANGED",
       entity: "User",
       entityId: user.id,
+      after: { sessionVersionBumped: true },
       ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0].trim() || undefined,
     });
 
-    return NextResponse.json({ success: true, message: "Password changed successfully" });
+    // Issue a fresh session cookie with the new version so the current browser
+    // stays logged in. All other sessions for this user are now invalid.
+    const token = await signSession(user.id, newVersion);
+    const res = NextResponse.json({ success: true, message: "Password changed successfully" });
+    res.cookies.set(ADMIN_COOKIE, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    return res;
   } catch (error) {
     console.error("Change password error:", error);
     return NextResponse.json(

@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     const user = await db.user.findUnique({
       where: { email },
-      select: { id: true, name: true, email: true, role: true, passwordHash: true },
+      select: { id: true, name: true, email: true, role: true, passwordHash: true, sessionVersion: true },
     });
 
     if (!user || !user.passwordHash) {
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const token = await signSession(user.id);
+    const token = await signSession(user.id, user.sessionVersion);
     const res = NextResponse.json({
       success: true,
       data: { id: user.id, name: user.name, email: user.email, role: user.role },
