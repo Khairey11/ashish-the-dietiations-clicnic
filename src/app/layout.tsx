@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -153,6 +154,7 @@ export default function RootLayout({
           {children}
           <FloatingWhatsApp />
           <Sonner />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

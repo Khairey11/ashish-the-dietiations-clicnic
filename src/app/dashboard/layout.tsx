@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import {
-  Home, Calendar, FileText, MessageCircle, Settings, LogOut, Menu, } from "lucide-react";
+  Home, Calendar, FileText, MessageCircle, Settings, LogOut, Menu, Utensils, } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 const sidebarItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
   { icon: Calendar, label: "Appointments", href: "/dashboard/appointments" },
+  { icon: Utensils, label: "Meal Plan", href: "/dashboard/meal-plan" },
   { icon: FileText, label: "Assessment", href: "/dashboard/onboarding" },
   { icon: FileText, label: "Reports", href: "/dashboard/reports" },
   { icon: MessageCircle, label: "Messages", href: "/dashboard/messages" },
