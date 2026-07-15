@@ -1,14 +1,13 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 /**
  * Content-Security-Policy.
  *
  * Tuned for this app's actual third-party origins:
  *   - 'self'                  — same-origin scripts/styles/images
- *   - nonce-...               — Next.js inline scripts (handled by Next automatically)
  *   - fonts.googleapis.com    — next/font/google CSS
  *   - fonts.gstatic.com       — Google Fonts woff2 files
- *   - api.resend.com          — server-side only (not needed in browser CSP)
  *   - data:                   — inline data URIs (favicons, small SVGs)
  *   - blob:                   — image previews from File API
  *
@@ -22,7 +21,7 @@ const CSP = [
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
   "media-src 'self'",
-  "connect-src 'self' https://api.resend.com", // verify-email etc. don't hit external from browser; only allow same-origin + Resend
+  "connect-src 'self' https://api.resend.com",
   "frame-ancestors 'self'",
   "form-action 'self'",
   "base-uri 'self'",
@@ -56,4 +55,16 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry wrapper — no-op when SENTRY_DSN / NEXT_PUBLIC_SENTRY_DSN are unset.
+// The SDK still loads but doesn't transmit, so there's no perf cost in dev.
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  // Suppress noisy build logs.
+  silent: true,
+  // Disable source-map upload in dev — only needed in CI/prod builds where
+  // SENTRY_AUTH_TOKEN is set.
+  sourcemaps: {
+    disable: process.env.NODE_ENV !== "production" || !process.env.SENTRY_AUTH_TOKEN,
+  },
+});
