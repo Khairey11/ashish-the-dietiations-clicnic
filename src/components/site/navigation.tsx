@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Command, Moon, Sun } from "lucide-react";
@@ -109,10 +110,13 @@ export function Navigation() {
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                <img
+                <Image
                   src="/logo-transparent.png"
-                  alt=""
+                  alt="The Dietitian's Clinic logo"
+                  width={36}
+                  height={36}
                   className="relative w-9 h-9 object-contain"
+                  priority
                 />
               </div>
               <div className="flex flex-col leading-none">

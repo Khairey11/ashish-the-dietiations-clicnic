@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, User, ShieldCheck, Sparkles, Phone } from "lucide-react";
@@ -133,7 +134,7 @@ function LoginForm() {
             className="w-full max-w-md"
           >
             <div className="lg:hidden mb-8 flex justify-center">
-              <img src="/logo-transparent.png" alt="" className="w-12 h-12 object-contain" />
+              <Image src="/logo-transparent.png" alt="The Dietitian's Clinic logo" width={48} height={48} className="w-12 h-12 object-contain" />
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight">

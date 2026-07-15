@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -172,9 +173,11 @@ export function Footer({ config }: { config?: DynamicConfig }) {
           {/* Brand + newsletter */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <img
+              <Image
                 src="/logo-transparent.png"
                 alt="The Dietitian's Clinic logo"
+                width={36}
+                height={36}
                 className="w-9 h-9 object-contain"
               />
               <div className="flex flex-col leading-none">
