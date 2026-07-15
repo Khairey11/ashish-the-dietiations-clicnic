@@ -15,7 +15,6 @@ import { Footer } from "@/components/sections/footer";
 import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
 import { getDynamicConfig, type DynamicConfig } from "@/lib/site-config";
 import {
-  getDbServices,
   getDbPrograms,
   getDbTestimonials,
   getDbBlogPosts,
@@ -24,9 +23,8 @@ import {
 } from "@/lib/queries";
 
 export default async function Home() {
-  const [config, dbServices, dbPrograms, dbTestimonials, dbBlogPosts, dbFaqs, dbDietitians] = await Promise.all([
+  const [config, dbPrograms, dbTestimonials, dbBlogPosts, dbFaqs, dbDietitians] = await Promise.all([
     getDynamicConfig(),
-    getDbServices(),
     getDbPrograms(),
     getDbTestimonials(),
     getDbBlogPosts(),
@@ -40,12 +38,12 @@ export default async function Home() {
       <main id="main" className="flex-1">
         <Hero />
         <TrustBar />
-        <Services services={dbServices} />
+        <Services />
         <Process />
         <Programs programs={dbPrograms} />
         <BMICalculator />
         <Testimonials testimonials={dbTestimonials} />
-        <Booking config={config} services={dbServices} dietitians={dbDietitians} programs={dbPrograms} />
+        <Booking config={config} dietitians={dbDietitians} programs={dbPrograms} />
         <Blog posts={dbBlogPosts} />
         <About />
         <FAQ faqs={dbFaqs} />

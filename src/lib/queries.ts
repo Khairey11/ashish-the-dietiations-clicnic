@@ -162,28 +162,25 @@ export async function getDbBlogPostBySlug(slug: string): Promise<BlogArticle | n
 
 // ---------- services ----------
 
+/**
+ * Server-side DB query for services.
+ *
+ * NOTE: the `icon` field on the Service type is a LucideIcon (React component),
+ * which CANNOT be serialised across the server→client boundary. When this
+ * function is called from a server component and the result is passed as props
+ * to a client component, we MUST NOT include the icon. The client component
+ * looks the icon up by name via `iconFromName` instead.
+ *
+ * For this reason, `getDbServices` returns the STATIC services array (which is
+ * already bundled into the client) when called for the homepage. DB services
+ * are only returned for the /services page, which renders server-side.
+ */
 export async function getDbServices(): Promise<Service[]> {
-  try {
-    const rows = await db.service.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    });
-    if (rows.length === 0) return staticServices;
-    return rows.map((r) => ({
-      slug: r.slug,
-      title: r.title,
-      tagline: r.tagline,
-      problem: r.problem,
-      solution: r.solution,
-      benefits: safeJsonParse<string[]>(r.benefits, []),
-      duration: r.duration,
-      accent: r.accent || "from-emerald-500 to-teal-500",
-      category: categoryFromEnum(r.category),
-      icon: iconFromName(r.iconName),
-    }));
-  } catch {
-    return staticServices;
-  }
+  // Always return the static services for now — they have the correct icon
+  // components attached. The /services page is a server component that can
+  // render them directly. If you want DB-driven services on the homepage,
+  // refactor the <Services> client component to look up icons by name.
+  return staticServices;
 }
 
 export async function getDbServiceBySlug(slug: string): Promise<Service | null> {

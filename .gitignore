@@ -80,3 +80,9 @@ tool-results/
 # OS files
 Thumbs.db
 /upload/
+
+# Test artifacts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
