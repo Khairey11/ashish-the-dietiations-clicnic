@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
+import { CookieConsent } from "@/components/site/cookie-consent";
 import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
@@ -153,6 +154,7 @@ export default function RootLayout({
           </a>
           {children}
           <FloatingWhatsApp />
+          <CookieConsent />
           <Sonner />
           <Analytics />
         </ThemeProvider>
