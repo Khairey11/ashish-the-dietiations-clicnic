@@ -69,6 +69,7 @@ const footerNav = [
       { label: "Client Login", href: "/login" },
       { label: "Client Dashboard", href: "/dashboard" },
       { label: "Admin Portal", href: "/admin" },
+      { label: "Privacy Policy", href: "/privacy" },
     ],
   },
 ];
