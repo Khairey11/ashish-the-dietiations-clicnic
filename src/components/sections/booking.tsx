@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader, SectionWrapper } from "./section-utils";
-import { services as staticServices, dietitians as staticDietitians, programs as staticPrograms, type Service, type Dietitian, type Program } from "@/lib/data";
+import { services, dietitians as staticDietitians, programs as staticPrograms, type Dietitian, type Program } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createBooking } from "@/lib/actions/contact";
@@ -45,12 +45,10 @@ const timeSlots = [
 
 export function Booking({
   config,
-  services = staticServices,
   dietitians = staticDietitians,
   programs = staticPrograms,
 }: {
   config?: DynamicConfig;
-  services?: Service[];
   dietitians?: Dietitian[];
   programs?: Program[];
 }) {
