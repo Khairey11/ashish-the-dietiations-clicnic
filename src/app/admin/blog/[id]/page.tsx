@@ -270,7 +270,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
                 onChange={(e) => update("coverAccent", e.target.value)}
                 className="w-full h-9 px-3 rounded-lg border border-border bg-background text-xs"
               >
-                <option value="from-primary to-secondary">Blue → Green (brand)</option>
+                <option value="from-primary to-secondary">Blue → Indigo (brand)</option>
                 <option value="from-emerald-500 to-teal-500">Emerald → Teal</option>
                 <option value="from-sky-500 to-blue-500">Sky → Blue</option>
                 <option value="from-amber-500 to-orange-500">Amber → Orange</option>

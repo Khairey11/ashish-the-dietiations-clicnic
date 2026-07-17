@@ -45,7 +45,7 @@ export const services: Service[] = [
       "Habit-based behavioural coaching",
     ],
     duration: "12–24 weeks",
-    accent: "from-emerald-500/20 to-emerald-500/5",
+    accent: "from-sky-500/20 to-blue-500/5",
     category: "weight",
   },
   {
@@ -216,7 +216,7 @@ export const services: Service[] = [
       "60-minute clinical review",
     ],
     duration: "Single session",
-    accent: "from-teal-500/20 to-teal-500/5",
+    accent: "from-sky-500/20 to-cyan-500/5",
     category: "performance",
   },
   {
@@ -311,7 +311,7 @@ export const services: Service[] = [
       "Policy and advocacy support",
     ],
     duration: "Flexible",
-    accent: "from-teal-500/20 to-teal-500/5",
+    accent: "from-sky-500/20 to-cyan-500/5",
     category: "corporate",
   },
 ];
@@ -345,7 +345,7 @@ export const programs: Program[] = [
       "Recipe library access",
     ],
     support: ["5 days/week chat", "1 follow-up session", "Email support"],
-    accent: "from-emerald-500 to-emerald-600",
+    accent: "from-sky-500 to-blue-600",
   },
   {
     id: "transform-60",
@@ -364,7 +364,7 @@ export const programs: Program[] = [
       "Grocery list generator",
     ],
     support: ["6 days/week chat", "3 follow-up sessions", "Priority response"],
-    accent: "from-emerald-600 to-teal-600",
+    accent: "from-blue-600 to-indigo-600",
   },
   {
     id: "lifestyle-90",
@@ -450,7 +450,7 @@ export const dietitians: Dietitian[] = [
     reviews: 482,
     bio: "Dr. Shrestha leads our hormonal health practice, combining evidence-based medical nutrition therapy with a deeply empathetic coaching style.",
     initials: "AS",
-    accent: "from-emerald-500 to-teal-500",
+    accent: "from-sky-500 to-blue-500",
     availability: "Next available: Tomorrow, 10:00 AM",
     focus: ["PMOS", "Thyroid", "Fertility"],
   },
@@ -618,7 +618,7 @@ export const testimonials: Testimonial[] = [
       "I'd tried every diet under the sun. This was the first time I lost weight without gaining it back. The behavioural coaching rewired my relationship with food.",
     highlight: "-18 kg kept off",
     initials: "SB",
-    accent: "from-emerald-500 to-teal-500",
+    accent: "from-sky-500 to-blue-500",
     tag: "weight-loss",
   },
 ];
@@ -672,7 +672,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-06-05",
     readingTime: 7,
     tags: ["Mindful eating", "CBT", "Habits"],
-    accent: "from-emerald-500 to-teal-500",
+    accent: "from-sky-500 to-blue-500",
   },
   {
     id: "b4",
@@ -964,7 +964,7 @@ export const teamMembers: TeamMember[] = [
     credentials: "RD, PhD Clinical Nutrition",
     bio: "Anita founded The Dietitian's Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
     initials: "AS",
-    accent: "from-emerald-500 to-teal-500",
+    accent: "from-sky-500 to-blue-500",
     specialties: ["PMOS", "Thyroid", "Fertility"],
     yearsExperience: 14,
   },
@@ -1039,7 +1039,7 @@ export const blogArticles: BlogArticle[] = [
     ...blogPosts[0],
     authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of The Dietitian's Clinic. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
     authorInitials: "AS",
-    authorAccent: "from-emerald-500 to-teal-500",
+    authorAccent: "from-sky-500 to-blue-500",
     content: [
       {
         heading: "The insulin-PMOS connection",

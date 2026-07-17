@@ -35,7 +35,7 @@ const contactMethods = [
     subtext: "Mon–Sat, 7AM–8PM",
     href: phoneLink(),
     external: false,
-    accent: "from-emerald-500 to-teal-500",
+    accent: "from-sky-500 to-blue-500",
   },
   {
     icon: MessageCircle,
