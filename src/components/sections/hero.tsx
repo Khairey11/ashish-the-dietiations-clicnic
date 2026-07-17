@@ -179,12 +179,12 @@ export function Hero() {
                   <svg viewBox="0 0 200 50" className="w-full h-12">
                     <defs>
                       <linearGradient id="heroLine" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="oklch(0.62 0.18 145)" />
-                        <stop offset="100%" stopColor="oklch(0.65 0.16 230)" />
+                        <stop offset="0%" stopColor="oklch(0.699 0.134 232.8)" />
+                        <stop offset="100%" stopColor="oklch(0.55 0.18 255)" />
                       </linearGradient>
                       <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="oklch(0.62 0.18 145 / 0.3)" />
-                        <stop offset="100%" stopColor="oklch(0.62 0.18 145 / 0)" />
+                        <stop offset="0%" stopColor="oklch(0.699 0.134 232.8 / 0.3)" />
+                        <stop offset="100%" stopColor="oklch(0.699 0.134 232.8 / 0)" />
                       </linearGradient>
                     </defs>
                     <path
@@ -198,8 +198,8 @@ export function Hero() {
                       fill="none"
                       strokeLinecap="round"
                     />
-                    <circle cx="200" cy="8" r="4" fill="oklch(0.62 0.18 145)" />
-                    <circle cx="200" cy="8" r="8" fill="oklch(0.62 0.18 145 / 0.3)" />
+                    <circle cx="200" cy="8" r="4" fill="oklch(0.55 0.18 255)" />
+                    <circle cx="200" cy="8" r="8" fill="oklch(0.55 0.18 255 / 0.3)" />
                   </svg>
                   <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
                     -10.8 kg in 16 weeks
@@ -247,13 +247,13 @@ export function Hero() {
                   </div>
                   <div className="relative w-14 h-14">
                     <svg viewBox="0 0 36 36" className="w-14 h-14 -rotate-90">
-                      <circle cx="18" cy="18" r="14" fill="none" stroke="oklch(0.92 0.01 150)" strokeWidth="3" />
+                      <circle cx="18" cy="18" r="14" fill="none" stroke="oklch(0.92 0.01 233)" strokeWidth="3" />
                       <circle
                         cx="18"
                         cy="18"
                         r="14"
                         fill="none"
-                        stroke="oklch(0.62 0.18 145)"
+                        stroke="oklch(0.699 0.134 232.8)"
                         strokeWidth="3"
                         strokeDasharray={`${0.59 * 88} 88`}
                         strokeLinecap="round"

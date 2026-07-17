@@ -83,7 +83,7 @@ export async function sendBookingConfirmation(opts: {
 }) {
   const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <div style="background: linear-gradient(135deg, #28abe3 0%, #70a442 100%); padding: 30px; border-radius: 12px 12px 0 0;">
+      <div style="background: linear-gradient(135deg, #28abe3 0%, #4263eb 100%); padding: 30px; border-radius: 12px 12px 0 0;">
         <h1 style="color: white; margin: 0; font-size: 24px;">Booking Confirmed!</h1>
       </div>
       <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
@@ -180,7 +180,7 @@ export async function sendVerificationEmail(opts: {
   const verifyUrl = `${baseUrl.replace(/\/$/, "")}/verify-email?token=${opts.token}`;
   const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <div style="background: linear-gradient(135deg, #28abe3 0%, #70a442 100%); padding: 30px; border-radius: 12px 12px 0 0;">
+      <div style="background: linear-gradient(135deg, #28abe3 0%, #4263eb 100%); padding: 30px; border-radius: 12px 12px 0 0;">
         <h1 style="color: white; margin: 0; font-size: 22px;">Verify your email</h1>
       </div>
       <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">

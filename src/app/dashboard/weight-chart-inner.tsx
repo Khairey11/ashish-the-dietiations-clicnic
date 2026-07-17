@@ -19,7 +19,7 @@ export function WeightChartInner({ data, targetWeight }: WeightChartInnerProps) 
         <YAxis stroke="oklch(0.45 0.03 233)" fontSize={11} tickLine={false} axisLine={false} domain={["auto", "auto"]} />
         <Tooltip contentStyle={{ background: "oklch(1 0 0)", border: "1px solid oklch(0.92 0.01 233)", borderRadius: "0.75rem", fontSize: "0.75rem" }} />
         {targetWeight && targetWeight > 0 && (
-          <ReferenceLine y={targetWeight} stroke="oklch(0.661 0.141 132.6)" strokeDasharray="4 4" label={{ value: "Target", fontSize: 10, fill: "oklch(0.661 0.141 132.6)" }} />
+          <ReferenceLine y={targetWeight} stroke="oklch(0.55 0.18 255)" strokeDasharray="4 4" label={{ value: "Target", fontSize: 10, fill: "oklch(0.55 0.18 255)" }} />
         )}
         <Line type="monotone" dataKey="weight" stroke="oklch(0.699 0.134 232.8)" strokeWidth={3} dot={{ r: 4, fill: "oklch(0.699 0.134 232.8)" }} activeDot={{ r: 6 }} />
       </LineChart>
