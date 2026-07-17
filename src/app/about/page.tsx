@@ -15,7 +15,7 @@ export default function AboutPage() {
         eyebrow="About us"
         title={<>Built by clinicians, <span className="gradient-text">for humans</span></>}
         description="What started in 2018 with one dietitian and a big idea has grown into a 28-clinician platform that has transformed 12,400+ lives across South Asia."
-        accent="from-emerald-500/15 to-teal-500/10"
+        accent="from-sky-500/15 to-blue-500/10"
       />
 
       <About />

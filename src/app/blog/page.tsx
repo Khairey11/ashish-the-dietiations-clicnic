@@ -11,7 +11,7 @@ export default async function BlogPage() {
         eyebrow="From the clinic"
         title={<>Insights from our <span className="gradient-text">clinical team</span></>}
         description="Evidence-based articles on nutrition, metabolism, behaviour change and the latest research — written by our RDN-credentialed dietitians."
-        accent="from-emerald-500/15 to-teal-500/10"
+        accent="from-sky-500/15 to-blue-500/10"
       />
       <BlogList posts={posts} />
     </SiteLayout>

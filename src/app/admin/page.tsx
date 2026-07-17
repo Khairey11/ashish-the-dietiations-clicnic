@@ -202,8 +202,8 @@ export default function AdminPage() {
             {/* KPI cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { icon: DollarSign, label: "Total Revenue", value: stats ? fmtNPR(stats.totalRevenue) : null, change: stats ? `${stats.activePrograms} active programs` : null, trend: "up", accent: "from-emerald-500 to-teal-500" },
-                  { icon: CalendarDays, label: "Today's appts", value: stats ? String(stats.todayAppointments) : null, change: stats ? `${stats.totalAppointments} total` : null, trend: "up", accent: "from-sky-500 to-blue-500" },
+                  { icon: DollarSign, label: "Total Revenue", value: stats ? fmtNPR(stats.totalRevenue) : null, change: stats ? `${stats.activePrograms} active programs` : null, trend: "up", accent: "from-sky-500 to-blue-500" },
+                  { icon: CalendarDays, label: "Today's appts", value: stats ? String(stats.todayAppointments) : null, change: stats ? `${stats.totalAppointments} total` : null, trend: "up", accent: "from-cyan-500 to-blue-500" },
                   { icon: UserPlus, label: "Pending leads", value: stats ? String(stats.pendingLeads) : null, change: "Action needed", trend: "down", accent: "from-amber-500 to-orange-500" },
                   { icon: Users, label: "Active clients", value: stats ? stats.totalClients.toLocaleString() : null, change: stats ? `+${stats.newClientsThisMonth} this month` : null, trend: "up", accent: "from-violet-500 to-purple-500" },
                 ].map((k) => (
