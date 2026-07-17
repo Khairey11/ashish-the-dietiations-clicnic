@@ -82,25 +82,25 @@ export function Services() {
               <div className="relative">
                 <div
                   className={cn(
-                    "w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4",
+                    "w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 group-hover:scale-110 transition-transform",
                     service.accent
                   )}
                 >
-                  <service.icon className="w-6 h-6 text-foreground" />
+                  <service.icon className="w-6 h-6 text-foreground group-hover:text-white transition-colors" />
                 </div>
-                <h3 className="text-lg font-semibold mb-1">{service.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <h3 className="text-lg font-semibold mb-1 group-hover:text-white transition-colors">{service.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 group-hover:text-white/80 transition-colors">
                   {service.tagline}
                 </p>
-                <p className="text-sm text-muted-foreground/80 line-clamp-3 mb-4">
+                <p className="text-sm text-muted-foreground/80 line-clamp-3 mb-4 group-hover:text-white/70 transition-colors">
                   {service.problem}
                 </p>
-                <div className="flex items-center justify-between pt-4 border-t border-border/40">
-                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <div className="flex items-center justify-between pt-4 border-t border-border/40 group-hover:border-white/20 transition-colors">
+                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground group-hover:text-white/70 transition-colors">
                     <Clock className="w-3 h-3" />
                     {service.duration}
                   </span>
-                  <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:gap-2 transition-all">
+                  <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:text-white group-hover:gap-2 transition-all">
                     Learn more
                     <ArrowRight className="w-3 h-3" />
                   </span>

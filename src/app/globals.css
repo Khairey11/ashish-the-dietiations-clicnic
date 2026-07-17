@@ -187,8 +187,8 @@
 .bg-mesh {
   background-image:
     radial-gradient(at 20% 0%, oklch(0.699 0.134 232.8 / 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, oklch(0.661 0.141 132.6 / 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, oklch(0.78 0.16 90 / 0.1) 0px, transparent 50%);
+    radial-gradient(at 80% 0%, oklch(0.55 0.18 255 / 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, oklch(0.7 0.13 200 / 0.1) 0px, transparent 50%);
 }
 
 .glass {
@@ -204,7 +204,7 @@
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, oklch(0.699 0.134 232.8) 0%, oklch(0.661 0.141 132.6) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
