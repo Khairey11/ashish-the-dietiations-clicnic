@@ -5,26 +5,27 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Command, Moon, Sun } from "lucide-react";
+import { Menu, X, ChevronDown, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Programs", href: "/programs" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Dietitians", href: "/dietitians" },
-  { label: "Results", href: "/testimonials" },
+  { label: "Success Stories", href: "/testimonials" },
   { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function Navigation() {
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [cmdOpen, setCmdOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [cmdQuery, setCmdQuery] = React.useState("");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const pathname = usePathname();
@@ -49,12 +50,7 @@ export function Navigation() {
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setCmdOpen((v) => !v);
-      }
       if (e.key === "Escape") {
-        setCmdOpen(false);
         setMobileOpen(false);
       }
     };
@@ -64,25 +60,11 @@ export function Navigation() {
 
   const go = (href: string) => {
     setMobileOpen(false);
-    setCmdOpen(false);
-    setCmdQuery("");
     void href;
   };
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
-
-  const cmdItems = [
-    ...navLinks,
-    { label: "Book Consultation", href: "/booking" },
-    { label: "Contact", href: "/contact" },
-    { label: "FAQ", href: "/faq" },
-    { label: "Client Login", href: "/login" },
-    { label: "Admin Portal", href: "/admin" },
-  ];
-  const filteredCmdItems = cmdItems.filter((item) =>
-    item.label.toLowerCase().includes(cmdQuery.toLowerCase())
-  );
 
   return (
     <>
@@ -111,20 +93,20 @@ export function Navigation() {
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Image
-                  src="/logo-transparent.png"
+                  src="/logo.svg"
                   alt="Ashish Nutrition Clinic logo"
                   width={36}
                   height={36}
-                  className="relative w-9 h-9 object-contain"
+                  className="relative w-9 h-9"
                   priority
                 />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="text-base font-bold tracking-tight">
-                  The Dietitian&apos;s Clinic
+                  Ashish
                 </span>
                 <span className="text-[10px] text-muted-foreground font-medium tracking-wide">
-                  CENTER FOR CLINICAL & PERFORMANCE NUTRITION
+                  NUTRITION CLINIC
                 </span>
               </div>
             </Link>
@@ -149,18 +131,6 @@ export function Navigation() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setCmdOpen(true)}
-                className="hidden md:flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground border border-border/60 rounded-lg hover:bg-muted/60 transition-colors min-h-[40px]"
-                aria-label="Open command palette"
-              >
-                <Command className="w-3 h-3" />
-                <span>Search</span>
-                <kbd className="ml-2 px-1.5 py-0.5 rounded bg-muted text-[10px] font-mono">
-                  ⌘K
-                </kbd>
-              </button>
-
               {mounted && (
                 <button
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -261,64 +231,6 @@ export function Navigation() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {cmdOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-start justify-center pt-[10vh] px-4"
-          >
-            <div
-              className="absolute inset-0 bg-background/60 backdrop-blur-sm"
-              onClick={() => setCmdOpen(false)}
-            />
-            <motion.div
-              initial={{ scale: 0.96, opacity: 0, y: -10 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-full max-w-xl glass rounded-2xl shadow-premium overflow-hidden"
-            >
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-border/40">
-                <Command className="w-4 h-4 text-muted-foreground" />
-                <input
-                  autoFocus
-                  value={cmdQuery}
-                  onChange={(e) => setCmdQuery(e.target.value)}
-                  placeholder="Search services, programs, dietitians, blogs..."
-                  aria-label="Search the site"
-                  className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
-                />
-                <kbd className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-mono">
-                  ESC
-                </kbd>
-              </div>
-              <div className="max-h-80 overflow-y-auto p-2">
-                <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Quick navigation
-                </p>
-                {filteredCmdItems.length === 0 && (
-                  <p className="px-3 py-4 text-sm text-muted-foreground text-center">
-                    No matches found.
-                  </p>
-                )}
-                {filteredCmdItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => go(item.href)}
-                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-muted/80 transition-colors text-sm text-left"
-                  >
-                    <span>{item.label}</span>
-                    <ChevronDown className="w-4 h-4 -rotate-90 text-muted-foreground" />
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }
