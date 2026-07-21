@@ -1,4 +1,4 @@
-// Seed script for The Dietitian's Clinic
+// Seed script for Ashish Nutrition Clinic
 // Run: bun run db:seed
 //
 // Passwords are read from env vars (SEED_ADMIN_PASSWORD, SEED_CLIENT_PASSWORD,
@@ -314,10 +314,10 @@ async function main() {
 
   const settings = [
     // Clinic contact
-    { key: "clinic_name", value: "The Dietitian's Clinic" },
+    { key: "clinic_name", value: "Ashish Nutrition Clinic" },
     { key: "clinic_phone", value: "+977-1-4445566" },
     { key: "clinic_phone_raw", value: "+97714445566" },
-    { key: "clinic_email", value: "care@thedietitiansclinic.health" },
+    { key: "clinic_email", value: "ashish@thedietitiansclinic.health" },
     { key: "clinic_address", value: "Banasthali, Baluwatar-4, Kathmandu 44600, Nepal" },
     { key: "whatsapp_number", value: "+977 9800000000" },
     { key: "whatsapp_raw", value: "9779800000000" },
@@ -342,7 +342,7 @@ async function main() {
     // Payment: Bank transfer
     { key: "payment_bank_enabled", value: "true" },
     { key: "payment_bank_name", value: "Nepal Investment Mega Bank" },
-    { key: "payment_bank_account_name", value: "The Dietitian's Clinic Pvt. Ltd." },
+    { key: "payment_bank_account_name", value: "Ashish Nutrition Clinic Pvt. Ltd." },
     { key: "payment_bank_account_number", value: "01234567890123" },
     { key: "payment_bank_branch", value: "Baluwatar Branch" },
     { key: "payment_bank_qr_url", value: "" },           // Admin uploads via /admin/settings

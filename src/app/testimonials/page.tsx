@@ -3,7 +3,7 @@ import { TestimonialsPageClient } from "./testimonials-client";
 
 export const metadata = {
   title: "Client Success Stories",
-  description: "Real transformations from The Dietitian's Clinic — weight loss, PCOS, diabetes, pregnancy and sports nutrition success stories.",
+  description: "Real transformations from Ashish Nutrition Clinic — weight loss, PCOS, diabetes, pregnancy and sports nutrition success stories.",
 };
 
 export default async function TestimonialsPage() {

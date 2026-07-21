@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata = {
   title: "Privacy Policy",
-  description: "How The Dietitian's Clinic collects, uses, and protects your personal and health data.",
+  description: "How Ashish Nutrition Clinic collects, uses, and protects your personal and health data.",
 };
 
 export default function PrivacyPolicyPage() {

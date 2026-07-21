@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
       const { sendEmail } = await import("@/lib/email");
       await sendEmail({
         to: email,
-        subject: "Password Reset — The Dietitian's Clinic",
+        subject: "Password Reset — Ashish Nutrition Clinic",
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <h2 style="color: #28abe3;">Password Reset Request</h2>

@@ -1,4 +1,4 @@
-// Central site configuration for The Dietitian's Clinic.
+// Central site configuration for Ashish Nutrition Clinic.
 // These are the FALLBACK values. The admin can override them via /admin/settings
 // (stored in the SiteSetting table). Use getDynamicConfig() in server components
 // to fetch the DB-overridden values.
@@ -6,18 +6,18 @@
 import { db } from "@/lib/db";
 
 export const siteConfig = {
-  name: "The Dietitian's Clinic",
-  shortName: "TDC",
-  tagline: "Center for Clinical & Performance Nutrition",
+  name: "Ashish Nutrition Clinic",
+  shortName: "ANC",
+  tagline: "Personalized Nutrition Care",
   domain: "https://thedietitiansclinic.com",
 
   // ===== Contact (fallbacks — overridden by DB in getDynamicConfig) =====
-  phoneDisplay: "+977-1-4445566",
-  phoneRaw: "+97714445566",
+  phoneDisplay: "+977 9800000000",
+  phoneRaw: "+9779800000000",
   whatsappDisplay: "+977 9800000000",
   whatsappRaw: "9779800000000",
-  email: "care@thedietitiansclinic.com",
-  address: "Dharan-14, Sunsari, Nepal",
+  email: "ashish@thedietitiansclinic.com",
+  address: "Kathmandu, Nepal",
 
   // ===== Hours =====
   weekdayHours: "7:00 AM – 8:00 PM",
@@ -25,21 +25,21 @@ export const siteConfig = {
 
   // ===== Social =====
   social: {
-    instagram: "https://instagram.com/thedietitiansclinic",
-    facebook: "https://facebook.com/thedietitiansclinic",
-    twitter: "https://twitter.com/tdc_health",
-    youtube: "https://youtube.com/@thedietitiansclinic",
-    linkedin: "https://linkedin.com/company/thedietitiansclinic",
+    instagram: "https://instagram.com/ashishnutritionclinic",
+    facebook: "https://facebook.com/ashishnutritionclinic",
+    twitter: "https://twitter.com/ashish_nc",
+    youtube: "https://youtube.com/@ashishnutritionclinic",
+    linkedin: "https://linkedin.com/company/ashish-nutrition-clinic",
   },
 
   // ===== Payment defaults =====
   payments: {
     khaltiMobile: "9800000000",
-    esewaId: "thedietitiansclinic",
+    esewaId: "ashishnutrition",
     bankName: "Nepal Investment Mega Bank",
-    bankAccountName: "The Dietitian's Clinic Pvt. Ltd.",
+    bankAccountName: "Ashish Nutrition Clinic",
     bankAccountNumber: "01234567890123",
-    bankBranch: "Dharan Branch",
+    bankBranch: "Kathmandu Branch",
   },
 } as const;
 

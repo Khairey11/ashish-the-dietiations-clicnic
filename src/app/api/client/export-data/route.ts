@@ -148,7 +148,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       exportedAt,
-      note: "This file contains all personal data The Dietitian's Clinic holds about you. Store it securely.",
+      note: "This file contains all personal data Ashish Nutrition Clinic holds about you. Store it securely.",
       data: {
         user,
         patient,

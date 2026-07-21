@@ -106,13 +106,13 @@ export function Navigation() {
               href="/"
               onClick={() => go("/")}
               className="flex items-center gap-2.5 group"
-              aria-label="The Dietitian's Clinic home"
+              aria-label="Ashish Nutrition Clinic home"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Image
                   src="/logo-transparent.png"
-                  alt="The Dietitian's Clinic logo"
+                  alt="Ashish Nutrition Clinic logo"
                   width={36}
                   height={36}
                   className="relative w-9 h-9 object-contain"

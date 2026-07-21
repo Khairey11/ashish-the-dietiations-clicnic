@@ -45,7 +45,7 @@ export const services: Service[] = [
       "Habit-based behavioural coaching",
     ],
     duration: "12–24 weeks",
-    accent: "from-sky-500/20 to-blue-500/5",
+    accent: "from-emerald-500/20 to-emerald-500/5",
     category: "weight",
   },
   {
@@ -102,7 +102,7 @@ export const services: Service[] = [
       "Prevent long-term complications",
     ],
     duration: "Ongoing",
-    accent: "from-sky-500/20 to-sky-500/5",
+    accent: "from-emerald-500/20 to-emerald-500/5",
     category: "medical",
   },
   {
@@ -216,7 +216,7 @@ export const services: Service[] = [
       "60-minute clinical review",
     ],
     duration: "Single session",
-    accent: "from-sky-500/20 to-cyan-500/5",
+    accent: "from-emerald-500/20 to-teal-500/5",
     category: "performance",
   },
   {
@@ -273,7 +273,7 @@ export const services: Service[] = [
       "Wellness policy consultation",
     ],
     duration: "Term/Annual",
-    accent: "from-blue-500/20 to-blue-500/5",
+    accent: "from-emerald-500/20 to-emerald-500/5",
     category: "life-stage",
   },
   {
@@ -311,7 +311,7 @@ export const services: Service[] = [
       "Policy and advocacy support",
     ],
     duration: "Flexible",
-    accent: "from-sky-500/20 to-cyan-500/5",
+    accent: "from-emerald-500/20 to-teal-500/5",
     category: "corporate",
   },
 ];
@@ -345,7 +345,7 @@ export const programs: Program[] = [
       "Recipe library access",
     ],
     support: ["5 days/week chat", "1 follow-up session", "Email support"],
-    accent: "from-sky-500 to-blue-600",
+    accent: "from-emerald-500 to-emerald-600",
   },
   {
     id: "transform-60",
@@ -364,7 +364,7 @@ export const programs: Program[] = [
       "Grocery list generator",
     ],
     support: ["6 days/week chat", "3 follow-up sessions", "Priority response"],
-    accent: "from-blue-600 to-indigo-600",
+    accent: "from-emerald-600 to-teal-600",
   },
   {
     id: "lifestyle-90",
@@ -418,7 +418,7 @@ export const programs: Program[] = [
       "Concierge support",
     ],
     support: ["24/7 concierge", "Unlimited sessions", "Instant response"],
-    accent: "from-sky-600 to-indigo-600",
+    accent: "from-emerald-600 to-teal-600",
   },
 ];
 
@@ -450,7 +450,7 @@ export const dietitians: Dietitian[] = [
     reviews: 482,
     bio: "Dr. Shrestha leads our hormonal health practice, combining evidence-based medical nutrition therapy with a deeply empathetic coaching style.",
     initials: "AS",
-    accent: "from-sky-500 to-blue-500",
+    accent: "from-emerald-500 to-teal-500",
     availability: "Next available: Tomorrow, 10:00 AM",
     focus: ["PMOS", "Thyroid", "Fertility"],
   },
@@ -465,7 +465,7 @@ export const dietitians: Dietitian[] = [
     reviews: 367,
     bio: "Former national team nutritionist, Dr. Thapa periodises fueling for endurance, strength and combat athletes — from amateur to Olympic-level.",
     initials: "RT",
-    accent: "from-cyan-500 to-blue-500",
+    accent: "from-teal-500 to-cyan-500",
     availability: "Next available: Today, 4:30 PM",
     focus: ["Endurance", "Strength", "Combat sports"],
   },
@@ -480,7 +480,7 @@ export const dietitians: Dietitian[] = [
     reviews: 298,
     bio: "A certified diabetes educator, Priya pairs CGM data with carb-counting mastery to help clients reverse pre-diabetes and stabilise type 2.",
     initials: "PG",
-    accent: "from-sky-500 to-indigo-500",
+    accent: "from-emerald-500 to-teal-500",
     availability: "Next available: Tomorrow, 2:00 PM",
     focus: ["Type 2 Diabetes", "Pre-diabetes", "Insulin resistance"],
   },
@@ -550,7 +550,7 @@ export const testimonials: Testimonial[] = [
       "My HbA1c dropped from 8.4 to 6.1 and my doctor took me off metformin. The CGM integration was a game changer — I finally understood how my body responds to food.",
     highlight: "HbA1c 8.4 → 6.1",
     initials: "BT",
-    accent: "from-sky-500 to-blue-500",
+    accent: "from-emerald-500 to-teal-500",
     tag: "diabetes",
   },
   {
@@ -584,7 +584,7 @@ export const testimonials: Testimonial[] = [
       "Dr. Thapa dialled in my race-day fueling and I dropped my marathon PB by 14 minutes. The 4 kg I gained is all lean mass. I've never felt this strong.",
     highlight: "+4 kg lean mass",
     initials: "PR",
-    accent: "from-cyan-500 to-blue-500",
+    accent: "from-teal-500 to-cyan-500",
     tag: "sports",
   },
   {
@@ -618,7 +618,7 @@ export const testimonials: Testimonial[] = [
       "I'd tried every diet under the sun. This was the first time I lost weight without gaining it back. The behavioural coaching rewired my relationship with food.",
     highlight: "-18 kg kept off",
     initials: "SB",
-    accent: "from-sky-500 to-blue-500",
+    accent: "from-emerald-500 to-teal-500",
     tag: "weight-loss",
   },
 ];
@@ -660,7 +660,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-06-12",
     readingTime: 6,
     tags: ["CGM", "Glucose", "Metabolism"],
-    accent: "from-sky-500 to-blue-500",
+    accent: "from-emerald-500 to-teal-500",
   },
   {
     id: "b3",
@@ -672,7 +672,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-06-05",
     readingTime: 7,
     tags: ["Mindful eating", "CBT", "Habits"],
-    accent: "from-sky-500 to-blue-500",
+    accent: "from-emerald-500 to-teal-500",
   },
   {
     id: "b4",
@@ -684,7 +684,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-05-28",
     readingTime: 9,
     tags: ["Endurance", "Performance", "Carb loading"],
-    accent: "from-cyan-500 to-blue-500",
+    accent: "from-teal-500 to-cyan-500",
   },
 ];
 
@@ -756,7 +756,7 @@ export const stats: Stat[] = [
   {
     label: "Lives transformed",
     value: "12,400",
-    description: "Clients who completed a The Dietitian's Clinic program",
+    description: "Clients who completed a Ashish Nutrition Clinic program",
   },
   {
     label: "Avg. weight lost",
@@ -768,7 +768,7 @@ export const stats: Stat[] = [
     label: "Client satisfaction",
     value: "97",
     suffix: "%",
-    description: "Would recommend The Dietitian's Clinic to a friend",
+    description: "Would recommend Ashish Nutrition Clinic to a friend",
   },
   {
     label: "Certified dietitians",
@@ -785,12 +785,44 @@ export type ProcessStep = {
   icon: LucideIcon;
 };
 
+export type WhyChooseUsItem = {
+  title: string;
+  description: string;
+};
+
+export const whyChooseUs: WhyChooseUsItem[] = [
+  {
+    title: "Individualized Nutrition Counseling",
+    description: "Every plan is built from scratch around your unique biology, goals, food preferences, and lifestyle — never a template.",
+  },
+  {
+    title: "Evidence-Based Recommendations",
+    description: "Our protocols are grounded in peer-reviewed research and clinical guidelines, not fads or trends.",
+  },
+  {
+    title: "Locally Available Foods",
+    description: "Meal plans use foods you can actually find in your local market — no imported superfoods or hard-to-source ingredients.",
+  },
+  {
+    title: "Sustainable Lifestyle Changes",
+    description: "We focus on habits you can maintain for life, not crash diets that leave you rebounding heavier than before.",
+  },
+  {
+    title: "Regular Follow-up & Accountability",
+    description: "Scheduled check-ins keep you on track. Your dietitian adjusts your plan based on real progress data.",
+  },
+  {
+    title: "Compassionate, Judgment-Free Care",
+    description: "Whatever your starting point, you'll be met with empathy and respect — never shame or guilt.",
+  },
+];
+
 export const processSteps: ProcessStep[] = [
   {
     step: 1,
-    title: "Discovery Call",
+    title: "Initial Consultation",
     description:
-      "A free 15-minute call to understand your goals, history and timeline. We match you with the right dietitian and program.",
+      "A free 15-minute call to discuss your health goals, concerns, and what you hope to achieve. We'll determine if our clinic is the right fit for you.",
     duration: "15 min · Free",
     icon: Users,
   },
@@ -798,24 +830,24 @@ export const processSteps: ProcessStep[] = [
     step: 2,
     title: "Comprehensive Assessment",
     description:
-      "60–90 minute deep-dive covering labs, body composition, lifestyle, food preferences and behavioural patterns.",
+      "A thorough 60–90 minute evaluation of your dietary habits, lifestyle, medical history, and lab results to understand your unique needs.",
     duration: "90 min · In-clinic or video",
     icon: Activity,
   },
   {
     step: 3,
-    title: "Personalised Plan & Coaching",
+    title: "Personalized Nutrition Plan",
     description:
-      "Receive a custom meal plan, supplement protocol and habit roadmap. Weekly check-ins keep you accountable.",
-    duration: "Ongoing · Daily support",
+      "Receive a custom nutrition plan tailored to your goals, food preferences, and lifestyle — using locally available foods and practical meal ideas.",
+    duration: "Within 48 hours",
     icon: HeartPulse,
   },
   {
     step: 4,
-    title: "Track, Adjust, Transform",
+    title: "Follow-up & Progress Monitoring",
     description:
-      "Monitor progress with our dashboard. Your dietitian adjusts protocols based on real data — not guesswork.",
-    duration: "12+ weeks",
+      "Regular check-ins to track your progress, adjust your plan as needed, and provide ongoing support and accountability to ensure lasting results.",
+    duration: "Ongoing · Weekly to monthly",
     icon: TrendingUp,
   },
 ];
@@ -962,9 +994,9 @@ export const teamMembers: TeamMember[] = [
     name: "Dr. Anita Shrestha",
     role: "Founder & Clinical Director",
     credentials: "RD, PhD Clinical Nutrition",
-    bio: "Anita founded The Dietitian's Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
+    bio: "Anita founded Ashish Nutrition Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
     initials: "AS",
-    accent: "from-sky-500 to-blue-500",
+    accent: "from-emerald-500 to-teal-500",
     specialties: ["PMOS", "Thyroid", "Fertility"],
     yearsExperience: 14,
   },
@@ -975,7 +1007,7 @@ export const teamMembers: TeamMember[] = [
     credentials: "RD, CSCS, Sports Nutritionist",
     bio: "Former national team nutritionist, Rohan periodises fueling for endurance, strength and combat athletes from amateur to Olympic level.",
     initials: "RT",
-    accent: "from-cyan-500 to-blue-500",
+    accent: "from-teal-500 to-cyan-500",
     specialties: ["Endurance", "Strength", "Combat sports"],
     yearsExperience: 11,
   },
@@ -986,7 +1018,7 @@ export const teamMembers: TeamMember[] = [
     credentials: "RD, CDE",
     bio: "A certified diabetes educator, Priya pairs CGM data with carb-counting mastery to help clients reverse pre-diabetes and stabilise type 2 diabetes.",
     initials: "PG",
-    accent: "from-sky-500 to-indigo-500",
+    accent: "from-emerald-500 to-teal-500",
     specialties: ["Type 2 Diabetes", "Pre-diabetes", "Insulin resistance"],
     yearsExperience: 9,
   },
@@ -1037,9 +1069,9 @@ export type BlogArticle = BlogPost & {
 export const blogArticles: BlogArticle[] = [
   {
     ...blogPosts[0],
-    authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of The Dietitian's Clinic. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
+    authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of Ashish Nutrition Clinic. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
     authorInitials: "AS",
-    authorAccent: "from-sky-500 to-blue-500",
+    authorAccent: "from-emerald-500 to-teal-500",
     content: [
       {
         heading: "The insulin-PMOS connection",
@@ -1050,7 +1082,7 @@ export const blogArticles: BlogArticle[] = [
         body: "The internet would have you believe that women with PMOS must adopt strict keto or carnivore protocols. The evidence tells a different story. Fibre-rich, low-glycaemic carbohydrates — think lentils, chickpeas, sweet potatoes, oats, berries and most whole fruits — actually improve insulin sensitivity over time. The problem isn't carbs; it's the dose, the timing, the processing and the company they keep. A bowl of white rice with grilled chicken and vegetables will spike glucose far less than the same rice alone. Pairing, processing and portion matter more than elimination.",
       },
       {
-        heading: "The Dietitian's Clinic PMOS framework",
+        heading: "Ashish Nutrition Clinic PMOS framework",
         body: "Our clinical protocol rests on four pillars. First, we build meals around a low-glycaemic-load architecture with 25–30g of protein per meal. Second, we incorporate chromium and inositol-rich foods (and supplement where appropriate). Third, we sync movement — particularly post-meal walks and resistance training — to lower postprandial glucose. Fourth, we address the often-overlooked lifestyle factors: sleep architecture, stress regulation and circadian alignment. Most clients see cycle regularity improve within 8–12 weeks, with weight loss following naturally as insulin levels normalise.",
       },
       {
@@ -1061,9 +1093,9 @@ export const blogArticles: BlogArticle[] = [
   },
   {
     ...blogPosts[1],
-    authorBio: "Priya Gurung is a Senior Diabetes Educator at The Dietitian's Clinic. She is a Certified Diabetes Educator (CDE) with 9 years of clinical experience.",
+    authorBio: "Priya Gurung is a Senior Diabetes Educator at Ashish Nutrition Clinic. She is a Certified Diabetes Educator (CDE) with 9 years of clinical experience.",
     authorInitials: "PG",
-    authorAccent: "from-sky-500 to-indigo-500",
+    authorAccent: "from-emerald-500 to-teal-500",
     content: [
       {
         heading: "What CGMs actually measure",
@@ -1074,14 +1106,14 @@ export const blogArticles: BlogArticle[] = [
         body: "For people with pre-diabetes, insulin resistance, PMOS or a strong family history of metabolic disease, a 14-day CGM trial can be genuinely illuminating. It reveals which foods cause unexpected spikes, how sleep affects your fasting glucose, and how exercise improves your glucose tolerance. For otherwise healthy people with no metabolic risk factors, however, the actionable insights are usually fewer — and the risk of obsessive tracking outweighs the benefits. We recommend CGMs selectively, not universally.",
       },
       {
-        heading: "How we use CGM data at The Dietitian's Clinic",
+        heading: "How we use CGM data at Ashish Nutrition Clinic",
         body: "When a client wears a CGM, we don't just glance at the graphs. We pair the data with a detailed food and activity log to identify personalised triggers — that mid-morning latte that spikes you to 180, the walk after dinner that flattens your overnight curve, the poor night's sleep that elevates your fasting glucose by 15 points. This data lets us move beyond population-level advice and craft a truly personalised protocol. Most clients are surprised by at least one finding: a 'healthy' food that spikes them, or a 'bad' food they tolerate well.",
       },
     ],
   },
   {
     ...blogPosts[2],
-    authorBio: "Meera Rai leads Maternal & Paediatric Nutrition at The Dietitian's Clinic. She has 12 years of experience guiding families through pregnancy and early childhood.",
+    authorBio: "Meera Rai leads Maternal & Paediatric Nutrition at Ashish Nutrition Clinic. She has 12 years of experience guiding families through pregnancy and early childhood.",
     authorInitials: "MR",
     authorAccent: "from-rose-500 to-pink-500",
     content: [
@@ -1101,9 +1133,9 @@ export const blogArticles: BlogArticle[] = [
   },
   {
     ...blogPosts[3],
-    authorBio: "Dr. Rohan Thapa leads Sports Nutrition at The Dietitian's Clinic. He is a former national team nutritionist with 11 years of elite-athlete experience.",
+    authorBio: "Dr. Rohan Thapa leads Sports Nutrition at Ashish Nutrition Clinic. He is a former national team nutritionist with 11 years of elite-athlete experience.",
     authorInitials: "RT",
-    authorAccent: "from-cyan-500 to-blue-500",
+    authorAccent: "from-teal-500 to-cyan-500",
     content: [
       {
         heading: "Periodisation: matching fuel to the training block",

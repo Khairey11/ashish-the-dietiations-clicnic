@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Play,
   ShieldCheck,
   Star,
   Activity,
@@ -81,21 +80,18 @@ export function Hero() {
               variants={item}
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.05] text-balance"
             >
-              Nutrition that
+              Eat Better.
               <br />
-              <span className="gradient-text">actually transforms</span>
-              <br />
-              your health.
+              <span className="gradient-text">Live Healthier.</span>
             </motion.h1>
 
             <motion.p
               variants={item}
               className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed text-balance"
             >
-              Personalized diet consultations, with evidence-based meal plans and
-              continuous progress tracking — all on one intelligent platform.
-              Lose weight, reverse metabolic conditions, and build habits that
-              last a lifetime.
+              Personalized nutrition care designed around you. Expert guidance for
+              weight management, diabetes, PCOS, heart health, and more — backed by
+              science and built around your life.
             </motion.p>
 
             <motion.div
@@ -107,18 +103,18 @@ export function Hero() {
                   size="lg"
                   className="shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow text-base h-12 px-6 w-full sm:w-auto"
                 >
-                  Start your free consultation
+                  Book Consultation
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              <Link href="/programs" className="w-full sm:w-auto">
+              <Link href="/services" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
                   className="text-base h-12 px-6 glass border-border/40 w-full sm:w-auto"
                 >
-                  <Play className="w-4 h-4 mr-2" />
-                  Explore programs
+                  Explore Services
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
             </motion.div>
@@ -179,8 +175,8 @@ export function Hero() {
                   <svg viewBox="0 0 200 50" className="w-full h-12">
                     <defs>
                       <linearGradient id="heroLine" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="oklch(0.699 0.134 232.8)" />
-                        <stop offset="100%" stopColor="oklch(0.55 0.18 255)" />
+                        <stop offset="0%" stopColor="oklch(0.62 0.18 145)" />
+                        <stop offset="100%" stopColor="oklch(0.5 0.15 150)" />
                       </linearGradient>
                       <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="oklch(0.699 0.134 232.8 / 0.3)" />
@@ -198,7 +194,7 @@ export function Hero() {
                       fill="none"
                       strokeLinecap="round"
                     />
-                    <circle cx="200" cy="8" r="4" fill="oklch(0.55 0.18 255)" />
+                    <circle cx="200" cy="8" r="4" fill="oklch(0.5 0.15 150)" />
                     <circle cx="200" cy="8" r="8" fill="oklch(0.55 0.18 255 / 0.3)" />
                   </svg>
                   <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
@@ -247,13 +243,13 @@ export function Hero() {
                   </div>
                   <div className="relative w-14 h-14">
                     <svg viewBox="0 0 36 36" className="w-14 h-14 -rotate-90">
-                      <circle cx="18" cy="18" r="14" fill="none" stroke="oklch(0.92 0.01 233)" strokeWidth="3" />
+                      <circle cx="18" cy="18" r="14" fill="none" stroke="oklch(0.92 0.01 145)" strokeWidth="3" />
                       <circle
                         cx="18"
                         cy="18"
                         r="14"
                         fill="none"
-                        stroke="oklch(0.699 0.134 232.8)"
+                        stroke="oklch(0.62 0.18 145)"
                         strokeWidth="3"
                         strokeDasharray={`${0.59 * 88} 88`}
                         strokeLinecap="round"

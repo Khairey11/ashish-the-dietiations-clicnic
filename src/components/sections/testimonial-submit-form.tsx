@@ -165,7 +165,7 @@ export function TestimonialSubmitForm() {
           id="t-quote"
           value={quote}
           onChange={(e) => setQuote(e.target.value)}
-          placeholder="Share your experience with The Dietitian's Clinic. What changed for you? How did the team help? (min 20 characters)"
+          placeholder="Share your experience with Ashish Nutrition Clinic. What changed for you? How did the team help? (min 20 characters)"
           rows={5}
           required
           minLength={20}

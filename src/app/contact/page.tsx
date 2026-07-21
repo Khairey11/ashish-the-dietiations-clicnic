@@ -3,7 +3,7 @@ import { Contact } from "@/components/sections/contact";
 
 export const metadata = {
   title: "Contact Us",
-  description: "Get in touch with The Dietitian's Clinic. Call, WhatsApp, email, or send us a message — we reply within 1 hour during clinic hours.",
+  description: "Get in touch with Ashish Nutrition Clinic. Call, WhatsApp, email, or send us a message — we reply within 1 hour during clinic hours.",
 };
 
 export default function ContactPage() {
