@@ -136,47 +136,33 @@ export function Contact({ config }: { config?: DynamicConfig }) {
             ))}
           </div>
 
-          {/* Map */}
+          {/* Address + Get Directions */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="relative rounded-2xl overflow-hidden border border-border/60 bg-card h-64"
+            className="rounded-2xl overflow-hidden border border-border/60 bg-card"
           >
-            {/* Stylized map */}
-            <div className="absolute inset-0 bg-mesh">
-              <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-                <defs>
-                  <pattern id="mapGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="oklch(0.699 0.134 232.8 / 0.1)" strokeWidth="1" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#mapGrid)" />
-                {/* Roads */}
-                <path d="M0,80 Q200,60 400,100 T800,80" fill="none" stroke="oklch(0.699 0.134 232.8 / 0.3)" strokeWidth="3" />
-                <path d="M100,0 Q150,150 200,300" fill="none" stroke="oklch(0.55 0.18 255 / 0.3)" strokeWidth="2" />
-                <path d="M0,200 L800,180" fill="none" stroke="oklch(0.699 0.134 232.8 / 0.25)" strokeWidth="4" />
-              </svg>
-              {/* Pin */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-primary/40 rounded-full blur-xl animate-pulse" />
-                  <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-glow pulse-ring">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
+            <div className="p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">{siteConfig.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{address}</p>
                 </div>
               </div>
-              {/* Address card */}
-              <div className="absolute bottom-4 left-4 right-4 glass rounded-xl p-3 shadow-premium">
-                <div className="flex items-start gap-2">
-                  <Navigation className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-semibold">{siteConfig.name}</p>
-                    <p className="text-xs text-muted-foreground">{address}</p>
-                  </div>
-                </div>
-              </div>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${siteConfig.name} ${address}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center w-full h-10 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors gap-2"
+              >
+                <Navigation className="w-4 h-4" />
+                Get Directions
+              </a>
             </div>
           </motion.div>
 
