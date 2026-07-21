@@ -70,15 +70,8 @@ export function Services() {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
               onClick={() => setSelected(service)}
-              className="group relative text-left rounded-2xl border border-border/60 bg-card p-6 hover:shadow-premium hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              className="group relative text-left rounded-2xl border border-border/60 bg-card p-6 hover:shadow-premium hover:-translate-y-1 transition-all duration-300"
             >
-              {/* Accent gradient */}
-              <div
-                className={cn(
-                  "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500",
-                  service.accent
-                )}
-              />
               <div className="relative">
                 <div
                   className={cn(
@@ -86,21 +79,17 @@ export function Services() {
                     service.accent
                   )}
                 >
-                  <service.icon className="w-6 h-6 text-foreground group-hover:text-white transition-colors" />
+                  <service.icon className="w-6 h-6 text-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-1 group-hover:text-white transition-colors">{service.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 group-hover:text-white/80 transition-colors">
-                  {service.tagline}
-                </p>
-                <p className="text-sm text-muted-foreground/80 line-clamp-3 mb-4 group-hover:text-white/70 transition-colors">
-                  {service.problem}
-                </p>
-                <div className="flex items-center justify-between pt-4 border-t border-border/40 group-hover:border-white/20 transition-colors">
-                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground group-hover:text-white/70 transition-colors">
+                <h3 className="text-lg font-semibold mb-1">{service.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{service.tagline}</p>
+                <p className="text-sm text-muted-foreground/80 line-clamp-3 mb-4">{service.problem}</p>
+                <div className="flex items-center justify-between pt-4 border-t border-border/40">
+                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Clock className="w-3 h-3" />
                     {service.duration}
                   </span>
-                  <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:text-white group-hover:gap-2 transition-all">
+                  <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:gap-2 transition-all">
                     Learn more
                     <ArrowRight className="w-3 h-3" />
                   </span>

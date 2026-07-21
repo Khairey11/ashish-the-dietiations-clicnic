@@ -3,30 +3,28 @@ import { Hero } from "@/components/sections/hero";
 import { TrustBar } from "@/components/sections/trust-bar";
 import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
-import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { Programs } from "@/components/sections/programs";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Booking } from "@/components/sections/booking";
 import { About } from "@/components/sections/about";
 import { FAQ } from "@/components/sections/faq";
 import { Contact } from "@/components/sections/contact";
+import { CTABanner } from "@/components/sections/cta-banner";
 import { Footer } from "@/components/sections/footer";
 import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
 import { getDynamicConfig, type DynamicConfig } from "@/lib/site-config";
 import {
   getDbPrograms,
   getDbTestimonials,
-  getDbBlogPosts,
   getDbFaqs,
   getDbDietitians,
 } from "@/lib/queries";
 
 export default async function Home() {
-  const [config, dbPrograms, dbTestimonials, dbBlogPosts, dbFaqs, dbDietitians] = await Promise.all([
+  const [config, dbPrograms, dbTestimonials, dbFaqs, dbDietitians] = await Promise.all([
     getDynamicConfig(),
     getDbPrograms(),
     getDbTestimonials(),
-    getDbBlogPosts(),
     getDbFaqs(),
     getDbDietitians(),
   ]);
@@ -39,11 +37,11 @@ export default async function Home() {
         <TrustBar />
         <Services />
         <Process />
-        <WhyChooseUs />
         <Programs programs={dbPrograms} />
         <Testimonials testimonials={dbTestimonials} />
-        <Booking config={config} dietitians={dbDietitians} programs={dbPrograms} />
         <About />
+        <CTABanner />
+        <Booking config={config} dietitians={dbDietitians} programs={dbPrograms} />
         <FAQ faqs={dbFaqs} />
         <Contact config={config} />
       </main>
