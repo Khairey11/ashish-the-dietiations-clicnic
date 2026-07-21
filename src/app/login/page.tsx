@@ -134,7 +134,7 @@ function LoginForm() {
             className="w-full max-w-md"
           >
             <div className="lg:hidden mb-8 flex justify-center">
-              <Image src="/logo-transparent.png" alt="The Dietitian's Clinic logo" width={48} height={48} className="w-12 h-12 object-contain" />
+              <Image src="/logo-transparent.png" alt="Ashish Nutrition Clinic logo" width={48} height={48} className="w-12 h-12 object-contain" />
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight">

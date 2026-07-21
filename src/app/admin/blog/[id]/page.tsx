@@ -272,7 +272,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
               >
                 <option value="from-primary to-secondary">Blue → Indigo (brand)</option>
                 <option value="from-emerald-500 to-teal-500">Emerald → Teal</option>
-                <option value="from-sky-500 to-blue-500">Sky → Blue</option>
+                <option value="from-emerald-500 to-teal-500">Sky → Blue</option>
                 <option value="from-amber-500 to-orange-500">Amber → Orange</option>
                 <option value="from-violet-500 to-purple-500">Violet → Purple</option>
                 <option value="from-rose-500 to-pink-500">Rose → Pink</option>

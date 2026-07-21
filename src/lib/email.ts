@@ -7,7 +7,7 @@
  * To enable real emails in production:
  *   1. bun add resend
  *   2. Set RESEND_API_KEY=re_xxx in .env
- *   3. Set FROM_EMAIL=care@thedietitiansclinic.com in .env
+ *   3. Set FROM_EMAIL=ashish@thedietitiansclinic.com in .env
  */
 
 import { siteConfig } from "@/lib/site-config";
@@ -89,7 +89,7 @@ export async function sendBookingConfirmation(opts: {
       <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
         <p style="color: #374151; font-size: 16px;">Hi ${opts.clientName},</p>
         <p style="color: #6b7280; font-size: 15px; line-height: 1.6;">
-          Your consultation at The Dietitian's Clinic has been confirmed. Here are your appointment details:
+          Your consultation at Ashish Nutrition Clinic has been confirmed. Here are your appointment details:
         </p>
         <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
           <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Service</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${opts.service}</td></tr>
@@ -112,7 +112,7 @@ export async function sendBookingConfirmation(opts: {
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
         <p style="color: #9ca3af; font-size: 12px;">
-          The Dietitian's Clinic — Center for Clinical & Performance Nutrition<br>
+          Ashish Nutrition Clinic — Personalized Nutrition Care<br>
           ${siteConfig.address}<br>
           ${siteConfig.phoneDisplay} · ${siteConfig.email}
         </p>
@@ -186,7 +186,7 @@ export async function sendVerificationEmail(opts: {
       <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
         <p style="color: #374151; font-size: 16px;">Hi ${opts.name},</p>
         <p style="color: #6b7280; font-size: 15px; line-height: 1.6;">
-          Welcome to The Dietitian's Clinic! Please confirm your email address to activate your account and access your dashboard.
+          Welcome to Ashish Nutrition Clinic! Please confirm your email address to activate your account and access your dashboard.
         </p>
         <a href="${verifyUrl}" style="display: inline-block; padding: 12px 28px; background: #28abe3; color: white; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600;">Verify email</a>
         <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
@@ -198,7 +198,7 @@ export async function sendVerificationEmail(opts: {
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
         <p style="color: #9ca3af; font-size: 12px;">
-          The Dietitian's Clinic — Center for Clinical & Performance Nutrition<br>
+          Ashish Nutrition Clinic — Personalized Nutrition Care<br>
           ${siteConfig.address}<br>
           ${siteConfig.phoneDisplay} · ${siteConfig.email}
         </p>
@@ -208,7 +208,7 @@ export async function sendVerificationEmail(opts: {
 
   return sendEmail({
     to: opts.to,
-    subject: "Verify your email — The Dietitian's Clinic",
+    subject: "Verify your email — Ashish Nutrition Clinic",
     html,
     text: `Hi ${opts.name}, please verify your email by visiting: ${verifyUrl}`,
   });

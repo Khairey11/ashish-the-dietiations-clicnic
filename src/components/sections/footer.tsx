@@ -175,7 +175,7 @@ export function Footer({ config }: { config?: DynamicConfig }) {
             <div className="flex items-center gap-2.5 mb-4">
               <Image
                 src="/logo-transparent.png"
-                alt="The Dietitian's Clinic logo"
+                alt="Ashish Nutrition Clinic logo"
                 width={36}
                 height={36}
                 className="w-9 h-9 object-contain"

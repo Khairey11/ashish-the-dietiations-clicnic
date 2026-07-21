@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Meet Our Dietitians",
-  description: "Meet the RDN-credentialed clinicians behind The Dietitian's Clinic. Specialists in PMOS, diabetes, sports nutrition, pregnancy and more.",
+  description: "Meet the RDN-credentialed clinicians behind Ashish Nutrition Clinic. Specialists in PMOS, diabetes, sports nutrition, pregnancy and more.",
 };
 
 export default async function DietitiansPage() {
@@ -18,7 +18,7 @@ export default async function DietitiansPage() {
       <PageHero
         eyebrow="Meet the team"
         title={<>World-class clinicians who <span className="gradient-text">actually care</span></>}
-        description="Every dietitian at The Dietitian's Clinic is RDN-credentialed, regularly peer-reviewed, and trained in motivational interviewing. You're not just getting a meal plan — you're getting a partner."
+        description="Every dietitian at Ashish Nutrition Clinic is RDN-credentialed, regularly peer-reviewed, and trained in motivational interviewing. You're not just getting a meal plan — you're getting a partner."
         accent="from-primary/15 to-secondary/10"
       />
 

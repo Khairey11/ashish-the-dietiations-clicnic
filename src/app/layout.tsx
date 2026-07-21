@@ -22,11 +22,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://thedietitiansclinic.com"),
   title: {
-    default: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
-    template: "%s | The Dietitian's Clinic",
+    default: "Ashish Nutrition Clinic | Personalized Nutrition Care",
+    template: "%s | Ashish Nutrition Clinic",
   },
   description:
-    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PMOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
+    "Ashish Nutrition Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PMOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
   keywords: [
     "dietitian",
     "nutritionist",
@@ -40,27 +40,27 @@ export const metadata: Metadata = {
     "online nutrition consultation",
     "meal plan",
     "body composition analysis",
-    "The Dietitian's Clinic",
+    "Ashish Nutrition Clinic",
   ],
-  authors: [{ name: "The Dietitian's Clinic" }],
-  creator: "The Dietitian's Clinic",
-  publisher: "The Dietitian's Clinic",
-  applicationName: "The Dietitian's Clinic",
+  authors: [{ name: "Ashish Nutrition Clinic" }],
+  creator: "Ashish Nutrition Clinic",
+  publisher: "Ashish Nutrition Clinic",
+  applicationName: "Ashish Nutrition Clinic",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
+    title: "Ashish Nutrition Clinic | Personalized Nutrition Care",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans. Book your consultation today.",
     url: "https://thedietitiansclinic.com",
-    siteName: "The Dietitian's Clinic",
+    siteName: "Ashish Nutrition Clinic",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Dietitian's Clinic | Center for Clinical & Performance Nutrition",
+    title: "Ashish Nutrition Clinic | Personalized Nutrition Care",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans.",
   },
@@ -97,18 +97,18 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "MedicalOrganization",
-              name: "The Dietitian's Clinic",
+              name: "Ashish Nutrition Clinic",
               description:
                 "Premium dietitian & nutrition consultancy offering personalized diet programs, online consultations, and continuous progress tracking.",
               url: "https://thedietitiansclinic.com",
               logo: "https://thedietitiansclinic.com/logo-transparent.png",
-              email: "care@thedietitiansclinic.com",
-              telephone: "+977-1-4445566",
+              email: "ashish@thedietitiansclinic.com",
+              telephone: "+977 9800000000",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "Dharan-14",
-                addressLocality: "Dharan",
-                postalCode: "56700",
+                streetAddress: "Kathmandu",
+                addressLocality: "Kathmandu",
+                postalCode: "44600",
                 addressCountry: "NP",
               },
               openingHoursSpecification: [

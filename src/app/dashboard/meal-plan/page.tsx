@@ -48,7 +48,7 @@ const mealColors: Record<string, string> = {
   BREAKFAST: "from-amber-500/20 to-amber-500/5",
   LUNCH: "from-emerald-500/20 to-emerald-500/5",
   DINNER: "from-violet-500/20 to-violet-500/5",
-  SNACK: "from-sky-500/20 to-sky-500/5",
+  SNACK: "from-emerald-500/20 to-emerald-500/5",
 };
 
 export default function MealPlanPage() {

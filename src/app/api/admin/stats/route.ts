@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
       _count: { _all: true },
     });
     const programColors = [
-      "oklch(0.699 0.134 232.8)", "oklch(0.55 0.18 255)", "oklch(0.7 0.13 200)",
+      "oklch(0.62 0.18 145)", "oklch(0.5 0.15 150)", "oklch(0.7 0.13 180)",
       "oklch(0.58 0.2 275)", "oklch(0.78 0.13 195)",
     ];
     const programIds = programPayments.map((p) => p.programId!).filter(Boolean);

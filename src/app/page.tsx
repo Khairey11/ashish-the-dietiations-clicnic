@@ -3,11 +3,10 @@ import { Hero } from "@/components/sections/hero";
 import { TrustBar } from "@/components/sections/trust-bar";
 import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
+import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { Programs } from "@/components/sections/programs";
-import { BMICalculator } from "@/components/sections/bmi-calculator";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Booking } from "@/components/sections/booking";
-import { Blog } from "@/components/sections/blog";
 import { About } from "@/components/sections/about";
 import { FAQ } from "@/components/sections/faq";
 import { Contact } from "@/components/sections/contact";
@@ -40,11 +39,10 @@ export default async function Home() {
         <TrustBar />
         <Services />
         <Process />
+        <WhyChooseUs />
         <Programs programs={dbPrograms} />
-        <BMICalculator />
         <Testimonials testimonials={dbTestimonials} />
         <Booking config={config} dietitians={dbDietitians} programs={dbPrograms} />
-        <Blog posts={dbBlogPosts} />
         <About />
         <FAQ faqs={dbFaqs} />
         <Contact config={config} />

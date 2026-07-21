@@ -46,104 +46,101 @@
 :root {
   --radius: 0.875rem;
 
-  /* Logo-derived palette: Primary blue #28abe3, Green #70a442.
-     Rebalanced to feature more of the blue family — secondary is now a
-     deeper royal/indigo blue, accent is a teal-cyan that bridges blue→green
-     without leaning too greenish. */
-  --background: oklch(0.99 0.005 233);
-  --foreground: oklch(0.21 0.04 233);
+  /* Ashish Nutrition Clinic palette — green-forward, matching the leaf
+     logo. Primary is a vibrant clinical green, secondary is a deeper
+     forest green, accent is a teal that bridges green→blue. */
+  --background: oklch(0.99 0.005 145);
+  --foreground: oklch(0.21 0.04 145);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.04 233);
+  --card-foreground: oklch(0.21 0.04 145);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.04 233);
+  --popover-foreground: oklch(0.21 0.04 145);
 
-  /* Primary: logo blue #28abe3 (sky blue, hue ~233) */
-  --primary: oklch(0.699 0.134 232.8);
-  --primary-foreground: oklch(0.99 0.01 233);
+  /* Primary: clinical green #4caf50 equivalent (hue ~145) */
+  --primary: oklch(0.62 0.18 145);
+  --primary-foreground: oklch(0.99 0.01 145);
 
-  /* Secondary: deep royal blue (hue ~255) — adds a richer blue tone
-     instead of the original green. Gradients now read blue→deep-blue. */
-  --secondary: oklch(0.55 0.18 255);
-  --secondary-foreground: oklch(0.99 0.01 240);
+  /* Secondary: deeper forest green (hue ~150) */
+  --secondary: oklch(0.5 0.15 150);
+  --secondary-foreground: oklch(0.99 0.01 150);
 
-  --muted: oklch(0.97 0.015 233);
-  --muted-foreground: oklch(0.45 0.03 233);
+  --muted: oklch(0.97 0.015 145);
+  --muted-foreground: oklch(0.45 0.03 145);
 
-  /* Accent: teal-cyan (hue ~200) — a blue-family bridge that keeps a hint
-     of the original green without making the site feel greenish. */
-  --accent: oklch(0.7 0.13 200);
-  --accent-foreground: oklch(0.18 0.03 200);
+  /* Accent: teal (hue ~180) — bridges green→blue for visual variety */
+  --accent: oklch(0.7 0.13 180);
+  --accent-foreground: oklch(0.18 0.03 180);
 
   --destructive: oklch(0.58 0.24 27);
-  --border: oklch(0.92 0.01 233);
-  --input: oklch(0.92 0.01 233);
-  --ring: oklch(0.699 0.134 232.8);
+  --border: oklch(0.92 0.01 145);
+  --input: oklch(0.92 0.01 145);
+  --ring: oklch(0.62 0.18 145);
 
-  /* Chart palette: rebalanced for a blue-forward look.
-     1 = sky blue (primary), 2 = royal blue, 3 = teal-cyan (accent),
-     4 = indigo, 5 = cyan. */
-  --chart-1: oklch(0.699 0.134 232.8);
-  --chart-2: oklch(0.55 0.18 255);
-  --chart-3: oklch(0.7 0.13 200);
-  --chart-4: oklch(0.58 0.2 275);
-  --chart-5: oklch(0.78 0.13 195);
+  /* Chart palette: green-forward with complementary tones.
+     1 = clinical green, 2 = forest green, 3 = teal,
+     4 = amber (warm contrast), 5 = sky blue (cool contrast). */
+  --chart-1: oklch(0.62 0.18 145);
+  --chart-2: oklch(0.5 0.15 150);
+  --chart-3: oklch(0.7 0.13 180);
+  --chart-4: oklch(0.75 0.15 65);
+  --chart-5: oklch(0.65 0.16 240);
 
-  --sidebar: oklch(0.99 0.005 233);
-  --sidebar-foreground: oklch(0.21 0.04 233);
-  --sidebar-primary: oklch(0.699 0.134 232.8);
-  --sidebar-primary-foreground: oklch(0.99 0.01 233);
-  --sidebar-accent: oklch(0.97 0.015 233);
-  --sidebar-accent-foreground: oklch(0.21 0.04 233);
-  --sidebar-border: oklch(0.92 0.01 233);
-  --sidebar-ring: oklch(0.699 0.134 232.8);
+  --sidebar: oklch(0.99 0.005 145);
+  --sidebar-foreground: oklch(0.21 0.04 145);
+  --sidebar-primary: oklch(0.62 0.18 145);
+  --sidebar-primary-foreground: oklch(0.99 0.01 145);
+  --sidebar-accent: oklch(0.97 0.015 145);
+  --sidebar-accent-foreground: oklch(0.21 0.04 145);
+  --sidebar-border: oklch(0.92 0.01 145);
+  --sidebar-ring: oklch(0.62 0.18 145);
 }
 
 .dark {
-  --background: oklch(0.16 0.02 233);
-  --foreground: oklch(0.97 0.01 233);
+  --background: oklch(0.16 0.02 145);
+  --foreground: oklch(0.97 0.01 145);
 
-  --card: oklch(0.21 0.025 233);
-  --card-foreground: oklch(0.97 0.01 233);
+  --card: oklch(0.21 0.025 145);
+  --card-foreground: oklch(0.97 0.01 145);
 
-  --popover: oklch(0.21 0.025 233);
-  --popover-foreground: oklch(0.97 0.01 233);
+  --popover: oklch(0.21 0.025 145);
+  --popover-foreground: oklch(0.97 0.01 145);
 
-  --primary: oklch(0.699 0.134 232.8);
-  --primary-foreground: oklch(0.16 0.02 233);
+  --primary: oklch(0.62 0.18 145);
+  --primary-foreground: oklch(0.16 0.02 145);
 
-  /* Secondary: deep royal blue (lighter for dark mode readability). */
-  --secondary: oklch(0.5 0.16 255);
-  --secondary-foreground: oklch(0.97 0.01 240);
+  /* Secondary: deeper forest green (lighter for dark mode). */
+  --secondary: oklch(0.45 0.13 150);
+  --secondary-foreground: oklch(0.97 0.01 150);
 
-  --muted: oklch(0.27 0.02 233);
-  --muted-foreground: oklch(0.7 0.02 233);
+  --muted: oklch(0.27 0.02 145);
+  --muted-foreground: oklch(0.7 0.02 145);
 
-  /* Accent: teal-cyan (slightly brighter for dark mode). */
-  --accent: oklch(0.65 0.14 200);
-  --accent-foreground: oklch(0.16 0.03 200);
+  /* Accent: teal (slightly brighter for dark mode). */
+  --accent: oklch(0.6 0.14 180);
+  --accent-foreground: oklch(0.16 0.03 180);
 
   --destructive: oklch(0.65 0.22 27);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.699 0.134 232.8);
+  --ring: oklch(0.62 0.18 145);
 
   /* Chart palette: matches light mode. */
-  --chart-1: oklch(0.699 0.134 232.8);
-  --chart-2: oklch(0.55 0.18 255);
-  --chart-3: oklch(0.7 0.13 200);
-  --chart-4: oklch(0.62 0.2 275);
-  --chart-5: oklch(0.78 0.13 195);
+  --chart-1: oklch(0.62 0.18 145);
+  --chart-2: oklch(0.5 0.15 150);
+  --chart-3: oklch(0.7 0.13 180);
+  --chart-4: oklch(0.7 0.15 65);
+  --chart-5: oklch(0.6 0.16 240);
 
-  --sidebar: oklch(0.21 0.025 233);
-  --sidebar-foreground: oklch(0.97 0.01 233);
-  --sidebar-primary: oklch(0.699 0.134 232.8);
-  --sidebar-primary-foreground: oklch(0.16 0.02 233);
-  --sidebar-accent: oklch(0.27 0.02 233);
-  --sidebar-accent-foreground: oklch(0.97 0.01 233);
+  --sidebar: oklch(0.21 0.025 145);
+  --sidebar-foreground: oklch(0.97 0.01 145);
+  --sidebar-primary: oklch(0.62 0.18 145);
+  --sidebar-primary-foreground: oklch(0.16 0.02 145);
+  --sidebar-accent: oklch(0.27 0.02 145);
+  --sidebar-accent-foreground: oklch(0.97 0.01 145);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.699 0.134 232.8);
+  --sidebar-ring: oklch(0.62 0.18 145);
 }
 
 @layer base {
@@ -186,9 +183,9 @@
 
 .bg-mesh {
   background-image:
-    radial-gradient(at 20% 0%, oklch(0.699 0.134 232.8 / 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, oklch(0.55 0.18 255 / 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, oklch(0.7 0.13 200 / 0.1) 0px, transparent 50%);
+    radial-gradient(at 20% 0%, oklch(0.62 0.18 145 / 0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, oklch(0.5 0.15 150 / 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, oklch(0.7 0.13 180 / 0.1) 0px, transparent 50%);
 }
 
 .glass {
@@ -211,7 +208,7 @@
 }
 
 .shadow-glow {
-  box-shadow: 0 10px 40px -10px oklch(0.699 0.134 232.8 / 0.4);
+  box-shadow: 0 10px 40px -10px oklch(0.62 0.18 145 / 0.4);
 }
 
 .shadow-premium {
