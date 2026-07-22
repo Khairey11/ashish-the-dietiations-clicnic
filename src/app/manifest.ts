@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Ashish Nutrition Clinic",
-    short_name: "TDC",
+    short_name: "ANC",
     description: "Premium dietitian & nutrition consultancy. Book consultations, follow science-backed diet programs, and track your transformation.",
     start_url: "/",
     display: "standalone",
@@ -13,15 +13,15 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["health", "medical", "lifestyle"],
     icons: [
       {
-        src: "/logo-transparent.png",
-        sizes: "506x480",
-        type: "image/png",
+        src: "/logo.svg",
+        sizes: "48x48",
+        type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/logo-transparent.png",
-        sizes: "506x480",
-        type: "image/png",
+        src: "/logo.svg",
+        sizes: "48x48",
+        type: "image/svg+xml",
         purpose: "maskable",
       },
     ],

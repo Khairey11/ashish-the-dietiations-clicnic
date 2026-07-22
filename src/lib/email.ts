@@ -19,7 +19,7 @@ type EmailParams = {
   text?: string;
 };
 
-const FROM_EMAIL = process.env.FROM_EMAIL || "care@thedietitiansclinic.health";
+const FROM_EMAIL = process.env.FROM_EMAIL || "ashish@thedietitiansclinic.com";
 
 export async function sendEmail({ to, subject, html, text }: EmailParams): Promise<{ success: boolean; error?: string }> {
   // In development, just log
