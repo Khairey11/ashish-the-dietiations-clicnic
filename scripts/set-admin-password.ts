@@ -30,7 +30,7 @@ async function main() {
   const clientPassword = requirePassword("SEED_CLIENT_PASSWORD", "the demo client");
 
   const admin = await prisma.user.update({
-    where: { email: "aarav@thedietitiansclinic.health" },
+    where: { email: "aarav@thedietitiansclinic.com" },
     data: { passwordHash: hashPassword(adminPassword) },
     select: { email: true, role: true },
   });

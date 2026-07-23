@@ -38,10 +38,10 @@ async function main() {
   console.log("→ Creating users...");
 
   const adminUser = await prisma.user.upsert({
-    where: { email: "aarav@thedietitiansclinic.health" },
+    where: { email: "aarav@thedietitiansclinic.com" },
     update: {},
     create: {
-      email: "aarav@thedietitiansclinic.health",
+      email: "aarav@thedietitiansclinic.com",
       name: "Aarav K.C.",
       phone: "+977 9800000001",
       role: UserRole.SUPER_ADMIN,
@@ -53,8 +53,8 @@ async function main() {
   const dietitianUsers: Array<{ user: { id: string; name: string | null }; data: typeof dietitians[number] }> = [];
   for (const d of dietitians) {
     const email = d.id.includes("-")
-      ? `${d.id.replace(/-/g, ".")}@thedietitiansclinic.health`
-      : `${d.id}@thedietitiansclinic.health`;
+      ? `${d.id.replace(/-/g, ".")}@thedietitiansclinic.com`
+      : `${d.id}@thedietitiansclinic.com`;
     const user = await prisma.user.upsert({
       where: { email },
       update: {},
@@ -317,7 +317,7 @@ async function main() {
     { key: "clinic_name", value: "Ashish Nutrition Clinic" },
     { key: "clinic_phone", value: "+977-1-4445566" },
     { key: "clinic_phone_raw", value: "+97714445566" },
-    { key: "clinic_email", value: "ashish@thedietitiansclinic.health" },
+    { key: "clinic_email", value: "ashish@thedietitiansclinic.com" },
     { key: "clinic_address", value: "Banasthali, Baluwatar-4, Kathmandu 44600, Nepal" },
     { key: "whatsapp_number", value: "+977 9800000000" },
     { key: "whatsapp_raw", value: "9779800000000" },
@@ -368,7 +368,7 @@ async function main() {
   console.log(`   - ${faqs.length} FAQs`);
   console.log(`   - ${testimonials.length} testimonials`);
   console.log(`   - ${demoLeads.length} leads`);
-  console.log(`   - 1 admin user (aarav@thedietitiansclinic.health)`);
+  console.log(`   - 1 admin user (aarav@thedietitiansclinic.com)`);
   console.log(`   - 1 demo client (sneha@example.com)`);
   console.log("");
   console.log("🔐 Passwords were read from env vars. Rotate them on first login.");

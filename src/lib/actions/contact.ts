@@ -109,8 +109,8 @@ export async function createBooking(input: BookingInput) {
     });
     if (!dietitian) {
       // Try slug → email lookup. The seed creates dietitian users with email
-      // `${slug.replace(/-/g, ".")}@thedietitiansclinic.health`.
-      const slugEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.health`;
+      // `${slug.replace(/-/g, ".")}@thedietitiansclinic.com`.
+      const slugEmail = `${parsed.dietitian.replace(/-/g, ".")}@thedietitiansclinic.com`;
       dietitian = await db.dietitian.findFirst({
         where: { user: { email: slugEmail } },
         include: { user: true },
