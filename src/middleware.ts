@@ -46,8 +46,16 @@ function getExpectedOrigin(req: NextRequest): string {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // ----- Exempt routes with their own signature verification -----
+  // Server-to-server callers (GitHub, payment gateways) don't send an Origin
+  // header, so the generic CSRF check below would reject them. These routes
+  // all verify authenticity themselves (HMAC / gateway signature), so skip
+  // CSRF for them. This must run BEFORE the CSRF block.
+  const CSRF_EXEMPT = ["/api/webhook", "/api/payments/esewa/return", "/api/payments/khalti/return"];
+  const isCsrfExempt = CSRF_EXEMPT.some((p) => pathname === p || pathname.startsWith(p + "/"));
+
   // ----- CSRF protection on mutation routes -----
-  if (pathname.startsWith("/api/") && MUTATION_METHODS.has(req.method)) {
+  if (!isCsrfExempt && pathname.startsWith("/api/") && MUTATION_METHODS.has(req.method)) {
     const origin = req.headers.get("origin");
     const expected = getExpectedOrigin(req);
     // In dev with no APP_BASE_URL, skip the check (don't lock out the developer).

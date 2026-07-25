@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac } from "node:crypto";
-import { execSync } from "node:child_process";
+import { spawn } from "node:child_process";
+
+// Force Node.js runtime (uses node:crypto + node:child_process).
+export const runtime = "nodejs";
+// Never cache / statically render this endpoint.
+export const dynamic = "force-dynamic";
 
 /**
  * POST /api/webhook
@@ -38,6 +43,42 @@ function verifySignature(payload: string, signature: string, secret: string): bo
     diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
   }
   return diff === 0;
+}
+
+/**
+ * Spawns the deploy pipeline as a detached background shell process so the
+ * webhook can respond to GitHub immediately. A full build takes much longer
+ * than GitHub's ~10s webhook delivery timeout, so we must not block on it.
+ */
+function startBackgroundDeploy(pushedBy: string, commitMsg: string): void {
+  const deployScript = [
+    "set -e",
+    'echo "======== Deploy started at $(date) ========"',
+    `echo "Triggered by: ${pushedBy} — ${commitMsg}"`,
+    "cd /opt/dietitians-clinic",
+    "git pull origin main",
+    "bun install --frozen-lockfile",
+    "npx prisma generate",
+    "npx prisma db push",
+    "NEXT_TELEMETRY_DISABLED=1 bun run build",
+    "cp -r .next/static .next/standalone/.next/",
+    "cp -r public .next/standalone/",
+    "systemctl restart dietitians-clinic",
+    'echo "======== Deploy complete at $(date) ========"',
+  ].join("\n");
+
+  // Pipe output to deploy.log in the project root for debugging.
+  const child = spawn("bash", ["-c", `${deployScript} >> /opt/dietitians-clinic/deploy.log 2>&1`], {
+    detached: true,
+    stdio: "ignore",
+  });
+
+  // Detach so the process survives after the request handler returns.
+  child.unref();
+
+  child.on("error", (err) => {
+    console.error("❌ Failed to spawn deploy process:", err);
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -85,38 +126,18 @@ export async function POST(req: NextRequest) {
 
     console.log(`🔄 Auto-deploy triggered by ${pushedBy}: ${commitMsg}`);
 
-    // Run deploy commands synchronously
-    const commands = [
-      "cd /opt/dietitians-clinic",
-      "git pull origin main",
-      "bun install --frozen-lockfile",
-      "npx prisma generate",
-      "npx prisma db push",
-      "NEXT_TELEMETRY_DISABLED=1 bun run build",
-      "cp -r .next/static .next/standalone/.next/",
-      "cp -r public .next/standalone/",
-      "systemctl restart dietitians-clinic",
-    ];
+    // Kick off the deploy in the background and respond immediately (HTTP 202
+    // Accepted). GitHub would otherwise time out the delivery.
+    startBackgroundDeploy(pushedBy, commitMsg);
 
-    const deployCmd = commands.join(" && ");
-    const output = execSync(deployCmd, {
-      timeout: 300000, // 5 minute timeout
-      encoding: "utf-8",
-      stdio: "pipe",
-    });
-
-    console.log("✅ Auto-deploy complete:", output.slice(-200));
-
-    return NextResponse.json({
-      success: true,
-      message: "Deployed successfully",
-      commit: commitMsg,
-      pushedBy,
-    });
-  } catch (error) {
-    console.error("❌ Auto-deploy failed:", error);
     return NextResponse.json(
-      { success: false, error: "Deploy failed", details: error instanceof Error ? error.message : "Unknown" },
+      { success: true, message: "Deploy started", commit: commitMsg, pushedBy },
+      { status: 202 }
+    );
+  } catch (error) {
+    console.error("❌ Webhook handler error:", error);
+    return NextResponse.json(
+      { success: false, error: "Webhook failed", details: error instanceof Error ? error.message : "Unknown" },
       { status: 500 }
     );
   }
