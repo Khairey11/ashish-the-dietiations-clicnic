@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { siteConfig } from "@/lib/site-config";
+import { GithubUpdateChecker } from "@/components/admin/github-checker";
 
 type PaymentConfig = {
   khalti: { enabled: boolean; merchantMobile: string; qrUrl: string | null; apiKeyConfigured: boolean };
@@ -152,6 +153,11 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
+            {/* ============ GitHub Update Checker ============ */}
+            <div className="lg:col-span-2">
+              <GithubUpdateChecker />
+            </div>
+
             {/* ============ Payment methods ============ */}
             <div className="lg:col-span-2 space-y-6">
               <SectionCard
