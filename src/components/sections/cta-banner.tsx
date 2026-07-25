@@ -40,7 +40,7 @@ export function CTABanner() {
             </Link>
             <span className="text-white/60 text-sm font-medium">or</span>
             <a
-              href={whatsappLink(`Hi Ashish, I'd like to book a nutrition consultation.`)}
+              href={whatsappLink(`Hi TDC, I'd like to book a nutrition consultation.`)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center h-12 px-6 rounded-lg border border-white/30 text-white hover:bg-white/10 transition-colors text-base font-semibold gap-2"

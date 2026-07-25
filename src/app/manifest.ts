@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Ashish Nutrition Clinic",
+    name: "The Dietitian’s Center for Clinical & Performance Nutrition",
     short_name: "ANC",
     description: "Premium dietitian & nutrition consultancy. Book consultations, follow science-backed diet programs, and track your transformation.",
     start_url: "/",

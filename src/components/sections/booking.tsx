@@ -642,7 +642,7 @@ function PaymentStep({
 
   // Build prefilled WhatsApp message with booking details
   const waMessage = [
-    `Hi Ashish Nutrition Clinic! I've just completed my booking.`,
+    `Hi The Dietitian’s Center for Clinical & Performance Nutrition! I've just completed my booking.`,
     ``,
     `*Booking details:*`,
     `• Name: ${data.name || "—"}`,

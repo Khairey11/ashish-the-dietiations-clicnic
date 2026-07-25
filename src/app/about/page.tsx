@@ -5,7 +5,7 @@ import { Award, GraduationCap, ShieldCheck, Star } from "lucide-react";
 
 export const metadata = {
   title: "About Us",
-  description: "Meet the clinicians, mission and story behind Ashish Nutrition Clinic — a premium nutrition consultancy transforming lives across South Asia since 2018.",
+  description: "Meet the clinicians, mission and story behind The Dietitian’s Center for Clinical & Performance Nutrition — a premium nutrition consultancy transforming lives across South Asia since 2018.",
 };
 
 export default function AboutPage() {

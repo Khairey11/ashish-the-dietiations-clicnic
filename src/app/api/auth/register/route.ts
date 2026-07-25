@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
         data: {
           userId: existing.id,
           type: "WELCOME",
-          title: "Welcome to Ashish Nutrition Clinic!",
+          title: "Welcome to The Dietitian’s Center for Clinical & Performance Nutrition!",
           body: "Complete your health assessment to get started with your personalized nutrition plan.",
           link: "/dashboard/onboarding",
         },
@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
       data: {
         userId: user.id,
         type: "WELCOME",
-        title: "Welcome to Ashish Nutrition Clinic!",
+        title: "Welcome to The Dietitian’s Center for Clinical & Performance Nutrition!",
         body: "Complete your health assessment to get started with your personalized nutrition plan.",
         link: "/dashboard/onboarding",
       },

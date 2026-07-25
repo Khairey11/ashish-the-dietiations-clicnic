@@ -1,4 +1,4 @@
-// Central site configuration for Ashish Nutrition Clinic.
+// Central site configuration for The Dietitian’s Center for Clinical & Performance Nutrition.
 // These are the FALLBACK values. The admin can override them via /admin/settings
 // (stored in the SiteSetting table). Use getDynamicConfig() in server components
 // to fetch the DB-overridden values.
@@ -6,8 +6,8 @@
 import { db } from "@/lib/db";
 
 export const siteConfig = {
-  name: "Ashish Nutrition Clinic",
-  shortName: "ANC",
+  name: "The Dietitian’s Center for Clinical & Performance Nutrition",
+  shortName: "TDC",
   tagline: "Personalized Nutrition Care",
   domain: "https://thedietitiansclinic.com",
 
@@ -16,7 +16,7 @@ export const siteConfig = {
   phoneRaw: "+9779800000000",
   whatsappDisplay: "+977 9800000000",
   whatsappRaw: "9779800000000",
-  email: "ashish@thedietitiansclinic.com",
+  email: "info@thedietitiansclinic.com",
   address: "Kathmandu, Nepal",
 
   // ===== Hours =====
@@ -25,19 +25,19 @@ export const siteConfig = {
 
   // ===== Social =====
   social: {
-    instagram: "https://instagram.com/ashishnutritionclinic",
-    facebook: "https://facebook.com/ashishnutritionclinic",
-    twitter: "https://twitter.com/ashish_nc",
-    youtube: "https://youtube.com/@ashishnutritionclinic",
-    linkedin: "https://linkedin.com/company/ashish-nutrition-clinic",
+    instagram: "https://instagram.com/thedietitiansclinic",
+    facebook: "https://facebook.com/thedietitiansclinic",
+    twitter: "https://twitter.com/tdc_nutrition",
+    youtube: "https://youtube.com/@thedietitiansclinic",
+    linkedin: "https://linkedin.com/company/the-dietitians-center",
   },
 
   // ===== Payment defaults =====
   payments: {
     khaltiMobile: "9800000000",
-    esewaId: "ashishnutrition",
+    esewaId: "tdcnutrition",
     bankName: "Nepal Investment Mega Bank",
-    bankAccountName: "Ashish Nutrition Clinic",
+    bankAccountName: "The Dietitian’s Center for Clinical & Performance Nutrition",
     bankAccountNumber: "01234567890123",
     bankBranch: "Kathmandu Branch",
   },

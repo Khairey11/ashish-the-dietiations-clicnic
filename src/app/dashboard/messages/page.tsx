@@ -29,6 +29,21 @@ export default function DashboardMessagesPage() {
   const [staffId, setStaffId] = React.useState<string | null>(null);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
+  const loadConversation = React.useCallback(async (partnerId: string) => {
+    try {
+      const res = await fetch(`/api/messages?with=${partnerId}`);
+      const d = await res.json();
+      if (d.success) {
+        setMessages(d.data.reverse());
+        setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+      }
+    } catch {
+      toast.error("Failed to load conversation");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   React.useEffect(() => {
     fetch("/api/messages")
       .then(async (r) => {
@@ -45,7 +60,7 @@ export default function DashboardMessagesPage() {
           if (staff) {
             setStaffId(staff.id);
             // Load full conversation
-            loadConversation(staff.id);
+            void loadConversation(staff.id);
           } else {
             setLoading(false);
           }
@@ -57,22 +72,7 @@ export default function DashboardMessagesPage() {
         toast.error("Failed to load messages");
         setLoading(false);
       });
-  }, [router]);
-
-  const loadConversation = async (partnerId: string) => {
-    try {
-      const res = await fetch(`/api/messages?with=${partnerId}`);
-      const d = await res.json();
-      if (d.success) {
-        setMessages(d.data.reverse());
-        setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-      }
-    } catch {
-      toast.error("Failed to load conversation");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [router, loadConversation]);
 
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,7 +184,7 @@ export default function DashboardMessagesPage() {
       {!staffId && !loading && (
         <div className="mt-4 p-4 rounded-xl bg-muted/30 text-center">
           <p className="text-xs text-muted-foreground">
-            You&apos;ll be able to message your dietitian once they&apos;re assigned to your account after your first consultation.
+            You'll be able to message your dietitian once they're assigned to your account after your first consultation.
           </p>
           <Link href="/booking" className="inline-block mt-2">
             <Button size="sm" variant="outline">Book consultation</Button>

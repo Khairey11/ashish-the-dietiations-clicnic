@@ -88,13 +88,13 @@ export function Navigation() {
               href="/"
               onClick={() => go("/")}
               className="flex items-center gap-2.5 group"
-              aria-label="Ashish Nutrition Clinic home"
+              aria-label="The Dietitian’s Center for Clinical & Performance Nutrition home"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Image
                   src="/logo.svg"
-                  alt="Ashish Nutrition Clinic logo"
+                  alt="The Dietitian’s Center for Clinical & Performance Nutrition logo"
                   width={36}
                   height={36}
                   className="relative w-9 h-9"
@@ -103,10 +103,10 @@ export function Navigation() {
               </div>
               <div className="flex flex-col leading-none">
                 <span className="text-base font-bold tracking-tight">
-                  Ashish
+                  The Dietitian's Center
                 </span>
                 <span className="text-[10px] text-muted-foreground font-medium tracking-wide">
-                  NUTRITION CLINIC
+                  CLINICAL & PERFORMANCE NUTRITION
                 </span>
               </div>
             </Link>
