@@ -1,4 +1,4 @@
-// Central site configuration for The Dietitian’s Center for Clinical & Performance Nutrition.
+// Central site configuration for The Dietitians Clinic.
 // These are the FALLBACK values. The admin can override them via /admin/settings
 // (stored in the SiteSetting table). Use getDynamicConfig() in server components
 // to fetch the DB-overridden values.
@@ -6,7 +6,7 @@
 import { db } from "@/lib/db";
 
 export const siteConfig = {
-  name: "The Dietitian’s Center for Clinical & Performance Nutrition",
+  name: "The Dietitians Clinic",
   shortName: "TDC",
   tagline: "Personalized Nutrition Care",
   domain: "https://thedietitiansclinic.com",
@@ -37,7 +37,7 @@ export const siteConfig = {
     khaltiMobile: "9800000000",
     esewaId: "tdcnutrition",
     bankName: "Nepal Investment Mega Bank",
-    bankAccountName: "The Dietitian’s Center for Clinical & Performance Nutrition",
+    bankAccountName: "The Dietitians Clinic",
     bankAccountNumber: "01234567890123",
     bankBranch: "Kathmandu Branch",
   },

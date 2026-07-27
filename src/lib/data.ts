@@ -756,7 +756,7 @@ export const stats: Stat[] = [
   {
     label: "Lives transformed",
     value: "12,400",
-    description: "Clients who completed a The Dietitian’s Center for Clinical & Performance Nutrition program",
+    description: "Clients who completed a The Dietitians Clinic program",
   },
   {
     label: "Avg. weight lost",
@@ -768,7 +768,7 @@ export const stats: Stat[] = [
     label: "Client satisfaction",
     value: "97",
     suffix: "%",
-    description: "Would recommend The Dietitian’s Center for Clinical & Performance Nutrition to a friend",
+    description: "Would recommend The Dietitians Clinic to a friend",
   },
   {
     label: "Certified dietitians",
@@ -994,7 +994,7 @@ export const teamMembers: TeamMember[] = [
     name: "Dr. Anita Shrestha",
     role: "Founder & Clinical Director",
     credentials: "RD, PhD Clinical Nutrition",
-    bio: "Anita founded The Dietitian’s Center for Clinical & Performance Nutrition in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
+    bio: "Anita founded The Dietitians Clinic in 2018 after a decade in hospital dietetics. She leads our hormonal health practice and oversees clinical quality across the team.",
     initials: "AS",
     accent: "from-emerald-500 to-teal-500",
     specialties: ["PMOS", "Thyroid", "Fertility"],
@@ -1069,7 +1069,7 @@ export type BlogArticle = BlogPost & {
 export const blogArticles: BlogArticle[] = [
   {
     ...blogPosts[0],
-    authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of The Dietitian’s Center for Clinical & Performance Nutrition. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
+    authorBio: "Dr. Anita Shrestha is the Founder & Clinical Director of The Dietitians Clinic. She holds a PhD in Clinical Nutrition and has 14 years of experience in hormonal health.",
     authorInitials: "AS",
     authorAccent: "from-emerald-500 to-teal-500",
     content: [
@@ -1082,7 +1082,7 @@ export const blogArticles: BlogArticle[] = [
         body: "The internet would have you believe that women with PMOS must adopt strict keto or carnivore protocols. The evidence tells a different story. Fibre-rich, low-glycaemic carbohydrates — think lentils, chickpeas, sweet potatoes, oats, berries and most whole fruits — actually improve insulin sensitivity over time. The problem isn't carbs; it's the dose, the timing, the processing and the company they keep. A bowl of white rice with grilled chicken and vegetables will spike glucose far less than the same rice alone. Pairing, processing and portion matter more than elimination.",
       },
       {
-        heading: "The Dietitian’s Center for Clinical & Performance Nutrition PMOS framework",
+        heading: "The Dietitians Clinic PMOS framework",
         body: "Our clinical protocol rests on four pillars. First, we build meals around a low-glycaemic-load architecture with 25–30g of protein per meal. Second, we incorporate chromium and inositol-rich foods (and supplement where appropriate). Third, we sync movement — particularly post-meal walks and resistance training — to lower postprandial glucose. Fourth, we address the often-overlooked lifestyle factors: sleep architecture, stress regulation and circadian alignment. Most clients see cycle regularity improve within 8–12 weeks, with weight loss following naturally as insulin levels normalise.",
       },
       {
@@ -1093,7 +1093,7 @@ export const blogArticles: BlogArticle[] = [
   },
   {
     ...blogPosts[1],
-    authorBio: "Priya Gurung is a Senior Diabetes Educator at The Dietitian’s Center for Clinical & Performance Nutrition. She is a Certified Diabetes Educator (CDE) with 9 years of clinical experience.",
+    authorBio: "Priya Gurung is a Senior Diabetes Educator at The Dietitians Clinic. She is a Certified Diabetes Educator (CDE) with 9 years of clinical experience.",
     authorInitials: "PG",
     authorAccent: "from-emerald-500 to-teal-500",
     content: [
@@ -1106,14 +1106,14 @@ export const blogArticles: BlogArticle[] = [
         body: "For people with pre-diabetes, insulin resistance, PMOS or a strong family history of metabolic disease, a 14-day CGM trial can be genuinely illuminating. It reveals which foods cause unexpected spikes, how sleep affects your fasting glucose, and how exercise improves your glucose tolerance. For otherwise healthy people with no metabolic risk factors, however, the actionable insights are usually fewer — and the risk of obsessive tracking outweighs the benefits. We recommend CGMs selectively, not universally.",
       },
       {
-        heading: "How we use CGM data at The Dietitian’s Center for Clinical & Performance Nutrition",
+        heading: "How we use CGM data at The Dietitians Clinic",
         body: "When a client wears a CGM, we don't just glance at the graphs. We pair the data with a detailed food and activity log to identify personalised triggers — that mid-morning latte that spikes you to 180, the walk after dinner that flattens your overnight curve, the poor night's sleep that elevates your fasting glucose by 15 points. This data lets us move beyond population-level advice and craft a truly personalised protocol. Most clients are surprised by at least one finding: a 'healthy' food that spikes them, or a 'bad' food they tolerate well.",
       },
     ],
   },
   {
     ...blogPosts[2],
-    authorBio: "Meera Rai leads Maternal & Paediatric Nutrition at The Dietitian’s Center for Clinical & Performance Nutrition. She has 12 years of experience guiding families through pregnancy and early childhood.",
+    authorBio: "Meera Rai leads Maternal & Paediatric Nutrition at The Dietitians Clinic. She has 12 years of experience guiding families through pregnancy and early childhood.",
     authorInitials: "MR",
     authorAccent: "from-rose-500 to-pink-500",
     content: [
@@ -1133,7 +1133,7 @@ export const blogArticles: BlogArticle[] = [
   },
   {
     ...blogPosts[3],
-    authorBio: "Dr. Rohan Thapa leads Sports Nutrition at The Dietitian’s Center for Clinical & Performance Nutrition. He is a former national team nutritionist with 11 years of elite-athlete experience.",
+    authorBio: "Dr. Rohan Thapa leads Sports Nutrition at The Dietitians Clinic. He is a former national team nutritionist with 11 years of elite-athlete experience.",
     authorInitials: "RT",
     authorAccent: "from-teal-500 to-cyan-500",
     content: [

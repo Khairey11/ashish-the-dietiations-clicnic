@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata = {
   title: "Terms & Conditions",
-  description: "Terms and conditions for using the services and website of The Dietitian’s Center for Clinical & Performance Nutrition.",
+  description: "Terms and conditions for using the services and website of The Dietitians Clinic.",
   alternates: { canonical: "/terms" },
 };
 

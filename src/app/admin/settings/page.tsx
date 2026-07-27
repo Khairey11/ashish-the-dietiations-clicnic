@@ -553,7 +553,7 @@ function ClinicConfigSection() {
           Contact
         </p>
         <div className="grid sm:grid-cols-2 gap-3">
-          <Field label="Clinic name" value={config?.clinicName || ""} onChange={(v) => update("clinicName", v)} placeholder="The Dietitian’s Center for Clinical & Performance Nutrition" />
+          <Field label="Clinic name" value={config?.clinicName || ""} onChange={(v) => update("clinicName", v)} placeholder="The Dietitians Clinic" />
           <Field label="Email" value={config?.email || ""} onChange={(v) => update("email", v)} placeholder="info@thedietitiansclinic.com" />
           <Field label="Phone (display)" value={config?.phoneDisplay || ""} onChange={(v) => update("phoneDisplay", v)} placeholder="+977-1-4445566" />
           <Field label="Phone (raw, for tel:)" value={config?.phoneRaw || ""} onChange={(v) => update("phoneRaw", v)} placeholder="+97714445566" />
