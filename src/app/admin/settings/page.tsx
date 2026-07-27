@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { siteConfig } from "@/lib/site-config";
+import { GithubUpdateChecker } from "@/components/admin/github-checker";
 
 type PaymentConfig = {
   khalti: { enabled: boolean; merchantMobile: string; qrUrl: string | null; apiKeyConfigured: boolean };
@@ -152,6 +153,11 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
+            {/* ============ GitHub Update Checker ============ */}
+            <div className="lg:col-span-2">
+              <GithubUpdateChecker />
+            </div>
+
             {/* ============ Payment methods ============ */}
             <div className="lg:col-span-2 space-y-6">
               <SectionCard
@@ -547,8 +553,8 @@ function ClinicConfigSection() {
           Contact
         </p>
         <div className="grid sm:grid-cols-2 gap-3">
-          <Field label="Clinic name" value={config?.clinicName || ""} onChange={(v) => update("clinicName", v)} placeholder="Ashish Nutrition Clinic" />
-          <Field label="Email" value={config?.email || ""} onChange={(v) => update("email", v)} placeholder="ashish@thedietitiansclinic.com" />
+          <Field label="Clinic name" value={config?.clinicName || ""} onChange={(v) => update("clinicName", v)} placeholder="The Dietitians Clinic" />
+          <Field label="Email" value={config?.email || ""} onChange={(v) => update("email", v)} placeholder="info@thedietitiansclinic.com" />
           <Field label="Phone (display)" value={config?.phoneDisplay || ""} onChange={(v) => update("phoneDisplay", v)} placeholder="+977-1-4445566" />
           <Field label="Phone (raw, for tel:)" value={config?.phoneRaw || ""} onChange={(v) => update("phoneRaw", v)} placeholder="+97714445566" />
           <Field label="WhatsApp (display)" value={config?.whatsappDisplay || ""} onChange={(v) => update("whatsappDisplay", v)} placeholder="+977 9800000000" />

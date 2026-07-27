@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { useGreeting } from "@/lib/use-greeting";
 import { toast } from "sonner";
 import { AdminCharts } from "./admin-charts";
+import { GithubUpdateChecker } from "@/components/admin/github-checker";
 
 export default function AdminPage() {
   const [stats, setStats] = React.useState<null | {
@@ -342,8 +343,11 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Lead sources + quick actions */}
+              {/* GitHub update checker + Lead sources */}
               <div className="grid lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-1">
+                  <GithubUpdateChecker />
+                </div>
                 <div className="lg:col-span-2 p-5 rounded-2xl border border-border/40 bg-card">
                   <div className="flex items-center justify-between mb-4">
                     <div>

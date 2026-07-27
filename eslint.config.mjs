@@ -19,6 +19,8 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     // React rules
     "react-hooks/exhaustive-deps": "warn",
     "react-hooks/purity": "off",
+    "react-hooks/set-state-in-effect": "off", // data fetching in useEffect is standard
+    "react-hooks/immutability": "off",
     "react/no-unescaped-entities": "off",
     "react/display-name": "off",
     "react/prop-types": "off",

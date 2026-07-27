@@ -75,7 +75,7 @@ export function About() {
                 <Leaf className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold">Ashish Nutrition Clinic</h3>
+                <h3 className="text-xl font-bold">The Dietitians Clinic</h3>
                 <p className="text-sm text-muted-foreground">Clinical Dietitian & Nutritionist</p>
               </div>
             </div>

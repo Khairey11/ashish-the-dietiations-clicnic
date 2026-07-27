@@ -55,7 +55,7 @@ function VerifyEmailContent() {
         if (data.success) {
           setStatus("success");
           toast.success("Email verified!", {
-            description: "Welcome to Ashish Nutrition Clinic.",
+            description: "Welcome to The Dietitians Clinic.",
           });
           // Redirect to the dashboard after a short delay so the user can
           // see the success state.
