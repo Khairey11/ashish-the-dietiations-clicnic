@@ -27,14 +27,13 @@ export function Services() {
   return (
     <SectionWrapper id="services" className="bg-background">
       <SectionHeader
-        eyebrow="What we treat"
+        eyebrow="Our Services"
         title={
           <>
-            Specialised programs for{" "}
-            <span className="gradient-text">every body</span> and every goal
+            Personalized Nutrition for{" "}
+            <span className="gradient-text">Every Stage of Health</span>
           </>
         }
-        description="Personalized Nutrition for Every Stage of Health"
       />
 
       {/* Grid — 6 featured services */}

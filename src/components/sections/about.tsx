@@ -69,23 +69,20 @@ export function About() {
               </svg>
             </div>
 
-            {/* Logo + name */}
-            <div className="flex items-center gap-3 mb-6 relative">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <Leaf className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">The Dietitians Clinic</h3>
-                <p className="text-sm text-muted-foreground">Clinical Dietitian & Nutritionist</p>
-              </div>
+            {/* Heading */}
+            <div className="mb-6 relative">
+              <h3 className="text-xl font-bold mb-2">About Your Dietitian</h3>
+              <p className="text-lg font-semibold text-primary">Hi, I'm Ashish Shrestha</p>
+              <p className="text-sm text-muted-foreground mt-1">Clinical Dietitian &amp; Nutritionist</p>
             </div>
 
             {/* Bio */}
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 relative">
-              We believe that nutrition care should be personal, practical, and
-              sustainable. Our approach combines evidence-based clinical protocols
-              with locally available foods and lifestyle-focused coaching — so you
-              can build habits that last a lifetime, not just a season.
+              I help individuals improve their health through personalized nutrition
+              strategies grounded in evidence-based practices. My approach focuses on
+              sustainable lifestyle changes, behavioral modifications, and practical
+              meal planning using locally available foods — so you can build habits
+              that last a lifetime, not just a season.
             </p>
 
             {/* Mission + Vision */}

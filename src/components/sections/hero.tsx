@@ -28,7 +28,7 @@ const item = {
 };
 
 const trustBadges = [
-  { icon: Stethoscope, label: "Online & In-person Consultations" },
+  { icon: Stethoscope, label: "Online 1-on-1 Consultations" },
   { icon: ShieldCheck, label: "Evidence-Based Care" },
   { icon: Apple, label: "Personalized Meal Plans" },
   { icon: MessageSquare, label: "Continuous Support" },
@@ -73,9 +73,9 @@ export function Hero() {
               variants={item}
               className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed text-balance"
             >
-              Evidence-based nutrition counseling for weight management, chronic
-              disease management, sports nutrition, maternal &amp; child nutrition,
-              and healthy living.
+              Evidence-based nutrition counselling for weight management, diabetes,
+              PCOS, thyroid issues, gut health concerns, kidney diseases, sports
+              nutrition, maternal &amp; child nutrition, and healthy living.
             </motion.p>
 
             <motion.div

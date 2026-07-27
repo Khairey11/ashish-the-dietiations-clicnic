@@ -29,7 +29,7 @@ export function CTABanner() {
             Ready to Start Your Health Journey?
           </h2>
           <p className="text-white/85 text-lg leading-relaxed mb-8 max-w-xl mx-auto">
-            Get personalized nutrition guidance from a clinical dietitian. Book your consultation today — online or in-person.
+            Personalized nutrition guidance begins with a conversation.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/booking">

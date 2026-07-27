@@ -792,27 +792,27 @@ export type WhyChooseUsItem = {
 
 export const whyChooseUs: WhyChooseUsItem[] = [
   {
-    title: "Individualized Nutrition Counseling",
+    title: "Evidence-based nutrition counseling",
     description: "Every plan is built from scratch around your unique biology, goals, food preferences, and lifestyle — never a template.",
   },
   {
-    title: "Evidence-Based Recommendations",
+    title: "Evidence-based recommendations",
     description: "Our protocols are grounded in peer-reviewed research and clinical guidelines, not fads or trends.",
   },
   {
-    title: "Locally Available Foods",
+    title: "Meal plans using locally available foods",
     description: "Meal plans use foods you can actually find in your local market — no imported superfoods or hard-to-source ingredients.",
   },
   {
-    title: "Sustainable Lifestyle Changes",
+    title: "Sustainable lifestyle changes",
     description: "We focus on habits you can maintain for life, not crash diets that leave you rebounding heavier than before.",
   },
   {
-    title: "Regular Follow-up & Accountability",
+    title: "Regular follow-up and accountability",
     description: "Scheduled check-ins keep you on track. Your dietitian adjusts your plan based on real progress data.",
   },
   {
-    title: "Compassionate, Judgment-Free Care",
+    title: "Compassionate and judgment-free care",
     description: "Whatever your starting point, you'll be met with empathy and respect — never shame or guilt.",
   },
 ];

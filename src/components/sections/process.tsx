@@ -11,14 +11,13 @@ export function Process() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-mesh rounded-full opacity-30 blur-3xl pointer-events-none" />
 
       <SectionHeader
-        eyebrow="How it works"
+        eyebrow="How It Works"
         title={
           <>
-            A clear path from{" "}
-            <span className="gradient-text">first call to lasting change</span>
+            Your Journey to{" "}
+            <span className="gradient-text">Better Health</span>
           </>
         }
-        description="No guesswork. No generic plans. Just a structured, science-backed process that meets you where you are and walks with you to where you want to be."
       />
 
       <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 relative">
