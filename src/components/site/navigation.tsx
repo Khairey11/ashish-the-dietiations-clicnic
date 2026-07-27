@@ -93,11 +93,11 @@ export function Navigation() {
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/40 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Image
-                  src="/logo.svg"
-                  alt="The Dietitian’s Center for Clinical & Performance Nutrition logo"
+                  src="/logo-transparent.png"
+                  alt="The Dietitian's Center for Clinical & Performance Nutrition logo"
                   width={36}
                   height={36}
-                  className="relative w-9 h-9"
+                  className="relative w-9 h-9 object-contain"
                   priority
                 />
               </div>

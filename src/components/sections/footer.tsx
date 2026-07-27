@@ -86,7 +86,7 @@ export function Footer({ config }: { config?: DynamicConfig }) {
   };
 
   return (
-    <footer className="mt-auto bg-[oklch(0.2_0.03_145)] text-white">
+    <footer className="mt-auto bg-[oklch(0.2_0.03_240)] text-white">
       {/* Contact bar */}
       <div className="border-b border-white/10">
         <div className="container mx-auto px-4 sm:px-6 py-6">
@@ -137,7 +137,7 @@ export function Footer({ config }: { config?: DynamicConfig }) {
           {/* Brand */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <Image src="/logo.svg" alt="The Dietitian’s Center for Clinical & Performance Nutrition logo" width={36} height={36} className="w-9 h-9" />
+              <Image src="/logo-transparent.png" alt="The Dietitian’s Center for Clinical & Performance Nutrition logo" width={36} height={36} className="w-9 h-9 object-contain" />
               <div className="flex flex-col leading-none">
                 <span className="text-base font-bold tracking-tight">The Dietitian's Center</span>
                 <span className="text-[10px] text-white/60 font-medium tracking-wide">CLINICAL & PERFORMANCE NUTRITION</span>
