@@ -21,36 +21,39 @@ const footerNav = [
       { label: "Weight Management", href: "/services/weight-loss" },
       { label: "Clinical Nutrition", href: "/services/diabetes-diet" },
       { label: "Women's Health", href: "/services/pcos-diet" },
-      { label: "Child Nutrition", href: "/services/child-nutrition" },
+      { label: "Child & Adolescent Nutrition", href: "/services/child-nutrition" },
       { label: "Sports Nutrition", href: "/services/sports-nutrition" },
-      { label: "View All Services", href: "/services" },
+      { label: "Lifestyle Nutrition", href: "/services/lifestyle-modification" },
     ],
   },
   {
     title: "Programs",
     links: [
-      { label: "All Programs", href: "/programs" },
-      { label: "Book Consultation", href: "/booking" },
-      { label: "BMI Calculator", href: "/#bmi-calculator" },
-      { label: "Body Composition", href: "/services/body-composition" },
+      { label: "Diabetes Management Program", href: "/programs" },
+      { label: "Weight Loss Program", href: "/programs" },
+      { label: "PCOS Support Program", href: "/programs" },
+      { label: "Heart Health Program", href: "/programs" },
+      { label: "Postpartum Recovery", href: "/programs" },
     ],
   },
   {
     title: "Resources",
     links: [
+      { label: "Nutrition Articles", href: "/blog" },
+      { label: "Success Stories", href: "/testimonials" },
+      { label: "Free Tools", href: "/#bmi-calculator" },
+      { label: "FAQ", href: "/faq" },
       { label: "Blog", href: "/blog" },
-      { label: "FAQs", href: "/faq" },
-      { label: "Testimonials", href: "/testimonials" },
-      { label: "Privacy Policy", href: "/privacy" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About Us", href: "/about" },
-      { label: "Meet the Team", href: "/dietitians" },
-      { label: "Contact", href: "/contact" },
-      { label: "Client Login", href: "/login" },
+      { label: "About Our Team", href: "/about" },
+      { label: "Careers", href: "/contact" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms & Conditions", href: "/terms" },
     ],
   },
 ];
@@ -137,14 +140,14 @@ export function Footer({ config }: { config?: DynamicConfig }) {
           {/* Brand */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <Image src="/logo-transparent.png" alt="The Dietitians Clinic logo" width={36} height={36} className="w-9 h-9 object-contain" />
+              <Image src="/logo.svg" alt="Ashish Nutrition Clinic logo" width={36} height={36} className="w-9 h-9" />
               <div className="flex flex-col leading-none">
-                <span className="text-base font-bold tracking-tight">The Dietitians Clinic</span>
+                <span className="text-base font-bold tracking-tight">Ashish</span>
                 <span className="text-[10px] text-white/60 font-medium tracking-wide">NUTRITION CLINIC</span>
               </div>
             </div>
             <p className="text-sm text-white/70 leading-relaxed mb-5 max-w-sm">
-              Nourishing health, transforming lives. Personalized nutrition care designed around you — backed by science, built around your life.
+              Empowering you with evidence-based nutrition for a healthier life.
             </p>
             <div className="flex items-center gap-2">
               {socials.map((s) => (

@@ -18,7 +18,7 @@ export function About() {
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
             Science-Based Nutrition.{" "}
-            <span className="gradient-text">Practical Solutions.</span>
+            <span className="gradient-text">Proven Solutions.</span>
           </h2>
           <p className="mt-4 text-base text-muted-foreground leading-relaxed">
             We combine clinical expertise with real-world practicality to help
@@ -78,11 +78,10 @@ export function About() {
 
             {/* Bio */}
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 relative">
-              I help individuals improve their health through personalized nutrition
-              strategies grounded in evidence-based practices. My approach focuses on
-              sustainable lifestyle changes, behavioral modifications, and practical
-              meal planning using locally available foods — so you can build habits
-              that last a lifetime, not just a season.
+              Hi! I believe in improving health through personalized nutrition that
+              fits your life. My approach combines clinical nutrition, behavior
+              change, and personalized care to create lasting results. Let&apos;s
+              work together to achieve your goals.
             </p>
 
             {/* Mission + Vision */}

@@ -31,9 +31,9 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "weight-loss",
-    title: "Weight Loss Program",
+    title: "Weight Management",
     icon: TrendingDown,
-    tagline: "Sustainable fat loss without crash diets",
+    tagline: "Sustainable weight loss and weight gain plans.",
     problem:
       "Fad diets, slow metabolism, emotional eating and yo-yo weight cycling make lasting fat loss feel impossible.",
     solution:
@@ -69,11 +69,11 @@ export const services: Service[] = [
   },
   {
     slug: "pcos-diet",
-    title: "PMOS Nutrition",
+    title: "Women's Health",
     icon: Heart,
-    tagline: "Balance hormones with food",
+    tagline: "PCOS management, prenatal nutrition, postpartum recovery, menopause support.",
     problem:
-      "Insulin resistance, irregular cycles and weight gain from PMOS disrupt daily life and long-term health.",
+      "Hormonal imbalances, PCOS, pregnancy nutrition needs and menopause symptoms disrupt daily life and long-term health.",
     solution:
       "Low-glycaemic, anti-inflammatory meal architecture combined with chromium & inositol-rich food protocols.",
     benefits: [
@@ -88,11 +88,11 @@ export const services: Service[] = [
   },
   {
     slug: "diabetes-diet",
-    title: "Diabetes Management",
+    title: "Clinical Nutrition",
     icon: Activity,
-    tagline: "Stabilise blood sugar, reclaim energy",
+    tagline: "Medical nutrition therapy for diabetes, hypertension, gastrointestinal disorders, thyroid disorders, allergies.",
     problem:
-      "Erratic glucose levels, medication dependence and fear of complications dominate life with diabetes.",
+      "Chronic conditions like diabetes, hypertension and thyroid disorders require specialized dietary management.",
     solution:
       "Carbohydrate-counted, fibre-forward meal plans with continuous glucose monitoring integration.",
     benefits: [
@@ -145,9 +145,9 @@ export const services: Service[] = [
   },
   {
     slug: "child-nutrition",
-    title: "Child Nutrition",
+    title: "Child & Adolescent Nutrition",
     icon: Apple,
-    tagline: "Healthy habits from the first bite",
+    tagline: "Healthy eating patterns, picky eating solutions, and healthy habits.",
     problem:
       "Picky eating, hidden sugar and growth concerns leave parents unsure if their child is meeting milestones.",
     solution:
@@ -166,7 +166,7 @@ export const services: Service[] = [
     slug: "sports-nutrition",
     title: "Sports Nutrition",
     icon: Dumbbell,
-    tagline: "Fuel performance, accelerate recovery",
+    tagline: "Performance optimization, meal prep, recovery, and body composition.",
     problem:
       "Generic advice fails athletes who need precision around training cycles, recovery and competition day.",
     solution:
@@ -240,11 +240,11 @@ export const services: Service[] = [
   },
   {
     slug: "lifestyle-modification",
-    title: "Lifestyle Modification",
+    title: "Lifestyle Nutrition",
     icon: HeartPulse,
-    tagline: "Sleep, stress, movement — the missing 80%",
+    tagline: "Plant-based eating, preventive nutrition, and overall well-being.",
     problem:
-      "Diet alone cannot outwork poor sleep, chronic stress or sedentary patterns — yet most plans ignore them.",
+      "Preventive nutrition and lifestyle changes are the foundation of long-term health, yet most plans ignore them.",
     solution:
       "Holistic coaching covering sleep architecture, stress regulation and movement integration alongside nutrition.",
     benefits: [
@@ -521,52 +521,52 @@ export type Testimonial = {
 export const testimonials: Testimonial[] = [
   {
     id: "t1",
-    name: "Sneha K.",
-    age: 29,
-    city: "Dharan",
-    condition: "PMOS",
+    name: "Sita P.",
+    age: 34,
+    city: "Kathmandu",
+    condition: "Weight Loss",
     rating: 5,
     beforeWeight: 78,
-    afterWeight: 67,
+    afterWeight: 66,
     duration: "16 weeks",
     quote:
-      "After years of irregular cycles and weight that wouldn't budge, Dr. Shrestha's protocol gave me my life back. My cycles are regular, my skin cleared up, and I lost 11 kg without feeling deprived.",
-    highlight: "-11 kg in 16 weeks",
-    initials: "SK",
-    accent: "from-pink-500 to-rose-500",
-    tag: "pcos",
+      "The meal plans were realistic, easy to follow, and helped me lose weight without feeling restricted.",
+    highlight: "Lost 12 kg in 16 weeks",
+    initials: "SP",
+    accent: "from-emerald-500 to-teal-500",
+    tag: "weight-loss",
   },
   {
     id: "t2",
-    name: "Bishal T.",
-    age: 42,
+    name: "Rajesh T.",
+    age: 52,
     city: "Lalitpur",
     condition: "Type 2 Diabetes",
     rating: 5,
     beforeWeight: 92,
-    afterWeight: 81,
-    duration: "24 weeks",
+    afterWeight: 84,
+    duration: "20 weeks",
     quote:
-      "My HbA1c dropped from 8.4 to 6.1 and my doctor took me off metformin. The CGM integration was a game changer — I finally understood how my body responds to food.",
-    highlight: "HbA1c 8.4 → 6.1",
-    initials: "BT",
+      "My energy levels improved significantly after following the personalized nutrition plan.",
+    highlight: "Type 2 Diabetes",
+    initials: "RT",
     accent: "from-emerald-500 to-teal-500",
     tag: "diabetes",
   },
   {
     id: "t3",
-    name: "Anjali M.",
-    age: 34,
+    name: "Priya M.",
+    age: 31,
     city: "Bhaktapur",
-    condition: "Postpartum Weight",
+    condition: "Postpartum Nutrition",
     rating: 5,
     beforeWeight: 72,
     afterWeight: 60,
-    duration: "20 weeks",
+    duration: "12 weeks",
     quote:
-      "Meera supported me through my second pregnancy and postpartum recovery. I'm now lighter than my pre-pregnancy weight and have more energy than I did in my twenties.",
-    highlight: "-12 kg postpartum",
-    initials: "AM",
+      "The constant support and evidence-based guidance throughout my pregnancy journey.",
+    highlight: "Postpartum Nutrition",
+    initials: "PM",
     accent: "from-rose-500 to-pink-500",
     tag: "pregnancy",
   },
@@ -822,7 +822,7 @@ export const processSteps: ProcessStep[] = [
     step: 1,
     title: "Initial Consultation",
     description:
-      "We discuss your health history, goals, lifestyle habits, and dietary preferences to understand your unique needs.",
+      "We discuss your health history, lifestyle goals, dietary history, eating habits, and concerns.",
     duration: "15 min · Free",
     icon: Users,
   },
@@ -830,7 +830,7 @@ export const processSteps: ProcessStep[] = [
     step: 2,
     title: "Comprehensive Assessment",
     description:
-      "Body composition analysis, dietary assessment, and lab report review to build a complete picture of your health.",
+      "Body composition analysis, dietary assessment, laboratory review (if needed), and activity diagnosis.",
     duration: "60–90 min",
     icon: Activity,
   },
@@ -838,7 +838,7 @@ export const processSteps: ProcessStep[] = [
     step: 3,
     title: "Personalized Nutrition Plan",
     description:
-      "Custom meal plans tailored to your medical conditions, food preferences, and lifestyle — using locally available foods.",
+      "Customized plan tailored to your medical conditions, food preferences, schedule, and budget.",
     duration: "Within 48 hours",
     icon: HeartPulse,
   },
@@ -846,7 +846,7 @@ export const processSteps: ProcessStep[] = [
     step: 4,
     title: "Follow-up & Progress Monitoring",
     description:
-      "Regular check-ins to track your progress, adjust your plan as needed, and provide ongoing support and accountability.",
+      "Regular check-ins, adjustments, motivation, and continuous support to help you stay on track.",
     duration: "Ongoing",
     icon: TrendingUp,
   },

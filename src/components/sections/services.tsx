@@ -21,8 +21,9 @@ const categories = [
 export function Services() {
   const [selected, setSelected] = React.useState<Service | null>(null);
 
-  // Show only 6 featured services on the homepage
-  const featured = services.slice(0, 6);
+  // Show 6 featured services on the homepage matching the reference design
+  const featuredSlugs = ["weight-loss", "diabetes-diet", "pcos-diet", "child-nutrition", "sports-nutrition", "lifestyle-modification"];
+  const featured = featuredSlugs.map(slug => services.find(s => s.slug === slug)).filter(Boolean) as Service[];
 
   return (
     <SectionWrapper id="services" className="bg-background">
