@@ -822,7 +822,7 @@ export const processSteps: ProcessStep[] = [
     step: 1,
     title: "Initial Consultation",
     description:
-      "A free 15-minute call to discuss your health goals, concerns, and what you hope to achieve. We'll determine if our clinic is the right fit for you.",
+      "We discuss your health history, goals, lifestyle habits, and dietary preferences to understand your unique needs.",
     duration: "15 min · Free",
     icon: Users,
   },
@@ -830,15 +830,15 @@ export const processSteps: ProcessStep[] = [
     step: 2,
     title: "Comprehensive Assessment",
     description:
-      "A thorough 60–90 minute evaluation of your dietary habits, lifestyle, medical history, and lab results to understand your unique needs.",
-    duration: "90 min · In-clinic or video",
+      "Body composition analysis, dietary assessment, and lab report review to build a complete picture of your health.",
+    duration: "60–90 min",
     icon: Activity,
   },
   {
     step: 3,
     title: "Personalized Nutrition Plan",
     description:
-      "Receive a custom nutrition plan tailored to your goals, food preferences, and lifestyle — using locally available foods and practical meal ideas.",
+      "Custom meal plans tailored to your medical conditions, food preferences, and lifestyle — using locally available foods.",
     duration: "Within 48 hours",
     icon: HeartPulse,
   },
@@ -846,8 +846,8 @@ export const processSteps: ProcessStep[] = [
     step: 4,
     title: "Follow-up & Progress Monitoring",
     description:
-      "Regular check-ins to track your progress, adjust your plan as needed, and provide ongoing support and accountability to ensure lasting results.",
-    duration: "Ongoing · Weekly to monthly",
+      "Regular check-ins to track your progress, adjust your plan as needed, and provide ongoing support and accountability.",
+    duration: "Ongoing",
     icon: TrendingUp,
   },
 ];

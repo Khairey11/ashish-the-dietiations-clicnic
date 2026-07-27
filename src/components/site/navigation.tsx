@@ -12,13 +12,16 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Programs", href: "/programs" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Dietitians", href: "/dietitians" },
-  { label: "Success Stories", href: "/testimonials" },
-  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
+  { label: "Resources", href: "/blog", dropdown: [
+    { label: "Blog & Articles", href: "/blog" },
+    { label: "FAQs", href: "/faq" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+  ]},
   { label: "Contact", href: "/contact" },
 ];
 
@@ -112,22 +115,50 @@ export function Navigation() {
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => go(link.href)}
-                  aria-current={isActive(link.href) ? "page" : undefined}
-                  className={cn(
-                    "px-3.5 py-2 text-sm font-medium rounded-lg transition-all",
-                    isActive(link.href)
-                      ? "text-foreground bg-muted/80"
-                      : "text-foreground/80 hover:text-foreground hover:bg-muted/60"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) =>
+                "dropdown" in link && link.dropdown ? (
+                  <div key={link.label} className="relative group">
+                    <button
+                      className={cn(
+                        "px-3.5 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1",
+                        isActive(link.href)
+                          ? "text-foreground bg-muted/80"
+                          : "text-foreground/80 hover:text-foreground hover:bg-muted/60"
+                      )}
+                    >
+                      {link.label}
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="absolute top-full left-0 mt-1 w-52 rounded-xl border border-border/60 bg-card shadow-premium py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                      {link.dropdown.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => go(item.href)}
+                          className="block px-4 py-2 text-sm text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => go(link.href)}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={cn(
+                      "px-3.5 py-2 text-sm font-medium rounded-lg transition-all",
+                      isActive(link.href)
+                        ? "text-foreground bg-muted/80"
+                        : "text-foreground/80 hover:text-foreground hover:bg-muted/60"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
             </nav>
 
             <div className="flex items-center gap-2">

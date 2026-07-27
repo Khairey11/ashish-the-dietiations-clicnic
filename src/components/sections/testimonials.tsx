@@ -19,12 +19,8 @@ const filters = [
 ];
 
 export function Testimonials({ testimonials = staticTestimonials }: { testimonials?: Testimonial[] }) {
-  const [active, setActive] = React.useState("all");
-
-  const filtered = React.useMemo(() => {
-    if (active === "all") return testimonials;
-    return testimonials.filter((t) => t.tag === active);
-  }, [active, testimonials]);
+  // Show only 3 featured testimonials on the homepage
+  const featured = testimonials.slice(0, 3);
 
   return (
     <SectionWrapper id="testimonials" className="bg-muted/30">
@@ -32,38 +28,24 @@ export function Testimonials({ testimonials = staticTestimonials }: { testimonia
         eyebrow="Real transformations"
         title={
           <>
-            Results that{" "}
-            <span className="gradient-text">speak for themselves</span>
+            What My{" "}
+            <span className="gradient-text">Clients Say</span>
           </>
         }
-        description="12,400+ clients have transformed their health with Ashish Nutrition Clinic. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
       />
 
-      {/* Filters */}
-      <div className="mt-10 flex flex-wrap justify-center gap-2">
-        {filters.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => setActive(f.id)}
-            className={cn(
-              "px-4 py-2 rounded-full text-sm font-medium transition-all",
-              active === f.id
-                ? "bg-primary text-primary-foreground shadow-glow"
-                : "bg-background/60 text-muted-foreground hover:bg-background hover:text-foreground"
-            )}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid */}
+      {/* Testimonial cards */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <AnimatePresence mode="popLayout">
-          {filtered.map((t, i) => (
+        {featured.map((t, i) => (
             <TestimonialCard key={t.id} t={t} delay={i * 0.05} />
           ))}
-        </AnimatePresence>
+      </div>
+
+      {/* Read More */}
+      <div className="mt-10 text-center">
+        <a href="/testimonials" className="inline-flex items-center justify-center h-11 px-6 rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm font-semibold transition-colors">
+          Read More Testimonials
+        </a>
       </div>
 
       {/* Aggregate ratings banner */}
