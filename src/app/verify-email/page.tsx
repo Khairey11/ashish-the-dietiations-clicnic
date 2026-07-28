@@ -116,7 +116,7 @@ function VerifyEmailContent() {
                 Your account is now active. Redirecting you to your dashboard…
               </p>
               <Link href="/dashboard">
-                <Button className="bg-gradient-to-r from-primary to-secondary">
+                <Button className="bg-secondary hover:bg-secondary/90">
                   Go to dashboard
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -147,7 +147,7 @@ function VerifyEmailContent() {
                 This verification link has expired. You can request a new one from your dashboard.
               </p>
               <Link href="/login">
-                <Button className="bg-gradient-to-r from-primary to-secondary">
+                <Button className="bg-secondary hover:bg-secondary/90">
                   Go to login
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>

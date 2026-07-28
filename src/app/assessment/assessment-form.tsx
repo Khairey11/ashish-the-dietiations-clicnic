@@ -486,12 +486,12 @@ export function AssessmentForm() {
                 Back
               </Button>
               {step < steps.length - 1 ? (
-                <Button onClick={next} disabled={!canNext()} className="bg-gradient-to-r from-primary to-secondary">
+                <Button onClick={next} disabled={!canNext()} className="bg-secondary hover:bg-secondary/90">
                   Next
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               ) : (
-                <Button onClick={submit} disabled={submitting} className="bg-gradient-to-r from-primary to-secondary">
+                <Button onClick={submit} disabled={submitting} className="bg-secondary hover:bg-secondary/90">
                   {submitting ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Check className="w-4 h-4 mr-1" />}
                   Submit Assessment
                 </Button>

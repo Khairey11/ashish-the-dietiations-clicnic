@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   disabled={loading || !email}
-                  className="w-full h-11 bg-gradient-to-r from-primary to-secondary"
+                  className="w-full h-11 bg-secondary hover:bg-secondary/90"
                 >
                   {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

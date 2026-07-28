@@ -146,7 +146,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
             {detail.process.map((step) => (
               <div key={step.step} className="rounded-2xl border border-border/60 bg-card p-5">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-3 text-white font-bold">
+                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mb-3 text-white font-bold">
                   {step.step}
                 </div>
                 <h3 className="font-semibold mb-1.5">{step.title}</h3>
@@ -184,7 +184,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       {/* Booking CTA */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="rounded-3xl bg-gradient-to-r from-primary to-secondary p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 text-white shadow-glow">
+          <div className="rounded-3xl bg-secondary hover:bg-secondary/90 p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 text-white shadow-glow">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold">Ready to start {service.title.toLowerCase()}?</h2>
               <p className="mt-2 text-white/85">Book a free 15-minute discovery call with one of our specialists.</p>

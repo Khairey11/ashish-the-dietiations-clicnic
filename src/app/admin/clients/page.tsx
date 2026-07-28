@@ -293,7 +293,7 @@ function ClientDetailDrawer({
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-white font-bold">
                   {(client.name || "?").charAt(0)}
                 </div>
                 <div>

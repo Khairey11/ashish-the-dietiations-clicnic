@@ -181,7 +181,7 @@ export default function PricingPage() {
               >
                 {pkg.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                    <Badge className="bg-gradient-to-r from-primary to-secondary text-primary-foreground gap-1 shadow-glow">
+                    <Badge className="bg-secondary hover:bg-secondary/90 text-primary-foreground gap-1 shadow-glow">
                       <Star className="w-3 h-3 fill-current" />
                       Most Popular
                     </Badge>
@@ -224,7 +224,7 @@ export default function PricingPage() {
                   </ul>
 
                   <Link href="/booking">
-                    <Button className={cn("w-full", pkg.popular ? "bg-gradient-to-r from-primary to-secondary" : "")} variant={pkg.popular ? "default" : "outline"}>
+                    <Button className={cn("w-full", pkg.popular ? "bg-secondary hover:bg-secondary/90" : "")} variant={pkg.popular ? "default" : "outline"}>
                       Choose {pkg.name.split(" ")[0]}
                       <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                     </Button>
@@ -290,7 +290,7 @@ export default function PricingPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {consultationSteps.map((s) => (
               <div key={s.step} className="p-5 rounded-2xl border border-border/60 bg-card">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-3 text-white font-bold">
+                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mb-3 text-white font-bold">
                   {s.step}
                 </div>
                 <h3 className="font-semibold mb-1.5">{s.title}</h3>
@@ -323,7 +323,7 @@ export default function PricingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-gradient-to-br from-primary to-secondary text-white text-center">
+      <section className="py-16 bg-secondary text-white text-center">
         <div className="container mx-auto px-4 sm:px-6">
           <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
           <p className="text-white/85 mb-8 max-w-xl mx-auto">

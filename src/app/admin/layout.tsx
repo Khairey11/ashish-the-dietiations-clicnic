@@ -76,7 +76,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Desktop sidebar */}
             <aside className="hidden lg:flex lg:col-span-2 flex-col gap-1 p-4 rounded-2xl border border-border/60 bg-card h-fit sticky top-24">
               <div className="flex items-center gap-2 px-2 py-3 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
                   <ShieldCheck className="w-4 h-4 text-white" />
                 </div>
                 <div className="min-w-0">

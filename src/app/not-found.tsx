@@ -30,7 +30,7 @@ export default function NotFound() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-secondary mb-8 shadow-glow"
+            className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-secondary mb-8 shadow-glow"
           >
             <Leaf className="w-10 h-10 text-white" />
           </motion.div>
@@ -69,7 +69,7 @@ export default function NotFound() {
             className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3"
           >
             <Link href="/">
-              <Button size="lg" className="bg-gradient-to-r from-primary to-secondary h-12 px-6">
+              <Button size="lg" className="bg-secondary hover:bg-secondary/90 h-12 px-6">
                 <Home className="w-4 h-4 mr-2" />
                 Back to home
               </Button>

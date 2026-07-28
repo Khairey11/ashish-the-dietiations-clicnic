@@ -97,7 +97,7 @@ export default async function DietitiansPage() {
           </div>
 
           {/* CTA bar */}
-          <div className="mt-12 rounded-3xl bg-gradient-to-r from-primary to-secondary p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-white shadow-glow">
+          <div className="mt-12 rounded-3xl bg-secondary hover:bg-secondary/90 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-white shadow-glow">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center">
                 <Sparkles className="w-6 h-6" />

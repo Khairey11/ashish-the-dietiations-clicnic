@@ -38,7 +38,7 @@ export default async function ProgramsPage() {
               >
                 {p.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                    <Badge className="bg-gradient-to-r from-primary to-secondary text-primary-foreground gap-1 shadow-glow">
+                    <Badge className="bg-secondary hover:bg-secondary/90 text-primary-foreground gap-1 shadow-glow">
                       <Star className="w-3 h-3 fill-current" />
                       Most popular
                     </Badge>
@@ -80,7 +80,7 @@ export default async function ProgramsPage() {
                   <Link href="/booking">
                     <Button
                       variant={p.popular ? "default" : "outline"}
-                      className={cn("w-full", p.popular && "bg-gradient-to-r from-primary to-secondary")}
+                      className={cn("w-full", p.popular && "bg-secondary hover:bg-secondary/90")}
                     >
                       Get started
                       <ArrowRight className="w-3.5 h-3.5 ml-1.5" />

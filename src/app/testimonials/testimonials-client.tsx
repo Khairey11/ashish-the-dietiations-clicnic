@@ -64,7 +64,7 @@ export function TestimonialsPageClient({ testimonials }: { testimonials: Testimo
       {/* Featured testimonial highlight */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-br from-primary to-secondary p-8 sm:p-12 text-white text-center shadow-glow">
+          <div className="max-w-5xl mx-auto rounded-3xl bg-secondary p-8 sm:p-12 text-white text-center shadow-glow">
             <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mx-auto mb-4">
               <Quote className="w-7 h-7 fill-white text-white" />
             </div>
@@ -116,7 +116,7 @@ export function TestimonialsPageClient({ testimonials }: { testimonials: Testimo
             <h2 className="text-2xl sm:text-3xl font-bold">Your story could be next</h2>
             <p className="mt-3 text-muted-foreground">Start your free discovery call today. No payment required.</p>
             <Link href="/booking">
-              <Button size="lg" className="mt-6 bg-gradient-to-r from-primary to-secondary">
+              <Button size="lg" className="mt-6 bg-secondary hover:bg-secondary/90">
                 Book your consultation
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>

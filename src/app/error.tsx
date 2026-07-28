@@ -39,7 +39,7 @@ export default function Error({
           </p>
         )}
         <div className="flex items-center justify-center gap-3">
-          <Button onClick={reset} className="bg-gradient-to-r from-primary to-secondary">
+          <Button onClick={reset} className="bg-secondary hover:bg-secondary/90">
             <RotateCcw className="w-4 h-4 mr-2" />
             Try again
           </Button>

@@ -37,7 +37,7 @@ export function Process() {
 
             <div className="relative rounded-2xl border border-border/60 bg-card p-6 hover:shadow-premium hover:-translate-y-1 transition-all duration-300 h-full">
               <div className="flex items-center gap-3 mb-4">
-                <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-glow">
+                <div className="relative w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center shadow-glow">
                   <step.icon className="w-6 h-6 text-white" />
                   <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-background border-2 border-primary flex items-center justify-center text-xs font-bold text-primary">
                     {step.step}

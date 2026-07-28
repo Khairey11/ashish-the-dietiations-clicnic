@@ -52,7 +52,7 @@ export default function AssessmentSuccessPage() {
                 </Button>
               </Link>
               <Link href="/pricing">
-                <Button className="bg-gradient-to-r from-primary to-secondary">
+                <Button className="bg-secondary hover:bg-secondary/90">
                   View Pricing
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>

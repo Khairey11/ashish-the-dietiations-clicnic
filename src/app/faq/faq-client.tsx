@@ -95,7 +95,7 @@ export function FAQPageClient({ faqs }: { faqs: FAQ[] }) {
               </div>
             </div>
             <Link href="/contact">
-              <Button className="bg-gradient-to-r from-primary to-secondary">Talk to us</Button>
+              <Button className="bg-secondary hover:bg-secondary/90">Talk to us</Button>
             </Link>
           </div>
         </div>

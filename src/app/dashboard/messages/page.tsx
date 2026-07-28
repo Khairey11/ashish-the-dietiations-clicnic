@@ -123,7 +123,7 @@ export default function DashboardMessagesPage() {
       <div className="rounded-2xl border border-border/40 bg-card overflow-hidden flex flex-col h-[500px]">
         {/* Header */}
         <div className="p-4 border-b border-border/40 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-white font-bold text-sm">
             DC
           </div>
           <div>

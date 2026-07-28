@@ -96,7 +96,7 @@ function ResetPasswordForm() {
               This password reset link is invalid or missing. Please request a new one.
             </p>
             <Link href="/forgot-password">
-              <Button className="bg-gradient-to-r from-primary to-secondary">
+              <Button className="bg-secondary hover:bg-secondary/90">
                 Request new link
               </Button>
             </Link>
@@ -191,7 +191,7 @@ function ResetPasswordForm() {
                 <Button
                   type="submit"
                   disabled={loading || !password || !confirmPassword}
-                  className="w-full h-11 bg-gradient-to-r from-primary to-secondary"
+                  className="w-full h-11 bg-secondary hover:bg-secondary/90"
                 >
                   {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

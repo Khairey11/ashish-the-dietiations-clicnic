@@ -286,7 +286,7 @@ export default function AdminPage() {
                             <div className="text-xs font-mono font-semibold w-20 text-muted-foreground">
                               {time}
                             </div>
-                            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                               {initials}
                             </div>
                             <div className="flex-1 min-w-0">
