@@ -39,7 +39,7 @@ export const siteConfig = {
     bankName: "Nepal Investment Mega Bank",
     bankAccountName: "The Dietitians Clinic",
     bankAccountNumber: "01234567890123",
-    bankBranch: "Kathmandu Branch",
+    bankBranch: "Dharan Branch",
   },
 } as const;
 

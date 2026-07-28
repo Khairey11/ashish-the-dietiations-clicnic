@@ -119,7 +119,7 @@ export function BlogEditor({
                 update("slug", autoSlug(e.target.value));
               }
             }}
-            placeholder="The truth about carbs and PMOS..."
+            placeholder="The truth about carbs and PCOS..."
             className="h-11 text-base font-semibold"
           />
         </div>

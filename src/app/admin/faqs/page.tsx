@@ -141,10 +141,10 @@ function NewFAQForm({ onSave, onCancel }: { onSave: (data: any) => void; onCance
   return (
     <div className="space-y-3">
       <div className="grid sm:grid-cols-3 gap-3">
-        <div className="sm:col-span-2"><Label className="text-xs">Question *</Label><Input value={form.question} onChange={(e) => update("question", e.target.value)} placeholder="Can PMOS be managed with diet alone?" className="h-9" /></div>
+        <div className="sm:col-span-2"><Label className="text-xs">Question *</Label><Input value={form.question} onChange={(e) => update("question", e.target.value)} placeholder="Can PCOS be managed with diet alone?" className="h-9" /></div>
         <div><Label className="text-xs">Category</Label><Input value={form.category} onChange={(e) => update("category", e.target.value)} className="h-9" /></div>
       </div>
-      <div><Label className="text-xs">Answer *</Label><Textarea value={form.answer} onChange={(e) => update("answer", e.target.value)} placeholder="For many women, yes — particularly with insulin-resistant PMOS..." rows={3} className="resize-none" /></div>
+      <div><Label className="text-xs">Answer *</Label><Textarea value={form.answer} onChange={(e) => update("answer", e.target.value)} placeholder="For many women, yes — particularly with insulin-resistant PCOS..." rows={3} className="resize-none" /></div>
       <div className="flex gap-2">
         <Button size="sm" onClick={() => onSave(form)} disabled={!form.question || !form.answer} className="bg-secondary hover:bg-secondary/90">Create</Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>Cancel</Button>

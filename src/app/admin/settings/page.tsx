@@ -561,7 +561,7 @@ function ClinicConfigSection() {
           <Field label="WhatsApp (raw, for wa.me)" value={config?.whatsappRaw || ""} onChange={(v) => update("whatsappRaw", v)} placeholder="9779800000000" />
         </div>
         <div className="mt-3">
-          <Field label="Address" value={config?.address || ""} onChange={(v) => update("address", v)} placeholder="Kathmandu, Nepal" />
+          <Field label="Address" value={config?.address || ""} onChange={(v) => update("address", v)} placeholder="Dharan-11, Sunsari, Nepal" />
         </div>
       </div>
 
