@@ -24,7 +24,7 @@ const steps = [
 ];
 
 const healthGoals = [
-  "Weight Loss", "Weight Gain", "Diabetes Management", "PCOS / PCOD",
+  "Weight Loss", "Weight Gain", "Diabetes Management", "PMOS / PCOD",
   "Thyroid Disorders", "Pregnancy Nutrition", "Child Nutrition",
   "Sports Nutrition", "Gut Health", "Hormonal Imbalance",
   "Cholesterol Management", "Blood Pressure", "General Wellness", "Other",
@@ -347,7 +347,7 @@ export function AssessmentForm() {
                   <div className="space-y-4">
                     <div className="space-y-1.5">
                       <Label className="text-xs">Diagnosed Conditions</Label>
-                      <Textarea value={data.conditions} onChange={(e) => update("conditions", e.target.value)} placeholder="e.g. Type 2 Diabetes (2022), Hypothyroidism, PCOS..." className="min-h-[80px]" />
+                      <Textarea value={data.conditions} onChange={(e) => update("conditions", e.target.value)} placeholder="e.g. Type 2 Diabetes (2022), Hypothyroidism, PMOS..." className="min-h-[80px]" />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">

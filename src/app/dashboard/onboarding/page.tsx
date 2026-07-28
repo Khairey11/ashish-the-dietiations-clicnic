@@ -210,11 +210,11 @@ export default function OnboardingPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs">Any specific health conditions? (PCOS, diabetes, thyroid, hypertension, etc.)</Label>
+              <Label className="text-xs">Any specific health conditions? (PMOS, diabetes, thyroid, hypertension, etc.)</Label>
               <Input
                 value={form.conditions}
                 onChange={(e) => update("conditions", e.target.value)}
-                placeholder="e.g. PCOS, pre-diabetes, hypothyroidism"
+                placeholder="e.g. PMOS, pre-diabetes, hypothyroidism"
                 className="h-11"
               />
             </div>

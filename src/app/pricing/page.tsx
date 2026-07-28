@@ -140,7 +140,7 @@ const pricingFAQs = [
   },
   {
     q: "Are online consultations as effective as in-person?",
-    a: "Yes. Studies show that telehealth nutrition counseling is equally effective for most conditions, including weight management, diabetes, and PCOS. In-clinic visits are recommended only for body composition analysis and hands-on assessments.",
+    a: "Yes. Studies show that telehealth nutrition counseling is equally effective for most conditions, including weight management, diabetes, and PMOS. In-clinic visits are recommended only for body composition analysis and hands-on assessments.",
   },
   {
     q: "What payment methods do you accept?",
