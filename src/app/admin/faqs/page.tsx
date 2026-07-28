@@ -88,7 +88,7 @@ export default function AdminFAQsPage() {
     <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">FAQs</h1>
-        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-primary hover:bg-primary/90">
+        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-secondary hover:bg-secondary/90">
           <Plus className="w-4 h-4 mr-1" /> Add FAQ
         </Button>
       </div>
@@ -118,7 +118,7 @@ export default function AdminFAQsPage() {
                 <div className="flex items-center gap-2">
                   <Label className="text-xs">Category:</Label>
                   <Input value={f.category} onChange={(e) => update(f.id, "category", e.target.value)} className="h-7 w-40 text-xs" />
-                  <Button size="sm" onClick={() => save(f.id)} disabled={saving === f.id} className="bg-primary hover:bg-primary/90 h-7 text-xs">
+                  <Button size="sm" onClick={() => save(f.id)} disabled={saving === f.id} className="bg-secondary hover:bg-secondary/90 h-7 text-xs">
                     {saving === f.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3 mr-1" /> Save</>}
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => del(f.id)} className="text-rose-600 hover:bg-rose-500/10 h-7">
@@ -146,7 +146,7 @@ function NewFAQForm({ onSave, onCancel }: { onSave: (data: any) => void; onCance
       </div>
       <div><Label className="text-xs">Answer *</Label><Textarea value={form.answer} onChange={(e) => update("answer", e.target.value)} placeholder="For many women, yes — particularly with insulin-resistant PMOS..." rows={3} className="resize-none" /></div>
       <div className="flex gap-2">
-        <Button size="sm" onClick={() => onSave(form)} disabled={!form.question || !form.answer} className="bg-primary hover:bg-primary/90">Create</Button>
+        <Button size="sm" onClick={() => onSave(form)} disabled={!form.question || !form.answer} className="bg-secondary hover:bg-secondary/90">Create</Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>Cancel</Button>
       </div>
     </div>

@@ -160,7 +160,7 @@ export function Navigation() {
               <Link href="/booking">
                 <Button
                   size="sm"
-                  className="hidden sm:inline-flex shimmer-btn bg-primary hover:bg-primary/90 hover:shadow-glow"
+                  className="hidden sm:inline-flex shimmer-btn bg-secondary hover:bg-secondary/90 hover:shadow-glow"
                 >
                   Book Consultation
                 </Button>
@@ -220,7 +220,7 @@ export function Navigation() {
               )}
               <Link href="/booking">
                 <Button
-                  className="mt-2 bg-primary hover:bg-primary/90 w-full"
+                  className="mt-2 bg-secondary hover:bg-secondary/90 w-full"
                 >
                   Book Consultation
                 </Button>

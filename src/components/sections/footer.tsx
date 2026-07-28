@@ -191,7 +191,7 @@ export function Footer({ config }: { config?: DynamicConfig }) {
               placeholder="you@email.com"
               className="bg-white/10 border-white/20 text-white placeholder:text-white/40 h-9 max-w-[200px]"
             />
-            <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90 h-9 px-3">
+            <Button type="submit" size="sm" className="bg-secondary hover:bg-secondary/90 h-9 px-3">
               <Send className="w-3.5 h-3.5" />
             </Button>
           </form>

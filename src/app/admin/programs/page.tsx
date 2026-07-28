@@ -129,7 +129,7 @@ export default function AdminProgramsPage() {
     <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Programs & Pricing</h1>
-        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-primary hover:bg-primary/90">
+        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-secondary hover:bg-secondary/90">
           <Plus className="w-4 h-4 mr-1" /> Add program
         </Button>
       </div>
@@ -184,7 +184,7 @@ export default function AdminProgramsPage() {
                 <Label className="text-xs">Features (JSON array)</Label>
                 <Textarea value={p.features} onChange={(e) => update(p.id, "features", e.target.value)} className="h-16 text-xs font-mono resize-none" />
                 <div className="flex gap-2">
-                  <Button size="sm" onClick={() => save(p.id)} disabled={saving === p.id} className="bg-primary hover:bg-primary/90">
+                  <Button size="sm" onClick={() => save(p.id)} disabled={saving === p.id} className="bg-secondary hover:bg-secondary/90">
                     {saving === p.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><Save className="w-3.5 h-3.5 mr-1" /> Save</>}
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => del(p.id)} className="text-rose-600 hover:bg-rose-500/10">
@@ -216,7 +216,7 @@ function NewProgramForm({ onSave, onCancel }: { onSave: (data: any) => void; onC
       <div><Label className="text-xs">Original price</Label><Input type="number" value={form.originalPrice} onChange={(e) => update("originalPrice", parseFloat(e.target.value) || 0)} className="h-9" /></div>
       <div><Label className="text-xs">Tagline *</Label><Input value={form.tagline} onChange={(e) => update("tagline", e.target.value)} placeholder="Kickstart your journey" className="h-9" /></div>
       <div className="sm:col-span-3 flex gap-2">
-        <Button size="sm" onClick={() => onSave(form)} disabled={!form.slug || !form.duration || !form.tagline} className="bg-primary hover:bg-primary/90">Create</Button>
+        <Button size="sm" onClick={() => onSave(form)} disabled={!form.slug || !form.duration || !form.tagline} className="bg-secondary hover:bg-secondary/90">Create</Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>Cancel</Button>
       </div>
     </div>

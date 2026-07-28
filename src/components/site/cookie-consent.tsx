@@ -61,7 +61,7 @@ export function CookieConsent() {
             .
           </p>
           <div className="flex items-center gap-2 mt-3">
-            <Button size="sm" onClick={dismiss} className="h-8 bg-primary hover:bg-primary/90">
+            <Button size="sm" onClick={dismiss} className="h-8 bg-secondary hover:bg-secondary/90">
               Got it
             </Button>
             <Button size="sm" variant="ghost" onClick={dismiss} className="h-8" aria-label="Dismiss">

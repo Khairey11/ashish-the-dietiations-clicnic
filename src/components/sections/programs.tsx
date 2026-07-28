@@ -43,7 +43,7 @@ export function Programs({ programs = staticPrograms }: { programs?: Program[] }
           >
             {p.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1 shadow-glow">
+                <Badge className="bg-secondary hover:bg-secondary/90 text-primary-foreground gap-1 shadow-glow">
                   <Star className="w-3 h-3 fill-current" />
                   Most popular
                 </Badge>
@@ -87,7 +87,7 @@ export function Programs({ programs = staticPrograms }: { programs?: Program[] }
                   variant={p.popular ? "default" : "outline"}
                   className={cn(
                     "w-full",
-                    p.popular && "bg-primary hover:bg-primary/90"
+                    p.popular && "bg-secondary hover:bg-secondary/90"
                   )}
                 >
                   Get Started

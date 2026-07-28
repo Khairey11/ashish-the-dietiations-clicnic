@@ -268,7 +268,7 @@ export function Contact({ config }: { config?: DynamicConfig }) {
             <Button
               type="submit"
               disabled={submitting}
-              className="w-full h-11 bg-primary hover:bg-primary/90"
+              className="w-full h-11 bg-secondary hover:bg-secondary/90"
             >
               {submitting ? (
                 <>

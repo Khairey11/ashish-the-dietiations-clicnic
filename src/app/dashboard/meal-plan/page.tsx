@@ -125,7 +125,7 @@ export default function MealPlanPage() {
             Your dietitian will create a personalized meal plan after your first consultation.
           </p>
           <Link href="/booking">
-            <Button size="sm" className="bg-primary hover:bg-primary/90">Book consultation</Button>
+            <Button size="sm" className="bg-secondary hover:bg-secondary/90">Book consultation</Button>
           </Link>
         </div>
       ) : (
@@ -156,7 +156,7 @@ export default function MealPlanPage() {
                   <span>{Math.round((checkedCount / totalItems) * 100)}%</span>
                 </div>
                 <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-primary hover:bg-primary/90 rounded-full transition-all" style={{ width: `${(checkedCount / totalItems) * 100}%` }} />
+                  <div className="h-full bg-secondary hover:bg-secondary/90 rounded-full transition-all" style={{ width: `${(checkedCount / totalItems) * 100}%` }} />
                 </div>
               </div>
             )}

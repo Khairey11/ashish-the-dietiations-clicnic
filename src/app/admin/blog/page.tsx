@@ -83,7 +83,7 @@ export default function AdminBlogPage() {
           </p>
         </div>
         <Link href="/admin/blog/new">
-          <Button size="sm" className="bg-primary hover:bg-primary/90">
+          <Button size="sm" className="bg-secondary hover:bg-secondary/90">
             <Plus className="w-4 h-4 mr-1.5" />
             New article
           </Button>
@@ -124,7 +124,7 @@ export default function AdminBlogPage() {
               Create your first blog post to share nutrition insights with your clients.
             </p>
             <Link href="/admin/blog/new">
-              <Button size="sm" className="bg-primary hover:bg-primary/90">
+              <Button size="sm" className="bg-secondary hover:bg-secondary/90">
                 <Plus className="w-4 h-4 mr-1.5" />
                 Write first article
               </Button>

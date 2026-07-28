@@ -190,7 +190,7 @@ function ServiceModal({
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   onClick={onBook}
-                  className="flex-1 bg-primary hover:bg-primary/90"
+                  className="flex-1 bg-secondary hover:bg-secondary/90"
                 >
                   Book this consultation
                   <ArrowRight className="w-4 h-4 ml-2" />
