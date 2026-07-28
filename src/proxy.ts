@@ -43,7 +43,7 @@ function getExpectedOrigin(req: NextRequest): string {
   return host ? `${proto}://${host}` : "";
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // ----- Exempt routes with their own signature verification -----
