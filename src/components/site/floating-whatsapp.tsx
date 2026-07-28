@@ -59,7 +59,7 @@ export function FloatingWhatsApp({ config }: { config?: DynamicConfig }) {
       sublabel: "2-min wizard",
       icon: Calendar,
       href: "/booking",
-      accent: "bg-gradient-to-r from-primary to-secondary text-white",
+      accent: "bg-primary hover:bg-primary/90 text-white",
       external: false,
     },
   ];

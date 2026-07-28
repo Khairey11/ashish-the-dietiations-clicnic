@@ -11,19 +11,21 @@ import { cn } from "@/lib/utils";
 const filters = [
   { id: "all", label: "All Stories" },
   { id: "weight-loss", label: "Weight Loss" },
-  { id: "pcos", label: "PMOS" },
+  { id: "pcos", label: "PCOS" },
   { id: "diabetes", label: "Diabetes" },
   { id: "pregnancy", label: "Pregnancy" },
   { id: "thyroid", label: "Thyroid" },
   { id: "sports", label: "Sports" },
 ];
 
+const MAX_VISIBLE = 6;
+
 export function Testimonials({ testimonials = staticTestimonials }: { testimonials?: Testimonial[] }) {
   const [active, setActive] = React.useState("all");
 
   const filtered = React.useMemo(() => {
-    if (active === "all") return testimonials;
-    return testimonials.filter((t) => t.tag === active);
+    if (active === "all") return testimonials.slice(0, MAX_VISIBLE);
+    return testimonials.filter((t) => t.tag === active).slice(0, MAX_VISIBLE);
   }, [active, testimonials]);
 
   return (
@@ -36,7 +38,7 @@ export function Testimonials({ testimonials = staticTestimonials }: { testimonia
             <span className="gradient-text">speak for themselves</span>
           </>
         }
-        description="12,400+ clients have transformed their health with The Dietitians Clinic. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
+        description="Hundreds of clients have transformed their health with The Dietitians Clinic. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
       />
 
       {/* Filters */}

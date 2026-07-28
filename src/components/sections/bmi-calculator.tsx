@@ -177,7 +177,7 @@ export function BMICalculator() {
 
           <Button
             onClick={calculate}
-            className="w-full h-11 bg-gradient-to-r from-primary to-secondary"
+            className="w-full h-11 bg-primary hover:bg-primary/90"
             disabled={!height || !weight}
           >
             Calculate my BMI

@@ -85,7 +85,7 @@ export function Hero() {
               <Link href="/booking" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow text-base h-12 px-6 w-full sm:w-auto"
+                  className="shimmer-btn bg-primary hover:bg-primary/90 hover:shadow-glow text-base h-12 px-6 w-full sm:w-auto"
                 >
                   Book Consultation
                   <ArrowRight className="w-4 h-4 ml-2" />

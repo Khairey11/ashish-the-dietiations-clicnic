@@ -177,7 +177,7 @@ export function TestimonialSubmitForm() {
       <Button
         type="submit"
         disabled={submitting || !name || !condition || quote.length < 20}
-        className="w-full h-11 bg-gradient-to-r from-primary to-secondary"
+        className="w-full h-11 bg-primary hover:bg-primary/90"
       >
         {submitting ? (
           <>

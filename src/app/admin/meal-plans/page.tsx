@@ -148,7 +148,7 @@ export default function AdminMealPlansPage() {
     <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Meal Plans</h1>
-        <Button size="sm" onClick={() => setShowBuilder(!showBuilder)} className="bg-gradient-to-r from-primary to-secondary">
+        <Button size="sm" onClick={() => setShowBuilder(!showBuilder)} className="bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-1" /> Create plan
         </Button>
       </div>
@@ -215,7 +215,7 @@ export default function AdminMealPlansPage() {
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={createPlan} disabled={saving || !selectedClient || !planTitle} className="bg-gradient-to-r from-primary to-secondary">
+            <Button onClick={createPlan} disabled={saving || !selectedClient || !planTitle} className="bg-primary hover:bg-primary/90">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-4 h-4 mr-1" /> Create & assign</>}
             </Button>
             <Button variant="ghost" onClick={() => setShowBuilder(false)}>Cancel</Button>

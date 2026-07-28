@@ -101,7 +101,7 @@ export default function AdminDietitiansPage() {
     <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Dietitians</h1>
-        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-gradient-to-r from-primary to-secondary">
+        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-1" /> Add dietitian
         </Button>
       </div>
@@ -146,7 +146,7 @@ export default function AdminDietitiansPage() {
                 </div>
                 <p className="text-[10px] text-muted-foreground mt-1">Rating: {d.rating}/5</p>
                 <div className="flex gap-2 mt-auto">
-                  <Button size="sm" onClick={() => save(d.id)} disabled={saving === d.id} className="bg-gradient-to-r from-primary to-secondary h-7 text-xs">
+                  <Button size="sm" onClick={() => save(d.id)} disabled={saving === d.id} className="bg-primary hover:bg-primary/90 h-7 text-xs">
                     {saving === d.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3 mr-1" /> Save</>}
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => deactivate(d.id)} className="text-rose-600 hover:bg-rose-500/10 h-7">
@@ -179,7 +179,7 @@ function NewDietitianForm({ onSave, onCancel }: { onSave: (data: any) => void; o
       <div className="sm:col-span-2"><Label className="text-xs">Bio</Label><Textarea value={form.bio} onChange={(e) => update("bio", e.target.value)} placeholder="Brief bio..." rows={2} className="resize-none" /></div>
       <div><Label className="text-xs">Experience (years)</Label><Input type="number" value={form.experience} onChange={(e) => update("experience", parseInt(e.target.value) || 0)} className="h-9" /></div>
       <div className="sm:col-span-3 flex gap-2">
-        <Button size="sm" onClick={() => onSave(form)} disabled={!form.name || !form.email || !form.password} className="bg-gradient-to-r from-primary to-secondary">Create dietitian</Button>
+        <Button size="sm" onClick={() => onSave(form)} disabled={!form.name || !form.email || !form.password} className="bg-primary hover:bg-primary/90">Create dietitian</Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>Cancel</Button>
       </div>
     </div>

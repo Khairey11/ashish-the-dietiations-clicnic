@@ -8,7 +8,7 @@ import { siteConfig, whatsappLink } from "@/lib/site-config";
 
 export function CTABanner() {
   return (
-    <section className="relative py-16 lg:py-20 bg-gradient-to-br from-primary to-secondary overflow-hidden">
+    <section className="relative py-16 lg:py-20 bg-primary overflow-hidden">
       {/* Decorative pattern */}
       <div className="absolute inset-0 bg-grid opacity-10" />
       <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" />

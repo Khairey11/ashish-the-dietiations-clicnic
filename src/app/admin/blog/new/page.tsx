@@ -83,7 +83,7 @@ export default function NewBlogPostPage() {
             {saving ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Save className="w-4 h-4 mr-1" />}
             Save draft
           </Button>
-          <Button size="sm" onClick={() => save(true)} disabled={saving || publishing || !form.title || !form.content} className="bg-gradient-to-r from-primary to-secondary">
+          <Button size="sm" onClick={() => save(true)} disabled={saving || publishing || !form.title || !form.content} className="bg-primary hover:bg-primary/90">
             {publishing ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Eye className="w-4 h-4 mr-1" />}
             Publish
           </Button>

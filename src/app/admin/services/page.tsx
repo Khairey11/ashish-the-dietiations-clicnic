@@ -105,7 +105,7 @@ export default function AdminServicesPage() {
     <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Services</h1>
-        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-gradient-to-r from-primary to-secondary">
+        <Button size="sm" onClick={() => setShowAdd(!showAdd)} className="bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-1" /> Add service
         </Button>
       </div>
@@ -146,7 +146,7 @@ export default function AdminServicesPage() {
                 <Label className="text-xs">Solution</Label>
                 <Textarea value={s.solution} onChange={(e) => update(s.id, "solution", e.target.value)} className="h-16 text-xs resize-none flex-1" />
                 <div className="flex gap-2 mt-1">
-                  <Button size="sm" onClick={() => save(s.id)} disabled={saving === s.id} className="bg-gradient-to-r from-primary to-secondary h-7 text-xs">
+                  <Button size="sm" onClick={() => save(s.id)} disabled={saving === s.id} className="bg-primary hover:bg-primary/90 h-7 text-xs">
                     {saving === s.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Save className="w-3 h-3 mr-1" /> Save</>}
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => del(s.id)} className="text-rose-600 hover:bg-rose-500/10 h-7">
@@ -182,7 +182,7 @@ function NewServiceForm({ onSave, onCancel }: { onSave: (data: any) => void; onC
       <div className="sm:col-span-2"><Label className="text-xs">Tagline *</Label><Input value={form.tagline} onChange={(e) => update("tagline", e.target.value)} placeholder="Sustainable fat loss without crash diets" className="h-9" /></div>
       <div><Label className="text-xs">Duration</Label><Input value={form.duration} onChange={(e) => update("duration", e.target.value)} className="h-9" /></div>
       <div className="sm:col-span-3 flex gap-2">
-        <Button size="sm" onClick={() => onSave(form)} disabled={!form.slug || !form.title || !form.tagline} className="bg-gradient-to-r from-primary to-secondary">Create</Button>
+        <Button size="sm" onClick={() => onSave(form)} disabled={!form.slug || !form.title || !form.tagline} className="bg-primary hover:bg-primary/90">Create</Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>Cancel</Button>
       </div>
     </div>

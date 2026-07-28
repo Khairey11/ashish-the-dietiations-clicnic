@@ -119,7 +119,7 @@ export default function DashboardReportsPage() {
               className="block w-full text-sm text-muted-foreground file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
             />
             <p className="text-[10px] text-muted-foreground">PNG, JPEG, or PDF · max 5 MB</p>
-            <Button type="submit" size="sm" disabled={uploading} className="bg-gradient-to-r from-primary to-secondary">
+            <Button type="submit" size="sm" disabled={uploading} className="bg-primary hover:bg-primary/90">
               <Upload className="w-3.5 h-3.5 mr-1.5" />
               {uploading ? "Uploading..." : "Upload report"}
             </Button>

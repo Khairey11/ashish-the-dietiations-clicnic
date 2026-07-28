@@ -277,7 +277,7 @@ export default function DashboardPage() {
             </div>
             <p className="text-2xl font-bold">{progressPercent}%</p>
             <div className="h-1.5 bg-muted rounded-full mt-2 overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all" style={{ width: `${progressPercent}%` }} />
+              <div className="h-full bg-primary hover:bg-primary/90 rounded-full transition-all" style={{ width: `${progressPercent}%` }} />
             </div>
           </div>
 
@@ -311,7 +311,7 @@ export default function DashboardPage() {
                 <Label className="text-xs">New weight (kg)</Label>
                 <Input type="number" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} placeholder="68.5" className="h-9 w-32" />
               </div>
-              <Button size="sm" onClick={saveWeight} disabled={!newWeight || savingWeight} className="bg-gradient-to-r from-primary to-secondary">
+              <Button size="sm" onClick={saveWeight} disabled={!newWeight || savingWeight} className="bg-primary hover:bg-primary/90">
                 {savingWeight ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Save"}
               </Button>
               <Button size="sm" variant="ghost" onClick={() => setShowAddWeight(false)}>Cancel</Button>
@@ -330,7 +330,7 @@ export default function DashboardPage() {
               <Activity className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
               <p className="text-sm text-muted-foreground mb-1">No measurements yet.</p>
               <p className="text-xs text-muted-foreground mb-3">Log your first weight to start tracking progress.</p>
-              <Button size="sm" onClick={() => setShowAddWeight(true)} className="bg-gradient-to-r from-primary to-secondary">
+              <Button size="sm" onClick={() => setShowAddWeight(true)} className="bg-primary hover:bg-primary/90">
                 <Plus className="w-3.5 h-3.5 mr-1" />
                 Log first weight
               </Button>
@@ -353,7 +353,7 @@ export default function DashboardPage() {
                 <Calendar className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground mb-2">No appointments yet.</p>
                 <Link href="/booking">
-                  <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">Book consultation</Button>
+                  <Button size="sm" className="bg-primary hover:bg-primary/90">Book consultation</Button>
                 </Link>
               </div>
             ) : (

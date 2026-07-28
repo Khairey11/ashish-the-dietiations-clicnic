@@ -318,7 +318,7 @@ async function main() {
     { key: "clinic_phone", value: "+977-1-4445566" },
     { key: "clinic_phone_raw", value: "+97714445566" },
     { key: "clinic_email", value: "ashish@thedietitiansclinic.com" },
-    { key: "clinic_address", value: "Banasthali, Baluwatar-4, Kathmandu 44600, Nepal" },
+    { key: "clinic_address", value: "Dharan-11, Sunsari, Nepal" },
     { key: "whatsapp_number", value: "+977 9800000000" },
     { key: "whatsapp_raw", value: "9779800000000" },
     { key: "weekday_hours", value: "7:00 AM – 8:00 PM" },
@@ -344,7 +344,7 @@ async function main() {
     { key: "payment_bank_name", value: "Nepal Investment Mega Bank" },
     { key: "payment_bank_account_name", value: "Ashish Nutrition Clinic Pvt. Ltd." },
     { key: "payment_bank_account_number", value: "01234567890123" },
-    { key: "payment_bank_branch", value: "Baluwatar Branch" },
+    { key: "payment_bank_branch", value: "Dharan Branch" },
     { key: "payment_bank_qr_url", value: "" },           // Admin uploads via /admin/settings
 
     // Payment: global

@@ -63,7 +63,7 @@ export default function DashboardAppointmentsPage() {
           <p className="text-sm font-semibold">No upcoming appointments</p>
           <p className="text-xs text-muted-foreground mt-1 mb-4">Book a consultation to get started.</p>
           <Link href="/booking">
-            <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">Book consultation</Button>
+            <Button size="sm" className="bg-primary hover:bg-primary/90">Book consultation</Button>
           </Link>
         </div>
       ) : (

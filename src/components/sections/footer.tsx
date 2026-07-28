@@ -16,6 +16,16 @@ import { siteConfig, whatsappLink, phoneLink, defaultWhatsappMessage, type Dynam
 
 const footerNav = [
   {
+    title: "Explore",
+    links: [
+      { label: "Home", href: "/" },
+      { label: "About Us", href: "/about" },
+      { label: "Services", href: "/services" },
+      { label: "Programs", href: "/programs" },
+      { label: "Dietitians", href: "/dietitians" },
+    ],
+  },
+  {
     title: "Services",
     links: [
       { label: "Weight Management", href: "/services/weight-loss" },
@@ -27,30 +37,21 @@ const footerNav = [
     ],
   },
   {
-    title: "Programs",
-    links: [
-      { label: "All Programs", href: "/programs" },
-      { label: "Book Consultation", href: "/booking" },
-      { label: "BMI Calculator", href: "/#bmi-calculator" },
-      { label: "Body Composition", href: "/services/body-composition" },
-    ],
-  },
-  {
     title: "Resources",
     links: [
+      { label: "Success Stories", href: "/testimonials" },
       { label: "Blog", href: "/blog" },
       { label: "FAQs", href: "/faq" },
-      { label: "Testimonials", href: "/testimonials" },
-      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Book Consultation", href: "/booking" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
-    title: "Company",
+    title: "Legal",
     links: [
-      { label: "About Us", href: "/about" },
-      { label: "Meet the Team", href: "/dietitians" },
-      { label: "Contact", href: "/contact" },
       { label: "Client Login", href: "/login" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
     ],
   },
 ];

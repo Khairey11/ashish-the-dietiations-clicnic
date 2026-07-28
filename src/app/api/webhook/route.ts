@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac } from "node:crypto";
 import { spawn } from "node:child_process";
+import { createWriteStream } from "node:fs";
 
 // Force Node.js runtime (uses node:crypto + node:child_process).
 export const runtime = "nodejs";
@@ -49,12 +50,16 @@ function verifySignature(payload: string, signature: string, secret: string): bo
  * Spawns the deploy pipeline as a detached background shell process so the
  * webhook can respond to GitHub immediately. A full build takes much longer
  * than GitHub's ~10s webhook delivery timeout, so we must not block on it.
+ *
+ * SECURITY: User-controlled values (pushedBy, commitMsg) are passed via
+ * environment variables — never interpolated into the shell script — to
+ * prevent command injection (CWE-78).
  */
 function startBackgroundDeploy(pushedBy: string, commitMsg: string): void {
   const deployScript = [
     "set -e",
     'echo "======== Deploy started at $(date) ========"',
-    `echo "Triggered by: ${pushedBy} — ${commitMsg}"`,
+    'echo "Triggered by: $DEPLOY_PUSHED_BY — $DEPLOY_COMMIT_MSG"',
     "cd /opt/dietitians-clinic",
     "git pull origin main",
     "bun install --frozen-lockfile",
@@ -67,11 +72,22 @@ function startBackgroundDeploy(pushedBy: string, commitMsg: string): void {
     'echo "======== Deploy complete at $(date) ========"',
   ].join("\n");
 
-  // Pipe output to deploy.log in the project root for debugging.
-  const child = spawn("bash", ["-c", `${deployScript} >> /opt/dietitians-clinic/deploy.log 2>&1`], {
+  const logStream = createWriteStream("/opt/dietitians-clinic/deploy.log", { flags: "a" });
+
+  const child = spawn("bash", ["-c", deployScript], {
     detached: true,
-    stdio: "ignore",
+    stdio: ["ignore", "pipe", "pipe"],
+    env: {
+      ...process.env,
+      // Truncate to prevent env var buffer overflow attempts
+      DEPLOY_PUSHED_BY: pushedBy.slice(0, 200),
+      DEPLOY_COMMIT_MSG: commitMsg.slice(0, 500),
+    },
   });
+
+  // Pipe output to deploy.log for debugging.
+  child.stdout?.pipe(logStream);
+  child.stderr?.pipe(logStream);
 
   // Detach so the process survives after the request handler returns.
   child.unref();
@@ -131,13 +147,13 @@ export async function POST(req: NextRequest) {
     startBackgroundDeploy(pushedBy, commitMsg);
 
     return NextResponse.json(
-      { success: true, message: "Deploy started", commit: commitMsg, pushedBy },
+      { success: true, message: "Deploy started" },
       { status: 202 }
     );
   } catch (error) {
     console.error("❌ Webhook handler error:", error);
     return NextResponse.json(
-      { success: false, error: "Webhook failed", details: error instanceof Error ? error.message : "Unknown" },
+      { success: false, error: "Webhook failed" },
       { status: 500 }
     );
   }

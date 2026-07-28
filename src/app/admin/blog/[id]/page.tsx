@@ -155,7 +155,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
             Save
           </Button>
           {!form.isPublished && (
-            <Button size="sm" onClick={() => save(true)} disabled={saving || publishing} className="bg-gradient-to-r from-primary to-secondary">
+            <Button size="sm" onClick={() => save(true)} disabled={saving || publishing} className="bg-primary hover:bg-primary/90">
               {publishing ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Eye className="w-4 h-4 mr-1" />}
               Publish
             </Button>

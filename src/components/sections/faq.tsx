@@ -101,7 +101,7 @@ export function FAQ({ faqs = staticFaqs }: { faqs?: FAQType[] }) {
         </div>
         <Button
           onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-          className="bg-gradient-to-r from-primary to-secondary"
+          className="bg-primary hover:bg-primary/90"
         >
           Talk to us
         </Button>

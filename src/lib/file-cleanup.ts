@@ -8,6 +8,7 @@ import path from "node:path";
  *   - null / undefined / empty URLs (no-op)
  *   - URLs that don't start with `/uploads/` (no-op — refuses to delete
  *     arbitrary filesystem paths)
+ *   - Path traversal attempts like `/uploads/../../../etc/passwd` (no-op)
  *   - missing files (logs but doesn't throw)
  *
  * Always resolves — never rejects. File cleanup is best-effort: if it fails,
@@ -20,7 +21,15 @@ export async function deleteUploadByUrl(url: string | null | undefined): Promise
   if (!url.startsWith("/uploads/")) return;
   // Strip query string / hash just in case.
   const cleanUrl = url.split("?")[0].split("#")[0];
-  const filePath = path.join(process.cwd(), "public", cleanUrl);
+  // SECURITY: Resolve the absolute path and verify it's within the uploads
+  // directory to prevent path traversal (CWE-22).
+  const uploadsDir = path.resolve(process.cwd(), "public", "uploads");
+  const filePath = path.resolve(process.cwd(), "public", cleanUrl);
+  if (!filePath.startsWith(uploadsDir + path.sep)) {
+    // Path traversal attempt — refuse to delete.
+    console.warn(`Refusing to delete file outside uploads dir: ${filePath}`);
+    return;
+  }
   try {
     await unlink(filePath);
   } catch (err) {

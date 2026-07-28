@@ -520,7 +520,7 @@ export function Booking({
                     <Button
                       onClick={step === 4 ? finalize : next}
                       disabled={!canNext() || submitting}
-                      className="bg-gradient-to-r from-primary to-secondary"
+                      className="bg-primary hover:bg-primary/90"
                     >
                       {submitting && step === 4 ? (
                         <>

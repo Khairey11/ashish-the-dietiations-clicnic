@@ -15,7 +15,6 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Programs", href: "/programs" },
-  { label: "Pricing", href: "/pricing" },
   { label: "Dietitians", href: "/dietitians" },
   { label: "Success Stories", href: "/testimonials" },
   { label: "Blog", href: "/blog" },
@@ -81,7 +80,7 @@ export function Navigation() {
           <div
             className={cn(
               "flex items-center justify-between gap-4 rounded-2xl px-4 sm:px-6 transition-all duration-300",
-              scrolled ? "glass shadow-premium h-14" : "h-16 bg-transparent"
+              scrolled ? "bg-background shadow-premium h-14 border border-border/40" : "h-16 bg-transparent"
             )}
           >
             <Link
@@ -161,7 +160,7 @@ export function Navigation() {
               <Link href="/booking">
                 <Button
                   size="sm"
-                  className="hidden sm:inline-flex shimmer-btn bg-gradient-to-r from-primary to-secondary hover:shadow-glow"
+                  className="hidden sm:inline-flex shimmer-btn bg-primary hover:bg-primary/90 hover:shadow-glow"
                 >
                   Book Consultation
                 </Button>
@@ -221,7 +220,7 @@ export function Navigation() {
               )}
               <Link href="/booking">
                 <Button
-                  className="mt-2 bg-gradient-to-r from-primary to-secondary w-full"
+                  className="mt-2 bg-primary hover:bg-primary/90 w-full"
                 >
                   Book Consultation
                 </Button>

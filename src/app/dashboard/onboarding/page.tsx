@@ -311,7 +311,7 @@ export default function OnboardingPage() {
             <Button
               onClick={() => setStep(step + 1)}
               disabled={!canNext()}
-              className="bg-gradient-to-r from-primary to-secondary"
+              className="bg-primary hover:bg-primary/90"
             >
               Next
               <ChevronRight className="w-4 h-4 ml-1" />
@@ -320,7 +320,7 @@ export default function OnboardingPage() {
             <Button
               onClick={submit}
               disabled={saving}
-              className="bg-gradient-to-r from-primary to-secondary"
+              className="bg-primary hover:bg-primary/90"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                 <>

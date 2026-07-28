@@ -191,7 +191,7 @@ export default function AdminPage() {
                 Export
               </Button>
               <Link href="/booking">
-                <Button size="sm" className="bg-gradient-to-r from-primary to-secondary">
+                <Button size="sm" className="bg-primary hover:bg-primary/90">
                   <Plus className="w-3.5 h-3.5 mr-1.5" />
                   New appointment
                 </Button>

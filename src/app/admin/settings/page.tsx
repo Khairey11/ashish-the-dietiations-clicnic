@@ -137,7 +137,7 @@ export default function AdminSettingsPage() {
                 Manage payment methods, QR codes, and clinic contact details.
               </p>
             </div>
-            <Button onClick={save} disabled={saving} className="bg-gradient-to-r from-primary to-secondary">
+            <Button onClick={save} disabled={saving} className="bg-primary hover:bg-primary/90">
               {saving ? (
                 <>
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -595,7 +595,7 @@ function ClinicConfigSection() {
       </div>
 
       <div className="pt-2">
-        <Button onClick={save} disabled={saving} className="bg-gradient-to-r from-primary to-secondary">
+        <Button onClick={save} disabled={saving} className="bg-primary hover:bg-primary/90">
           {saving ? (
             <>
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-1.5" />
@@ -678,7 +678,7 @@ function ChangePasswordSection() {
         {newPassword && newPassword !== confirmPassword && (
           <p className="text-xs text-rose-600">Passwords don&apos;t match</p>
         )}
-        <Button onClick={handleChange} disabled={saving || !currentPassword || !newPassword || newPassword !== confirmPassword} className="bg-gradient-to-r from-primary to-secondary">
+        <Button onClick={handleChange} disabled={saving || !currentPassword || !newPassword || newPassword !== confirmPassword} className="bg-primary hover:bg-primary/90">
           {saving ? (
             <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-1.5" /> Saving...</>
           ) : (

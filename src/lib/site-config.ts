@@ -17,7 +17,7 @@ export const siteConfig = {
   whatsappDisplay: "+977 9800000000",
   whatsappRaw: "9779800000000",
   email: "info@thedietitiansclinic.com",
-  address: "Kathmandu, Nepal",
+  address: "Dharan-11, Sunsari, Nepal",
 
   // ===== Hours =====
   weekdayHours: "7:00 AM – 8:00 PM",

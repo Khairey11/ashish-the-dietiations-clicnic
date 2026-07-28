@@ -237,7 +237,7 @@ export default function AdminMessagesPage() {
                   disabled={sending}
                   className="flex-1"
                 />
-                <Button type="submit" size="sm" disabled={sending || !text.trim()} className="bg-gradient-to-r from-primary to-secondary">
+                <Button type="submit" size="sm" disabled={sending || !text.trim()} className="bg-primary hover:bg-primary/90">
                   {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 </Button>
               </form>

@@ -15,7 +15,7 @@ export function Programs({ programs = staticPrograms }: { programs?: Program[] }
   return (
     <SectionWrapper id="programs" className="bg-muted/30">
       <SectionHeader
-        eyebrow="Programs & Pricing"
+        eyebrow="Programs"
         title={
           <>
             Choose your{" "}
@@ -43,7 +43,7 @@ export function Programs({ programs = staticPrograms }: { programs?: Program[] }
           >
             {p.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <Badge className="bg-gradient-to-r from-primary to-secondary text-primary-foreground gap-1 shadow-glow">
+                <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1 shadow-glow">
                   <Star className="w-3 h-3 fill-current" />
                   Most popular
                 </Badge>
@@ -82,15 +82,15 @@ export function Programs({ programs = staticPrograms }: { programs?: Program[] }
                 </div>
               </div>
 
-              <Link href="/pricing" className="block">
+              <Link href="/booking" className="block">
                 <Button
                   variant={p.popular ? "default" : "outline"}
                   className={cn(
                     "w-full",
-                    p.popular && "bg-gradient-to-r from-primary to-secondary"
+                    p.popular && "bg-primary hover:bg-primary/90"
                   )}
                 >
-                  View Pricing
+                  Get Started
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
               </Link>
@@ -99,14 +99,14 @@ export function Programs({ programs = staticPrograms }: { programs?: Program[] }
         ))}
       </div>
 
-      {/* View pricing CTA */}
+      {/* View all programs CTA */}
       <div className="mt-12 text-center">
         <p className="text-sm text-muted-foreground mb-4">
           Every program includes a 14-day money-back guarantee.
         </p>
-        <Link href="/pricing">
+        <Link href="/programs">
           <Button variant="outline" size="lg">
-            View Detailed Pricing
+            View All Programs
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </Link>
