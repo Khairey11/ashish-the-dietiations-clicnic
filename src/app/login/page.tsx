@@ -236,7 +236,7 @@ function LoginForm() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-gradient-to-r from-primary to-secondary"
+                className="w-full h-11 bg-secondary hover:bg-secondary/90"
               >
                 {loading ? (
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -297,7 +297,7 @@ function LoginForm() {
         </div>
 
         {/* Right: marketing panel */}
-        <div className="hidden lg:flex relative bg-gradient-to-br from-primary to-secondary p-12 items-center justify-center overflow-hidden">
+        <div className="hidden lg:flex relative bg-secondary p-12 items-center justify-center overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-accent/30 rounded-full blur-3xl" />
 
