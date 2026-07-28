@@ -28,10 +28,10 @@ const item = {
 };
 
 const trustBadges = [
-  { icon: Stethoscope, label: "Online & In-person Consultations" },
+  { icon: Stethoscope, label: "Online 1-on-1 person Consultations" },
   { icon: ShieldCheck, label: "Evidence-Based Care" },
   { icon: Apple, label: "Personalized Meal Plans" },
-  { icon: MessageSquare, label: "Ongoing Support" },
+  { icon: MessageSquare, label: "Continuous Support" },
 ];
 
 export function Hero() {
@@ -73,9 +73,9 @@ export function Hero() {
               variants={item}
               className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed text-balance"
             >
-              Personalized nutrition care designed around you. Expert guidance for
-              weight management, diabetes, PCOS, heart health, and more — backed by
-              science and built around your life.
+              Evidence-based nutrition counselling for weight management, chronic
+              disease prevention, sports nutrition, maternal &amp; child nutrition,
+              and healthy living.
             </motion.p>
 
             <motion.div

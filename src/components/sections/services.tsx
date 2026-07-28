@@ -19,49 +19,28 @@ const categories = [
 ];
 
 export function Services() {
-  const [active, setActive] = React.useState("all");
   const [selected, setSelected] = React.useState<Service | null>(null);
 
-  const filtered = React.useMemo(() => {
-    if (active === "all") return services;
-    return services.filter((s) => s.category === active);
-  }, [active]);
+  // Show 6 featured services on the homepage matching the reference design
+  const featuredSlugs = ["weight-loss", "diabetes-diet", "pcos-diet", "child-nutrition", "sports-nutrition", "lifestyle-modification"];
+  const featured = featuredSlugs.map(slug => services.find(s => s.slug === slug)).filter(Boolean) as Service[];
 
   return (
     <SectionWrapper id="services" className="bg-background">
       <SectionHeader
-        eyebrow="What we treat"
+        eyebrow="Our Services"
         title={
           <>
-            Specialised programs for{" "}
-            <span className="gradient-text">every body</span> and every goal
+            Personalized Nutrition for{" "}
+            <span className="gradient-text">Every Stage of Health</span>
           </>
         }
-        description="Twelve evidence-based service tracks led by RDN-credentialed clinicians. From weight management to medical nutrition therapy, we have a path designed for you."
       />
 
-      {/* Category filter */}
-      <div className="mt-10 flex flex-wrap justify-center gap-2">
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setActive(cat.id)}
-            className={cn(
-              "px-4 py-2 rounded-full text-sm font-medium transition-all",
-              active === cat.id
-                ? "bg-primary text-primary-foreground shadow-glow"
-                : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
-            )}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid */}
+      {/* Grid — 6 featured services */}
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <AnimatePresence mode="popLayout">
-          {filtered.map((service, i) => (
+          {featured.map((service, i) => (
             <motion.button
               key={service.slug}
               layout
@@ -98,6 +77,13 @@ export function Services() {
             </motion.button>
           ))}
         </AnimatePresence>
+      </div>
+
+      {/* View All Services */}
+      <div className="mt-10 text-center">
+        <a href="/services" className="inline-flex items-center justify-center h-11 px-6 rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm font-semibold transition-colors">
+          View All Services
+        </a>
       </div>
 
       {/* Detail modal */}
