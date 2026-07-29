@@ -55,6 +55,10 @@ server.log
 # Local database
 /db/*.db
 /db/*.db-journal
+/prisma/db/*.db
+/prisma/db/*.db-journal
+*.db
+*.db-journal
 
 # Env files (keep .env.example tracked)
 .env
