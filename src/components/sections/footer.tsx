@@ -138,10 +138,10 @@ export function Footer({ config }: { config?: DynamicConfig }) {
           {/* Brand */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <Image src="/logo-transparent.png" alt="The Dietitians Clinic logo" width={36} height={36} className="w-9 h-9 object-contain" />
+              <Image src="/logo-transparent.png" alt="The Dietitian's Clinic logo" width={36} height={36} className="w-9 h-9 object-contain" />
               <div className="flex flex-col leading-none">
-                <span className="text-base font-bold tracking-tight">The Dietitians Clinic</span>
-                <span className="text-[10px] text-white/60 font-medium tracking-wide">NUTRITION CLINIC</span>
+                <span className="text-base font-bold tracking-tight">The Dietitian's Clinic</span>
+                <span className="text-[10px] text-white/60 font-medium tracking-wide">Centre for Clinical & Performance Nutrition</span>
               </div>
             </div>
             <p className="text-sm text-white/70 leading-relaxed mb-5 max-w-sm">
@@ -197,7 +197,7 @@ export function Footer({ config }: { config?: DynamicConfig }) {
           </form>
 
           <div className="flex items-center gap-4 text-xs text-white/50">
-            <p>&copy; 2026 The Dietitians Clinic. All rights reserved.</p>
+            <p>&copy; 2026 The Dietitian's Clinic. All rights reserved.</p>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
           </div>

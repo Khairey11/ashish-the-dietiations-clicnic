@@ -642,7 +642,7 @@ function PaymentStep({
 
   // Build prefilled WhatsApp message with booking details
   const waMessage = [
-    `Hi The Dietitians Clinic! I've just completed my booking.`,
+    `Hi The Dietitian's Clinic! I've just completed my booking.`,
     ``,
     `*Booking details:*`,
     `• Name: ${data.name || "—"}`,

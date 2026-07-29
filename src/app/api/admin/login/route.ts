@@ -8,7 +8,7 @@ import { verifyPassword } from "@/lib/password";
  * POST /api/admin/login
  * Body: { email, password }
  *
- * Verifies credentials against the User table (SUPER_ADMIN or DIETITIAN role).
+ * Verifies credentials against the User table (any role).
  * On success, sets an httpOnly HMAC-signed session cookie.
  */
 
@@ -40,13 +40,21 @@ export async function POST(req: NextRequest) {
 
     const user = await db.user.findUnique({
       where: { email },
-      select: { id: true, name: true, email: true, role: true, passwordHash: true, sessionVersion: true },
+      select: { id: true, name: true, email: true, role: true, isActive: true, passwordHash: true, sessionVersion: true },
     });
 
     if (!user || !user.passwordHash) {
       return NextResponse.json(
         { success: false, error: "Invalid credentials" },
         { status: 401 }
+      );
+    }
+
+    // Reject deactivated accounts
+    if (!user.isActive) {
+      return NextResponse.json(
+        { success: false, error: "Account has been deactivated. Please contact the clinic." },
+        { status: 403 }
       );
     }
 
@@ -68,6 +76,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Update last login timestamp (best-effort, don't block login on failure)
+    await db.user.update({
+      where: { id: user.id },
+      data: { lastLoginAt: new Date() },
+    }).catch(() => {});
+
     const token = await signSession(user.id, user.sessionVersion);
     const res = NextResponse.json({
       success: true,
@@ -82,7 +96,7 @@ export async function POST(req: NextRequest) {
     });
     return res;
   } catch (error) {
-    console.error("Admin login error:", error);
+    console.error("Login error:", error);
     return NextResponse.json(
       { success: false, error: "Login failed" },
       { status: 500 }

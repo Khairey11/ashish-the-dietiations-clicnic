@@ -22,11 +22,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://thedietitiansclinic.com"),
   title: {
-    default: "The Dietitians Clinic | Personalized Nutrition Care",
-    template: "%s | The Dietitians Clinic",
+    default: "The Dietitian's Clinic | Centre for Clinical and Performance Nutrition",
+    template: "%s | The Dietitian's Clinic",
   },
   description:
-    "The Dietitians Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PMOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
+    "The Dietitian's Clinic is a premium healthcare platform for personalized nutrition. Book consultations, follow science-backed diet programs for weight loss, PCOS, diabetes, thyroid, pregnancy and sports nutrition. Track progress, receive meal plans, and meet certified dietitians — all in one place.",
   keywords: [
     "dietitian",
     "nutritionist",
@@ -40,27 +40,27 @@ export const metadata: Metadata = {
     "online nutrition consultation",
     "meal plan",
     "body composition analysis",
-    "The Dietitians Clinic",
+    "The Dietitian's Clinic",
   ],
-  authors: [{ name: "The Dietitians Clinic" }],
-  creator: "The Dietitians Clinic",
-  publisher: "The Dietitians Clinic",
-  applicationName: "The Dietitians Clinic",
+  authors: [{ name: "The Dietitian's Clinic" }],
+  creator: "The Dietitian's Clinic",
+  publisher: "The Dietitian's Clinic",
+  applicationName: "The Dietitian's Clinic",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "The Dietitians Clinic | Personalized Nutrition Care",
+    title: "The Dietitian's Clinic | Centre for Clinical and Performance Nutrition",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans. Book your consultation today.",
     url: "https://thedietitiansclinic.com",
-    siteName: "The Dietitians Clinic",
+    siteName: "The Dietitian's Clinic",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Dietitians Clinic | Personalized Nutrition Care",
+    title: "The Dietitian's Clinic | Centre for Clinical and Performance Nutrition",
     description:
       "Personalized nutrition programs, certified dietitians, science-backed meal plans.",
   },
@@ -97,7 +97,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "MedicalOrganization",
-              name: "The Dietitians Clinic",
+              name: "The Dietitian's Clinic",
               description:
                 "Premium dietitian & nutrition consultancy offering personalized diet programs, online consultations, and continuous progress tracking.",
               url: "https://thedietitiansclinic.com",

@@ -38,7 +38,7 @@ export function Testimonials({ testimonials = staticTestimonials }: { testimonia
             <span className="gradient-text">speak for themselves</span>
           </>
         }
-        description="Hundreds of clients have transformed their health with The Dietitians Clinic. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
+        description="Hundreds of clients have transformed their health with The Dietitian's Clinic. Here are a few of their stories — unfiltered, verified, and tracked through our platform."
       />
 
       {/* Filters */}
