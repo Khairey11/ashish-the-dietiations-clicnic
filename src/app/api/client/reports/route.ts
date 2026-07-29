@@ -49,7 +49,12 @@ export async function GET(req: NextRequest) {
 const createSchema = z.object({
   title: z.string().min(1).max(200),
   type: z.enum(["LAB", "BODY_COMP", "PROGRESS", "CUSTOM"]).default("LAB"),
-  fileUrl: z.string().min(1).max(500),
+  // SECURITY: fileUrl must be a local upload path — never an external URL or
+  // arbitrary path that could enable SSRF or path traversal attacks.
+  fileUrl: z.string().min(1).max(500).refine(
+    (url) => url.startsWith("/uploads/") && !url.includes(".."),
+    "fileUrl must be a valid /uploads/ path"
+  ),
   summary: z.string().max(2000).optional(),
 });
 

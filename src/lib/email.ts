@@ -21,6 +21,19 @@ type EmailParams = {
 
 const FROM_EMAIL = process.env.FROM_EMAIL || "info@thedietitiansclinic.com";
 
+/**
+ * HTML-escape a string for safe interpolation into email templates.
+ * Prevents stored XSS via user-controlled values (name, service, etc.).
+ */
+function esc(str: string): string {
+  return String(str)
+    .replace(/&/g, "\x26amp;")
+    .replace(/</g, "\x26lt;")
+    .replace(/>/g, "\x26gt;")
+    .replace(/"/g, "\x26quot;")
+    .replace(/'/g, "\x26#39;");
+}
+
 export async function sendEmail({ to, subject, html, text }: EmailParams): Promise<{ success: boolean; error?: string }> {
   // In development, just log
   if (process.env.NODE_ENV !== "production") {
@@ -87,34 +100,34 @@ export async function sendBookingConfirmation(opts: {
         <h1 style="color: white; margin: 0; font-size: 24px;">Booking Confirmed!</h1>
       </div>
       <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
-        <p style="color: #374151; font-size: 16px;">Hi ${opts.clientName},</p>
+        <p style="color: #374151; font-size: 16px;">Hi ${esc(opts.clientName)},</p>
         <p style="color: #6b7280; font-size: 15px; line-height: 1.6;">
           Your consultation at The Dietitian's Clinic has been confirmed. Here are your appointment details:
         </p>
         <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
-          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Service</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${opts.service}</td></tr>
-          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Dietitian</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${opts.dietitian}</td></tr>
-          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Date</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${opts.date}</td></tr>
-          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Time</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${opts.time} (Nepal Standard Time)</td></tr>
-          ${opts.program ? `<tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Program</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${opts.program}</td></tr>` : ""}
+          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Service</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${esc(opts.service)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Dietitian</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${esc(opts.dietitian)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Date</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${esc(opts.date)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Time</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${esc(opts.time)} (Nepal Standard Time)</td></tr>
+          ${opts.program ? `<tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Program</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">${esc(opts.program)}</td></tr>` : ""}
           ${opts.amount ? `<tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Amount</td><td style="padding: 8px 0; color: #111827; font-weight: 600; font-size: 14px;">Rs. ${opts.amount.toLocaleString("en-IN")}</td></tr>` : ""}
         </table>
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 20px 0;">
           <p style="margin: 0; color: #15803d; font-size: 14px; font-weight: 600;">📋 Next steps</p>
           <p style="margin: 8px 0 0 0; color: #166534; font-size: 13px; line-height: 1.5;">
             1. Complete your payment via Khalti/eSewa or bank transfer<br>
-            2. Send the payment screenshot to our WhatsApp: ${siteConfig.whatsappDisplay}<br>
+            2. Send the payment screenshot to our WhatsApp: ${esc(siteConfig.whatsappDisplay)}<br>
             3. You'll receive a video call link 15 minutes before your appointment
           </p>
         </div>
         <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
-          Need to reschedule? Reply to this email or call us at ${siteConfig.phoneDisplay}.
+          Need to reschedule? Reply to this email or call us at ${esc(siteConfig.phoneDisplay)}.
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
         <p style="color: #9ca3af; font-size: 12px;">
           The Dietitian's Clinic — Centre for Clinical and Performance Nutrition<br>
-          ${siteConfig.address}<br>
-          ${siteConfig.phoneDisplay} · ${siteConfig.email}
+          ${esc(siteConfig.address)}<br>
+          ${esc(siteConfig.phoneDisplay)} · ${esc(siteConfig.email)}
         </p>
       </div>
     </div>
@@ -142,12 +155,12 @@ export async function sendLeadNotification(opts: {
     <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <h2 style="color: #28abe3;">New Lead from Website</h2>
       <table style="width: 100%; border-collapse: collapse;">
-        <tr><td style="padding: 6px 0; color: #6b7280;">Name:</td><td style="font-weight: 600;">${opts.leadName}</td></tr>
-        <tr><td style="padding: 6px 0; color: #6b7280;">Email:</td><td style="font-weight: 600;">${opts.leadEmail}</td></tr>
-        <tr><td style="padding: 6px 0; color: #6b7280;">Phone:</td><td style="font-weight: 600;">${opts.leadPhone}</td></tr>
-        ${opts.service ? `<tr><td style="padding: 6px 0; color: #6b7280;">Service:</td><td style="font-weight: 600;">${opts.service}</td></tr>` : ""}
+        <tr><td style="padding: 6px 0; color: #6b7280;">Name:</td><td style="font-weight: 600;">${esc(opts.leadName)}</td></tr>
+        <tr><td style="padding: 6px 0; color: #6b7280;">Email:</td><td style="font-weight: 600;">${esc(opts.leadEmail)}</td></tr>
+        <tr><td style="padding: 6px 0; color: #6b7280;">Phone:</td><td style="font-weight: 600;">${esc(opts.leadPhone)}</td></tr>
+        ${opts.service ? `<tr><td style="padding: 6px 0; color: #6b7280;">Service:</td><td style="font-weight: 600;">${esc(opts.service)}</td></tr>` : ""}
       </table>
-      <p style="margin-top: 16px; padding: 12px; background: #f9fafb; border-radius: 8px;">${opts.message}</p>
+      <p style="margin-top: 16px; padding: 12px; background: #f9fafb; border-radius: 8px;">${esc(opts.message)}</p>
       <p style="color: #6b7280; font-size: 13px; margin-top: 20px;">Respond within 1 hour via WhatsApp or phone for best conversion.</p>
     </div>
   `;
@@ -184,7 +197,7 @@ export async function sendVerificationEmail(opts: {
         <h1 style="color: white; margin: 0; font-size: 22px;">Verify your email</h1>
       </div>
       <div style="background: white; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
-        <p style="color: #374151; font-size: 16px;">Hi ${opts.name},</p>
+        <p style="color: #374151; font-size: 16px;">Hi ${esc(opts.name)},</p>
         <p style="color: #6b7280; font-size: 15px; line-height: 1.6;">
           Welcome to The Dietitian's Clinic! Please confirm your email address to activate your account and access your dashboard.
         </p>
@@ -199,8 +212,8 @@ export async function sendVerificationEmail(opts: {
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
         <p style="color: #9ca3af; font-size: 12px;">
           The Dietitian's Clinic — Centre for Clinical and Performance Nutrition<br>
-          ${siteConfig.address}<br>
-          ${siteConfig.phoneDisplay} · ${siteConfig.email}
+          ${esc(siteConfig.address)}<br>
+          ${esc(siteConfig.phoneDisplay)} · ${esc(siteConfig.email)}
         </p>
       </div>
     </div>
