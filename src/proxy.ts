@@ -24,23 +24,36 @@ const PROTECTED_API = "/api/admin";
 const MUTATION_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 /**
+ * Normalize an origin URL: strip trailing slash and www. prefix so that
+ * "https://www.example.com" and "https://example.com" are treated as the
+ * same origin. This prevents false-positive CSRF rejections when the app
+ * is accessible via both www and non-www domains.
+ */
+function normalizeOrigin(url: string): string {
+  try {
+    const u = new URL(url);
+    let host = u.hostname;
+    // Strip leading "www." so both variants match
+    if (host.startsWith("www.")) host = host.slice(4);
+    return `${u.protocol}//${host}`;
+  } catch {
+    return url.replace(/\/$/, "").toLowerCase();
+  }
+}
+
+/**
  * Resolve the app's own origin (scheme + host). Falls back to the request's
  * own host header if APP_BASE_URL is not configured.
  */
 function getExpectedOrigin(req: NextRequest): string {
   const configured = process.env.APP_BASE_URL || process.env.NEXT_PUBLIC_APP_URL;
   if (configured) {
-    try {
-      const u = new URL(configured);
-      return u.origin;
-    } catch {
-      // fall through
-    }
+    return normalizeOrigin(configured);
   }
   // Fallback: trust the Host header on the incoming request.
   const host = req.headers.get("host");
   const proto = req.headers.get("x-forwarded-proto") || (process.env.NODE_ENV === "production" ? "https" : "http");
-  return host ? `${proto}://${host}` : "";
+  return host ? normalizeOrigin(`${proto}://${host}`) : "";
 }
 
 export async function proxy(req: NextRequest) {
@@ -58,21 +71,35 @@ export async function proxy(req: NextRequest) {
   if (!isCsrfExempt && pathname.startsWith("/api/") && MUTATION_METHODS.has(req.method)) {
     const origin = req.headers.get("origin");
     const expected = getExpectedOrigin(req);
-    // In dev with no APP_BASE_URL, skip the check (don't lock out the developer).
-    if (expected && origin && origin !== expected) {
-      return NextResponse.json(
-        { success: false, error: "Cross-origin requests are not allowed." },
-        { status: 403 }
-      );
+
+    // If both origin and expected are known, compare them (with www-normalization).
+    if (expected && origin) {
+      const normalizedOrigin = normalizeOrigin(origin);
+      if (normalizedOrigin !== expected) {
+        return NextResponse.json(
+          { success: false, error: "Cross-origin requests are not allowed." },
+          { status: 403 }
+        );
+      }
     }
-    // If `origin` is missing on a mutation request, that's suspicious —
-    // browsers always send it. Allow it through only in dev (where curl / Postman
-    // are common). In production, reject.
+    // If `origin` is missing on a mutation request:
+    //   - In production: allow it through for auth routes (login/register/reset)
+    //     since they have their own protections (rate limiting, password verification).
+    //   - In production: reject for other API routes (suspicious).
+    //   - In dev: always allow (curl/Postman don't send Origin).
+    // Note: Browsers normally send Origin for fetch/XHR, but some edge cases
+    // (HTTP→HTTPS redirects, certain older browsers) may not. Blocking auth
+    // routes on missing Origin would lock users out in those cases.
     if (!origin && process.env.NODE_ENV === "production" && expected) {
-      return NextResponse.json(
-        { success: false, error: "Missing Origin header." },
-        { status: 403 }
-      );
+      const isAuthRoute =
+        pathname.startsWith("/api/admin/login") ||
+        pathname.startsWith("/api/auth/");
+      if (!isAuthRoute) {
+        return NextResponse.json(
+          { success: false, error: "Missing Origin header." },
+          { status: 403 }
+        );
+      }
     }
   }
 
