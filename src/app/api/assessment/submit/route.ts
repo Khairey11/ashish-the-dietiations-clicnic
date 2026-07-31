@@ -158,22 +158,28 @@ export async function POST(req: NextRequest) {
     });
 
     // Create notifications for the uploaded files (if any)
-    if (body.fileUrls && body.fileUrls.length > 0) {
-      // Store file URLs as documents on the patient record
-      const patient = await db.patient.findUnique({
-        where: { userId },
-        select: { id: true },
-      });
-      if (patient) {
-        for (const url of body.fileUrls) {
-          await db.document.create({
-            data: {
-              patientId: patient.id,
-              name: url.split("/").pop() || "Uploaded document",
-              fileUrl: url,
-              fileType: url.endsWith(".pdf") ? "application/pdf" : "image",
-            },
-          });
+    // SECURITY: Only accept /uploads/ paths to prevent SSRF/arbitrary URL storage
+    if (body.fileUrls && Array.isArray(body.fileUrls) && body.fileUrls.length > 0) {
+      const safeUrls = body.fileUrls.filter(
+        (url: string) => typeof url === "string" && url.startsWith("/uploads/") && !url.includes("..")
+      );
+      if (safeUrls.length > 0) {
+        // Store file URLs as documents on the patient record
+        const patient = await db.patient.findUnique({
+          where: { userId },
+          select: { id: true },
+        });
+        if (patient) {
+          for (const url of safeUrls) {
+            await db.document.create({
+              data: {
+                patientId: patient.id,
+                name: url.split("/").pop() || "Uploaded document",
+                fileUrl: url,
+                fileType: url.endsWith(".pdf") ? "application/pdf" : "image",
+              },
+            });
+          }
         }
       }
     }
