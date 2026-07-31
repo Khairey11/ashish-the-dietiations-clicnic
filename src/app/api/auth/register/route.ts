@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
         name,
         phone,
         role: "CLIENT",
-        isActive: true,
+        isActive: false, // Pending admin approval before portal access
         passwordHash,
         patient: {
           create: {
