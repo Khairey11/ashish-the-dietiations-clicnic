@@ -59,6 +59,7 @@ model User {
   passwordResets    PasswordReset[]
   sessions          Session[]
   accounts          Account[]
+  staffProfile      StaffProfile?
 }
 
 model Account {
@@ -175,6 +176,47 @@ model Patient {
 
   @@index([dietitianId])
   @@index([programId])
+}
+
+// ============================================================
+// STAFF PROFILES
+// ============================================================
+
+model StaffProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bio             String?
+  qualifications  String?
+  experienceYears Int?
+  specialties     String?
+  languages       String?
+
+  photoUrl        String?
+  resumeUrl       String?
+  certificateUrls String?
+
+  employeeId      String?
+  department      String?
+  joinedAt        DateTime?
+  employmentType  String?
+
+  workPhone       String?
+  workEmail       String?
+
+  linkedinUrl     String?
+  twitterUrl      String?
+  websiteUrl      String?
+
+  isVerified      Boolean  @default(false)
+  verifiedAt      DateTime?
+  verifiedById    String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([department])
 }
 
 // ============================================================

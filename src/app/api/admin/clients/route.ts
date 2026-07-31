@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/auth";
 
 const querySchema = z.object({
   search: z.string().max(100).optional(),
+  status: z.enum(["all", "pending", "active", "suspended"]).optional().default("all"),
   limit: z.coerce.number().min(1).max(200).default(50),
   offset: z.coerce.number().min(0).default(0),
 });
@@ -21,6 +22,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const parsed = querySchema.safeParse({
       search: searchParams.get("search") || undefined,
+      status: searchParams.get("status") || "all",
       limit: searchParams.get("limit") || 50,
       offset: searchParams.get("offset") || 0,
     });
@@ -32,18 +34,22 @@ export async function GET(req: NextRequest) {
     }
 
     const search = parsed.data.search?.trim();
-    const where = search
-      ? {
-          role: "CLIENT" as const,
-          OR: [
-            { name: { contains: search, mode: "insensitive" as const } },
-            { email: { contains: search, mode: "insensitive" as const } },
-            { phone: { contains: search, mode: "insensitive" as const } },
-          ],
-        }
-      : { role: "CLIENT" as const };
 
-    const [clients, total] = await Promise.all([
+    const where = {
+      role: "CLIENT" as const,
+      ...(parsed.data.status === "pending" ? { isActive: false } : {}),
+      ...(parsed.data.status === "active" ? { isActive: true } : {}),
+      ...(parsed.data.status === "suspended" ? { isActive: false } : {}),
+      ...(search ? {
+        OR: [
+          { name: { contains: search, mode: "insensitive" as const } },
+          { email: { contains: search, mode: "insensitive" as const } },
+          { phone: { contains: search, mode: "insensitive" as const } },
+        ],
+      } : {}),
+    };
+
+    const [clients, total, pendingCount] = await Promise.all([
       db.user.findMany({
         where,
         orderBy: { createdAt: "desc" },
@@ -54,7 +60,9 @@ export async function GET(req: NextRequest) {
           name: true,
           email: true,
           phone: true,
+          isActive: true,
           createdAt: true,
+          lastLoginAt: true,
           patient: {
             select: {
               id: true,
@@ -74,12 +82,14 @@ export async function GET(req: NextRequest) {
         },
       }),
       db.user.count({ where }),
+      db.user.count({ where: { role: "CLIENT", isActive: false } }),
     ]);
 
     return NextResponse.json({
       success: true,
       data: clients,
       total,
+      pendingCount,
     });
   } catch (error) {
     console.error("Failed to fetch clients:", error);
