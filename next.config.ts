@@ -14,9 +14,12 @@ import { withSentryConfig } from "@sentry/nextjs";
  * Note: this is intentionally strict. If a new third-party is added
  * (analytics, Stripe, etc.) it MUST be added here.
  */
+// In production, Next.js doesn't need 'unsafe-eval'. In dev, Turbopack/HMR
+// requires both 'unsafe-inline' and 'unsafe-eval' for script-src.
+const isDev = process.env.NODE_ENV !== "production";
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Next.js dev + framer-motion in dev
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
