@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Save, Trash2, Loader2, Eye, EyeOff, UserCog } from "lucide-react";
+import { Plus, Save, Trash2, Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, Target, Eye, ArrowRight, Leaf } from "lucide-react";
+import { Check, Target, Eye, ArrowRight } from "lucide-react";
 import { whyChooseUs } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { SectionWrapper } from "./section-utils";

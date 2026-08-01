@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Utensils, ChevronLeft, Loader2, Apple, Coffee, Moon, Cookie } from "lucide-react";
+import { Utensils, ChevronLeft, Apple, Coffee, Moon, Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

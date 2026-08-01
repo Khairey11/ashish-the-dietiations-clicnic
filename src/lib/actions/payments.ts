@@ -1,6 +1,5 @@
 "use server";
 
-import * as React from "react";
 import { db } from "@/lib/db";
 import { siteConfig } from "@/lib/site-config";
 

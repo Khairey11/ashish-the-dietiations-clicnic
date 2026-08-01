@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
 import { SiteLayout, PageHero } from "@/components/site/site-layout";
 import { services } from "@/lib/data";
 import { cn } from "@/lib/utils";

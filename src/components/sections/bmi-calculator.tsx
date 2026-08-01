@@ -7,7 +7,7 @@ import { Calculator, Activity, HeartPulse, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { SectionHeader, SectionWrapper } from "./section-utils";
+import { SectionWrapper } from "./section-utils";
 import { cn } from "@/lib/utils";
 
 type BMIResult = {

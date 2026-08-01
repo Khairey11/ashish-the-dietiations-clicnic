@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Calendar, Target, Wallet, Plus, TrendingDown, Loader2, Activity, Clock, MailCheck, AlertCircle } from "lucide-react";
+import { Calendar, Target, Plus, TrendingDown, Loader2, Activity, Clock, MailCheck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

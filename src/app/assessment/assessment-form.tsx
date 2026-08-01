@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User, Target, Activity, FileText, Scale, Upload,
-  ChevronLeft, ChevronRight, Check, Loader2, Info, X,
+  ChevronLeft, ChevronRight, Check, Loader2, Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

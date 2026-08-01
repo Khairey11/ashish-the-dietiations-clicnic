@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Quote, TrendingDown, TrendingUp, ArrowRight } from "lucide-react";
+import { Star, Quote, TrendingDown, TrendingUp } from "lucide-react";
 import { testimonials as staticTestimonials, type Testimonial } from "@/lib/data";
-import { Button } from "@/components/ui/button";
 import { SectionHeader, SectionWrapper } from "./section-utils";
 import { cn } from "@/lib/utils";
 

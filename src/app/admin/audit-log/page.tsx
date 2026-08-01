@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ScrollText, ChevronLeft, Loader2 } from "lucide-react";
+import { ScrollText, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

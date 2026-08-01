@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { siteConfig } from "@/lib/site-config";
 import { GithubUpdateChecker } from "@/components/admin/github-checker";
 
 type PaymentConfig = {

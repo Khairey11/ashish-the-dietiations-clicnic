@@ -2,12 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  LayoutDashboard, Users, CalendarDays, CreditCard, Megaphone, Star, Settings, Search, Bell, DollarSign,
-  UserPlus, ChevronRight, Activity, Wallet, ArrowUpRight,
-  ArrowDownRight, Plus, Download, ShieldCheck, Clock,
+import { Users, CalendarDays, CreditCard, Megaphone, Star, Settings, Search, DollarSign,
+  UserPlus, ChevronRight, Activity, ArrowUpRight,
+  ArrowDownRight, Plus, Download, Clock,
 } from "lucide-react";
-import { Navigation } from "@/components/site/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

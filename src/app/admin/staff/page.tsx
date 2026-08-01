@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, ChevronLeft, Search, MoreVertical, UserCog, Mail, Phone, Loader2, Upload, X, Shield, Eye, EyeOff, Key, Trash2, CheckCircle } from "lucide-react";
+import { Plus, ChevronLeft, Search, MoreVertical, UserCog, Loader2, Upload, Shield, Eye, EyeOff, Key, Trash2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";

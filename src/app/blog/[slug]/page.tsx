@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Calendar, Clock, User, ChevronRight, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, ChevronRight, Tag } from "lucide-react";
 import { SiteLayout } from "@/components/site/site-layout";
 import { ShareButton } from "@/components/site/share-button";
 import { blogPosts as staticBlogPosts } from "@/lib/data";

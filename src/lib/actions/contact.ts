@@ -1,6 +1,5 @@
 "use server";
 
-import * as React from "react";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { db } from "@/lib/db";

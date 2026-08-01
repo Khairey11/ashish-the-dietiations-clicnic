@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { siteConfig, whatsappLink } from "@/lib/site-config";
+import { whatsappLink } from "@/lib/site-config";
 
 export function CTABanner() {
   return (
