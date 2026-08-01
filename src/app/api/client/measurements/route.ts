@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireClient } from "@/lib/auth";
+import { rateLimit, getClientIp } from "@/lib/ratelimit";
 
 const createSchema = z.object({
   weight: z.coerce.number().min(20).max(500).optional(),
@@ -56,6 +57,16 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const auth = await requireClient(req);
   if (!auth.ok) return auth.response;
+
+  // Rate limit: 30 measurements per 15 min per user+IP
+  const ip = getClientIp(req);
+  const rl = rateLimit({ key: `measurement:${auth.userId}:${ip}`, limit: 30, windowMs: 15 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
+    );
+  }
 
   try {
     const body = await req.json();

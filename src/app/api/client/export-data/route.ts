@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireClient } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
-import { getClientIp } from "@/lib/ratelimit";
+import { getClientIp, rateLimit } from "@/lib/ratelimit";
 
 /**
  * GET /api/client/export-data
@@ -19,6 +19,16 @@ import { getClientIp } from "@/lib/ratelimit";
 export async function GET(req: NextRequest) {
   const auth = await requireClient(req);
   if (!auth.ok) return auth.response;
+
+  // Rate limit: 5 data exports per hour per user+IP (heavy DB query)
+  const ip = getClientIp(req);
+  const rl = rateLimit({ key: `export:${auth.userId}:${ip}`, limit: 5, windowMs: 60 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
+    );
+  }
 
   try {
     const userId = auth.userId;

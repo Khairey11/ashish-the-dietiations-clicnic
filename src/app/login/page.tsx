@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, User, ShieldCheck, Sparkles, Phone } from "lucide-react";
 import { Navigation } from "@/components/site/navigation";
+import { Footer } from "@/components/sections/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,7 @@ function LoginFallback() {
       <main id="main" className="flex-1 pt-20 flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
       </main>
+      <Footer />
     </div>
   );
 }
@@ -346,6 +348,7 @@ function LoginForm() {
           </motion.div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

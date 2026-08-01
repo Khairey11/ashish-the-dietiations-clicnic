@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySession } from "@/lib/auth";
+import { verifySession, ADMIN_COOKIE } from "@/lib/auth";
 
 /**
  * Next.js middleware — runs before every matched route.
@@ -105,7 +105,7 @@ export async function proxy(req: NextRequest) {
 
   // ----- Auth guard for /api/admin/* (except /api/admin/login) -----
   if (pathname.startsWith(PROTECTED_API) && !pathname.startsWith("/api/admin/login")) {
-    const token = req.cookies.get("admin_session")?.value;
+    const token = req.cookies.get(ADMIN_COOKIE)?.value;
     const userId = await verifySession(token);
     if (!userId) {
       return NextResponse.json(
@@ -118,7 +118,7 @@ export async function proxy(req: NextRequest) {
 
   // ----- Auth guard for /admin and /dashboard pages -----
   if (PROTECTED_PAGES.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
-    const token = req.cookies.get("admin_session")?.value;
+    const token = req.cookies.get(ADMIN_COOKIE)?.value;
     const userId = await verifySession(token);
     if (!userId) {
       const loginUrl = new URL("/login", req.url);

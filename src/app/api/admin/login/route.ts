@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Reject deactivated accounts
-    if (!user.isActive) {
+    if (!user.isActive && user.role !== "CLIENT") {
       return NextResponse.json(
         { success: false, error: "Account has been deactivated. Please contact the clinic." },
         { status: 403 }

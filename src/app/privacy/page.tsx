@@ -113,7 +113,7 @@ export default function PrivacyPolicyPage() {
             <h2>10. Cookies</h2>
             <p>We use only essential cookies:</p>
             <ul>
-              <li><strong>admin_session:</strong> keeps you logged in. HttpOnly, secure, expires after 7 days.</li>
+              <li><strong>app_session:</strong> keeps you logged in. HttpOnly, secure, expires after 7 days.</li>
               <li><strong>theme:</strong> remembers your light/dark mode preference. Set by next-themes.</li>
             </ul>
             <p>

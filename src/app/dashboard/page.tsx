@@ -27,7 +27,7 @@ type Measurement = {
 };
 
 type DashboardData = {
-  user: { id: string; name: string | null; email: string; phone: string | null; createdAt: string; emailVerified: string | null } | null;
+  user: { id: string; name: string | null; email: string; phone: string | null; createdAt: string; emailVerified: string | null; isActive: boolean } | null;
   patient: {
     id: string;
     primaryGoal: string | null;
@@ -172,6 +172,21 @@ export default function DashboardPage() {
 
   return (
     <>
+      {/* Pending approval banner */}
+      {data?.user && data.user.isActive === false && (
+        <div className="mb-6 p-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+            <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">Account pending approval</p>
+            <p className="text-xs text-amber-700/80 dark:text-amber-400/80 mt-0.5">
+              Our team is reviewing your registration. You'll have full access once approved — usually within 1 business hour.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Email verification banner */}
       {data?.user && !data.user.emailVerified && (
         <div className="mb-6 p-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 flex items-start gap-3 flex-wrap">

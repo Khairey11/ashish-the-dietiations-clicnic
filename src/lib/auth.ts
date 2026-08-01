@@ -15,7 +15,7 @@ import type { UserRole } from "@prisma/client";
  * Login flow:
  *   1. POST /api/admin/login (or /api/auth/register) with { email, password }
  *   2. Server verifies password against User.passwordHash (scrypt)
- *   3. Server sets httpOnly cookie `admin_session` = signed token
+ *   3. Server sets httpOnly cookie `app_session` = signed token
  *   4. Subsequent requests verified via requireUser / requireAdmin / etc.
  *
  * Role helpers:
@@ -27,7 +27,7 @@ import type { UserRole } from "@prisma/client";
  *   - requireSuperAdmin        — SUPER_ADMIN only (payment config, clinic config, audit log)
  */
 
-const COOKIE_NAME = "admin_session";
+const COOKIE_NAME = "app_session";
 
 function getSecret(): string {
   const s = process.env.ADMIN_SESSION_SECRET || process.env.NEXTAUTH_SECRET;
@@ -168,6 +168,33 @@ export async function requireClient(req: NextRequest): Promise<
   const result = await requireUser(req, ["CLIENT"]);
   if (!result.ok) return result;
   return { ok: true, userId: result.userId, role: result.role };
+}
+
+/**
+ * Client (including pending/unapproved) — used ONLY for the dashboard GET endpoint
+ * so that newly registered clients can see the "pending approval" banner.
+ * All other client APIs use requireClient which blocks inactive accounts.
+ */
+export async function requireClientAllowPending(req: NextRequest): Promise<
+  { ok: true; userId: string; role: UserRole } | { ok: false; response: NextResponse }
+> {
+  const token = req.cookies.get(COOKIE_NAME)?.value;
+  const userId = await verifySession(token);
+  if (!userId) {
+    return { ok: false, response: NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 }) };
+  }
+  const cookieVersion = token ? parseInt(token.split(".")[1] || "NaN", 10) : NaN;
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { id: true, role: true, isActive: true, sessionVersion: true },
+  });
+  if (!user || user.role !== "CLIENT") {
+    return { ok: false, response: NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 }) };
+  }
+  if (!Number.isFinite(cookieVersion) || cookieVersion !== user.sessionVersion) {
+    return { ok: false, response: NextResponse.json({ success: false, error: "Session expired. Please log in again." }, { status: 401 }) };
+  }
+  return { ok: true, userId: user.id, role: user.role };
 }
 
 /** Client or any staff role — for file upload (used by both clients and admins). */

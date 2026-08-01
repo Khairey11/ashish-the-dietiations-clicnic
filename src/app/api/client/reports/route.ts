@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireClient } from "@/lib/auth";
+import { rateLimit, getClientIp } from "@/lib/ratelimit";
 
 /**
  * GET /api/client/reports
@@ -66,6 +67,16 @@ const createSchema = z.object({
 export async function POST(req: NextRequest) {
   const auth = await requireClient(req);
   if (!auth.ok) return auth.response;
+
+  // Rate limit: 30 report uploads per 15 min per user+IP
+  const ip = getClientIp(req);
+  const rl = rateLimit({ key: `report:${auth.userId}:${ip}`, limit: 30, windowMs: 15 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
+    );
+  }
 
   try {
     const patient = await db.patient.findUnique({

@@ -24,7 +24,7 @@ export function FAQ({ faqs = staticFaqs }: { faqs?: FAQType[] }) {
         description="Can't find the answer you're looking for? Our team is one message away."
       />
 
-      <div className="mt-12 max-w-3xl mx-auto space-y-3">
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
         {faqs.map((faq, i) => (
           <motion.div
             key={i}

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireClient } from "@/lib/auth";
+import { requireClient, ADMIN_COOKIE } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
-import { getClientIp } from "@/lib/ratelimit";
+import { getClientIp, rateLimit } from "@/lib/ratelimit";
 import { deleteUploadByUrl } from "@/lib/file-cleanup";
 
 /**
@@ -42,6 +42,16 @@ const schema = z.object({
 export async function DELETE(req: NextRequest) {
   const auth = await requireClient(req);
   if (!auth.ok) return auth.response;
+
+  // Rate limit: 3 account deletion attempts per hour per user+IP
+  const ip = getClientIp(req);
+  const rl = rateLimit({ key: `delete-acc:${auth.userId}:${ip}`, limit: 3, windowMs: 60 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
+    );
+  }
 
   try {
     const body = await req.json().catch(() => ({}));
@@ -137,7 +147,7 @@ export async function DELETE(req: NextRequest) {
       success: true,
       message: "Your account and all associated data have been deleted. Payments were anonymised and retained as required by tax law.",
     });
-    res.cookies.set("admin_session", "", {
+    res.cookies.set(ADMIN_COOKIE, "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

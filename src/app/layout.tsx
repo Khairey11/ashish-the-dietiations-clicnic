@@ -106,7 +106,7 @@ export default function RootLayout({
               telephone: "+977 9800000000",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "Dharan-11",
+                streetAddress: "Dharan-14",
                 addressLocality: "Dharan",
                 addressRegion: "Sunsari",
                 postalCode: "56700",

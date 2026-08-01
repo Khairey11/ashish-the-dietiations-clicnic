@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireClient } from "@/lib/auth";
+import { requireClientAllowPending } from "@/lib/auth";
 
 /**
  * GET /api/client/dashboard
  * Returns the logged-in client's profile, upcoming appointments, recent
  * notifications, and program/payment summary.
+ * Uses requireClientAllowPending so pending (unapproved) clients can still
+ * see the dashboard with a "pending approval" banner.
  */
 export async function GET(req: NextRequest) {
-  const auth = await requireClient(req);
+  const auth = await requireClientAllowPending(req);
   if (!auth.ok) return auth.response;
 
   try {
@@ -24,6 +26,7 @@ export async function GET(req: NextRequest) {
           phone: true,
           createdAt: true,
           emailVerified: true,
+          isActive: true,
         },
       }),
       db.patient.findUnique({

@@ -62,8 +62,10 @@ echo ""
 echo ">>> Step 5/8: Cloning project..."
 if [ -d "$APP_DIR" ]; then
   cd $APP_DIR
+  git config pull.rebase false
   git stash
-  git pull origin main
+  git pull origin main --no-rebase
+  git stash pop || true
 else
   git clone $REPO_URL $APP_DIR
   cd $APP_DIR

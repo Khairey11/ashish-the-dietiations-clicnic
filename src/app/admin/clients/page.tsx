@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import {
   Users, ChevronLeft, Search, Target, CalendarDays,
-  Wallet, ArrowUpRight, X,
+  Wallet, ArrowUpRight, X, CheckCircle2, Ban, Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,7 @@ type ClientRow = {
   name: string | null;
   email: string;
   phone: string | null;
+  isActive: boolean;
   createdAt: string;
   patient: {
     id: string;
@@ -90,6 +91,9 @@ export default function AdminClientsPage() {
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
   const [selected, setSelected] = React.useState<ClientDetail | null>(null);
   const [detailLoading, setDetailLoading] = React.useState(false);
+  const [statusFilter, setStatusFilter] = React.useState<"all" | "pending" | "active" | "suspended">("all");
+  const [actionLoading, setActionLoading] = React.useState<string | null>(null);
+  const [pendingCount, setPendingCount] = React.useState(0);
 
   // Debounce search
   React.useEffect(() => {
@@ -100,20 +104,59 @@ export default function AdminClientsPage() {
   const load = React.useCallback(async () => {
     setLoading(true);
     try {
-      const qs = debouncedSearch ? `?search=${encodeURIComponent(debouncedSearch)}` : "";
-      const res = await fetch(`/api/admin/clients${qs}`);
+      const params = new URLSearchParams();
+      if (debouncedSearch) params.set("search", debouncedSearch);
+      if (statusFilter !== "all") params.set("status", statusFilter);
+      const res = await fetch(`/api/admin/clients?${params.toString()}`);
       const data = await res.json();
-      if (data.success) setClients(data.data);
+      if (data.success) {
+        setClients(data.data);
+        setPendingCount(data.pendingCount ?? 0);
+      }
     } catch {
       toast.error("Failed to load clients");
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, statusFilter]);
+
+  const updateClientStatus = async (clientId: string, action: "approve" | "reject" | "suspend" | "reactivate") => {
+    setActionLoading(clientId + action);
+    try {
+      const res = await fetch(`/api/admin/clients/${clientId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message || `Client ${action}d`);
+        if (action === "reject") {
+          setClients((prev) => prev.filter((c) => c.id !== clientId));
+        } else {
+          setClients((prev) => prev.map((c) => c.id === clientId ? { ...c, isActive: action === "approve" || action === "reactivate" } : c));
+        }
+        load();
+      } else {
+        toast.error("Action failed", { description: data.error });
+      }
+    } catch {
+      toast.error("Action failed");
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
   React.useEffect(() => {
     load();
   }, [load]);
+
+  const statusTabs = [
+    { key: "all" as const, label: "All", count: null },
+    { key: "pending" as const, label: "Pending", count: pendingCount },
+    { key: "active" as const, label: "Active", count: null },
+    { key: "suspended" as const, label: "Suspended", count: null },
+  ];
 
   const openDetail = async (id: string) => {
     setDetailLoading(true);
@@ -159,6 +202,32 @@ export default function AdminClientsPage() {
             </div>
           </div>
 
+          {/* Status filter tabs */}
+          <div className="flex items-center gap-1 mb-4 p-1 rounded-xl border border-border/40 bg-card w-fit">
+            {statusTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setStatusFilter(tab.key)}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5",
+                  statusFilter === tab.key
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted"
+                )}
+              >
+                {tab.label}
+                {tab.count !== null && tab.count > 0 && (
+                  <span className={cn(
+                    "text-[9px] font-bold rounded-full px-1.5 py-0.5",
+                    statusFilter === tab.key ? "bg-white/20" : "bg-amber-500/15 text-amber-600"
+                  )}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
           {/* Search */}
           <div className="relative max-w-md mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -197,10 +266,11 @@ export default function AdminClientsPage() {
                       <TableHead className="text-xs">Client</TableHead>
                       <TableHead className="text-xs hidden sm:table-cell">Goal</TableHead>
                       <TableHead className="text-xs hidden md:table-cell">Condition</TableHead>
+                      <TableHead className="text-xs">Status</TableHead>
                       <TableHead className="text-xs hidden lg:table-cell">Joined</TableHead>
                       <TableHead className="text-xs text-center">Appts</TableHead>
                       <TableHead className="text-xs text-center">Payments</TableHead>
-                      <TableHead className="text-xs text-right">Action</TableHead>
+                      <TableHead className="text-xs text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -223,6 +293,17 @@ export default function AdminClientsPage() {
                             </Badge>
                           ) : "—"}
                         </TableCell>
+                        <TableCell className="text-xs">
+                          {c.isActive ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                              <CheckCircle2 className="w-3 h-3" />Active
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                              <Ban className="w-3 h-3" />Pending
+                            </span>
+                          )}
+                        </TableCell>
                         <TableCell className="text-xs hidden lg:table-cell text-muted-foreground">
                           {fmtDate(c.createdAt)}
                         </TableCell>
@@ -233,15 +314,26 @@ export default function AdminClientsPage() {
                           {c._count.payments}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => openDetail(c.id)}
-                            className="h-7 text-xs"
-                          >
-                            View
-                            <ArrowUpRight className="w-3 h-3 ml-1" />
-                          </Button>
+                          <div className="flex items-center justify-end gap-1">
+                            {!c.isActive && (
+                              <>
+                                <Button size="sm" variant="ghost" disabled={actionLoading === c.id + "approve"} onClick={() => updateClientStatus(c.id, "approve")} className="h-7 px-2 text-[10px] text-emerald-600 hover:bg-emerald-500/10" title="Approve">
+                                  {actionLoading === c.id + "approve" ? <span className="w-3 h-3 border-2 border-current/30 border-t-current rounded-full animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+                                  <span className="hidden xl:inline ml-0.5">Approve</span>
+                                </Button>
+                                <Button size="sm" variant="ghost" disabled={actionLoading === c.id + "reject"} onClick={() => { if (confirm(`Reject and delete ${c.name || c.email}?`)) updateClientStatus(c.id, "reject"); }} className="h-7 px-2 text-[10px] text-rose-600 hover:bg-rose-500/10" title="Reject">
+                                  <Trash2 className="w-3.5 h-3.5" /><span className="hidden xl:inline ml-0.5">Reject</span>
+                                </Button>
+                              </>
+                            )}
+                            {c.isActive && (
+                              <Button size="sm" variant="ghost" disabled={actionLoading === c.id + "suspend"} onClick={() => updateClientStatus(c.id, "suspend")} className="h-7 px-2 text-[10px] text-amber-600 hover:bg-amber-500/10" title="Suspend">
+                                {actionLoading === c.id + "suspend" ? <span className="w-3 h-3 border-2 border-current/30 border-t-current rounded-full animate-spin" /> : <Ban className="w-3.5 h-3.5" />}
+                                <span className="hidden xl:inline ml-0.5">Suspend</span>
+                              </Button>
+                            )}
+                            <Button size="sm" variant="outline" onClick={() => openDetail(c.id)} className="h-7 text-xs">View<ArrowUpRight className="w-3 h-3 ml-1" /></Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
