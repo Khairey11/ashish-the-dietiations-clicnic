@@ -62,7 +62,7 @@ function startBackgroundDeploy(pushedBy: string, commitMsg: string): void {
     'echo "Triggered by: $DEPLOY_PUSHED_BY — $DEPLOY_COMMIT_MSG"',
     "cd /opt/dietitians-clinic",
     "git config pull.rebase false",
-    "git stash",
+    "git stash || true",
     "git pull origin main --no-rebase",
     "git stash pop || true",
     "bun install --frozen-lockfile",
